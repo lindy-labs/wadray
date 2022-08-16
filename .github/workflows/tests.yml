@@ -28,7 +28,7 @@ jobs:
         run: find contracts -type f -name '*.cairo' | xargs cairo-format -c
 
       - name: Run black
-        run: black --line-length=120 --check .
+        run: black --check .
 
       - name: Run flake8
         run: flake8
