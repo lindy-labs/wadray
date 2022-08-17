@@ -2,8 +2,55 @@
 
 This library provides a felt-based implementation of arithmetic functions for two types of fixed-point decimal numbers, `wad` (18 decimals of precision) and `ray` (27 decimals of decimal numbers), written in Cairo for [StarkNet](https://www.cairo-lang.org/docs/).
 
+The library has been extensively tested with Hypothesis. For more details on running the tests, refer to this [section](#run-tests).
+
 The design of this library was originally inspired by Influenceth's [64x61 fixed-point math library](https://github.com/influenceth/cairo-math-64x61).
 
+## Overview
+
+This library includes arithmetic, aggregation, conversion and bounds check functions.
+
+### Arithmetic
+
+#### Addition and Subtraction
+
+These functions operate on both `wad` and `ray`.
+
+- `add(a, b)`: Addition `a` and `b` with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
+- `add_unsigned(a, b)`: Unsigned addition of `a` and `b` with a bounds check that the result is within the range [0, 2<sup>125</sup>]
+- `sub(a, b)`: Subtraction of `b` from `a` with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
+- `sub_unsigned(a, b)`: Unsigned subtraction of `a` and `b` with a bounds check that the result is within the range [0, 2<sup>125</sup>]
+
+#### Multiplication and Division
+
+The prefixes `w` and `r` denotes whether the function operates on `wad` or `ray` respectively.
+
+- `wmul(a, b)`, `rmul(a, b)`: Multiplication of `a` and `b`
+- `wsigned_div(a, b)`, `rsigned_div(a, b)`: Signed division of `a` by `b`
+- `wunsigned_div(a, b)`, `runsigned_div(a, b)`: Unsigned division of `a` by `b` with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
+- `wunsigned_div_unchecked(a, b)`, `runsigned_div_unchecked(a, b)`: Unsigned division of `a` by `b`
+
+### Aggregation
+
+These functions operate on `wad` only.
+
+- `floor(n)` - Round a value down to the nearest `wad`
+- `ceil(n)` - Round a value up to the nearest `wad`
+
+### Conversion
+
+- `to_uint(n)`: Convert a felt value to `Uint256`
+- `from_uint(n)`: Convert a `Uint256` value to felt with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
+- `to_wad(n)`: Multiply `n` by 10<sup>18</sup> with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
+- `wad_to_ray(n)`: Multiply `n` by 10<sup>9</sup> with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
+- `ray_to_wad(n)`: Divide `n` by 10<sup>9</sup>
+
+### Bounds Check
+
+These functions operate on both `wad` and `ray`.
+
+- `assert_result_valid(n)`: Raises an error if `n` is not in the range [-2<sup>125</sup>, 2<sup>125</sup>]
+- `assert_result_valid_unsigned(n)`: Raises an error if `n` is not in the range [0, 2<sup>125</sup>]
 
 ## Usage
 
