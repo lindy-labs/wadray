@@ -1,5 +1,7 @@
 # WadRay library for Cairo
 
+![tests](https://github.com/lindy-labs/cairo-wadray/actions/workflows/tests.yml/badge.svg)
+
 This library provides a felt-based implementation of arithmetic functions for two types of fixed-point decimal numbers, `wad` (18 decimals of precision) and `ray` (27 decimals of decimal numbers), written in Cairo for [StarkNet](https://www.cairo-lang.org/docs/).
 
 The library has been extensively tested with Hypothesis. For more details on running the tests, refer to this [section](#run-tests).
@@ -74,7 +76,6 @@ end
 ```
 
 You can also refer to the test file `tests/test_wad_ray.cairo` for another example.
-
 
 ## Development
 
