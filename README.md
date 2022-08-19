@@ -109,7 +109,7 @@ To run the tests:
 pytest
 ```
 
-### Formal Verification
+## Formal Verification
 The WadRay library is not currently formally verified, but it will soon be formally verified by Lindy Lab's formal verification unit. 
 
 
