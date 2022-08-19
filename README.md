@@ -109,6 +109,10 @@ To run the tests:
 pytest
 ```
 
+## Formal Verification
+The WadRay library is not currently formally verified, but it will soon be formally verified by Lindy Lab's formal verification unit. 
+
+
 ## Contribute
 
 We welcome contributions of any kind! Please feel free to submit an issue or open a PR if you have a solution to an existing bug.
