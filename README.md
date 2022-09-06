@@ -71,7 +71,7 @@ func add_wad{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     a: felt, b: felt
 ) -> (c: felt) {
     let c: felt = WadRay.add(a, b);
-    return (c);
+    return (c,);
 }
 ```
 
