@@ -69,10 +69,10 @@ from contracts.wad_ray import WadRay
 @external
 func add_wad{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     a: felt, b: felt
-) -> (c: felt):
-    let c: felt = WadRay.add(a, b)
-    return (c)
-end
+) -> (c: felt) {
+    let c: felt = WadRay.add(a, b);
+    return (c);
+}
 ```
 
 You can also refer to the test file `tests/test_wad_ray.cairo` for another example.
