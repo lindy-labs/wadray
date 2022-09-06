@@ -59,9 +59,9 @@ BOUND_TEST_CASES = [-(BOUND + 1), -BOUND, -1, 0, 1, BOUND - 1, BOUND, BOUND + 1]
 async def test_assert_result_valid(wad_ray, val):
     if abs(val) > BOUND:
         with pytest.raises(StarkException):
-            await wad_ray.test_assert_result_valid(val).call()
+            await wad_ray.test_assert_result_valid(val).execute()
     else:
-        await wad_ray.test_assert_result_valid(val).call()
+        await wad_ray.test_assert_result_valid(val).execute()
 
 
 @pytest.mark.parametrize("val", BOUND_TEST_CASES)
@@ -69,9 +69,9 @@ async def test_assert_result_valid(wad_ray, val):
 async def test_assert_result_valid_unsigned(wad_ray, val):
     if val < 0 or val > BOUND:
         with pytest.raises(StarkException):
-            await wad_ray.test_assert_result_valid_unsigned(val).call()
+            await wad_ray.test_assert_result_valid_unsigned(val).execute()
     else:
-        await wad_ray.test_assert_result_valid_unsigned(val).call()
+        await wad_ray.test_assert_result_valid_unsigned(val).execute()
 
 
 @settings(max_examples=50, deadline=None)
@@ -100,12 +100,12 @@ async def test_floor(wad_ray, val):
         # Exception raised by Cairo's builtin `signed_div_rem`
         # -bound <= q < bound
         with pytest.raises(StarkException):
-            await wad_ray.test_floor(input_val).call()
+            await wad_ray.test_floor(input_val).execute()
     elif abs(expected_py) > BOUND:
         with pytest.raises(StarkException, match="WadRay: Result is out of bounds"):
-            await wad_ray.test_floor(input_val).call()
+            await wad_ray.test_floor(input_val).execute()
     else:
-        res = (await wad_ray.test_floor(input_val).call()).result.wad
+        res = (await wad_ray.test_floor(input_val).execute()).result.wad
         assert res == expected_cairo
 
 
@@ -142,12 +142,12 @@ async def test_ceil(wad_ray, val):
         # Exception raised by Cairo's builtin `signed_div_rem`
         # -bound <= q < bound
         with pytest.raises(StarkException):
-            await wad_ray.test_ceil(input_val).call()
+            await wad_ray.test_ceil(input_val).execute()
     elif abs(expected_py) > BOUND:
         with pytest.raises(StarkException, match="WadRay: Result is out of bounds"):
-            await wad_ray.test_ceil(input_val).call()
+            await wad_ray.test_ceil(input_val).execute()
     else:
-        res = (await wad_ray.test_ceil(input_val).call()).result.wad
+        res = (await wad_ray.test_ceil(input_val).execute()).result.wad
         assert res == expected_cairo
 
 
@@ -171,10 +171,10 @@ async def test_add_sub(wad_ray, left, right, fn, op):
 
     if abs(expected_py) > BOUND:
         with pytest.raises(StarkException, match="WadRay: Result is out of bounds"):
-            await method(left_input_val, right_input_val).call()
+            await method(left_input_val, right_input_val).execute()
 
     else:
-        res = (await method(left_input_val, right_input_val).call()).result.wad
+        res = (await method(left_input_val, right_input_val).execute()).result.wad
         assert res == expected_cairo
 
 
@@ -193,10 +193,10 @@ async def test_add_sub_unsigned(wad_ray, left, right, fn, op):
 
     if expected_py < 0 or expected_py > BOUND:
         with pytest.raises(StarkException, match="WadRay: Result is out of bounds"):
-            await method(left, right).call()
+            await method(left, right).execute()
 
     else:
-        res = (await method(left, right).call()).result.wad
+        res = (await method(left, right).execute()).result.wad
         assert res == expected_cairo
 
 
@@ -248,10 +248,10 @@ async def test_mul_div_signed(wad_ray, left, right, fn, op, scale, ret):
 
     if abs(expected_py) > BOUND:
         with pytest.raises(StarkException):
-            await method(left_input_val, right_input_val).call()
+            await method(left_input_val, right_input_val).execute()
 
     else:
-        res = getattr((await method(left_input_val, right_input_val).call()).result, ret)
+        res = getattr((await method(left_input_val, right_input_val).execute()).result, ret)
         assert res == expected_cairo
 
 
@@ -288,16 +288,16 @@ async def test_div_unsigned(wad_ray, left, right, fn, op, scale, ret):
         # will only catch BOUND < quotient <= rc_bound
         if expected_py < RANGE_CHECK_BOUND:
             with pytest.raises(StarkException, match="WadRay: Result is out of bounds"):
-                await method(left, right).call()
+                await method(left, right).execute()
         else:
             with pytest.raises(StarkException):
-                await method(left, right).call()
+                await method(left, right).execute()
     elif fn.endswith("unchecked") and expected_py > RANGE_CHECK_BOUND:
         # `unsigned_div_rem` asserts 0 <= quotient < rc_bound,
         with pytest.raises(StarkException):
-            await method(left, right).call()
+            await method(left, right).execute()
     else:
-        res = getattr((await method(left, right).call()).result, ret)
+        res = getattr((await method(left, right).execute()).result, ret)
         assert res == expected_cairo
 
 
@@ -326,13 +326,13 @@ async def test_wadray_conversions_pass(wad_ray, val, fn, input_op, output_op, re
     if fn in ("test_to_wad", "test_wad_to_ray") and abs(expected_py) > BOUND:
         # Test `assert_result_valid`
         with pytest.raises(StarkException, match="WadRay: Result is out of bounds"):
-            await method(input_val).call()
+            await method(input_val).execute()
     elif fn == "test_wad_to_felt" and not (-BOUND <= expected_py < BOUND):
         # Exception for `signed_div_rem`
         with pytest.raises(StarkException):
-            await method(input_val).call()
+            await method(input_val).execute()
     else:
-        res = getattr((await method(input_val).call()).result, ret)
+        res = getattr((await method(input_val).execute()).result, ret)
         assert res == expected_py
 
 
@@ -348,7 +348,7 @@ async def test_uint_conversion_pass(wad_ray, val, fn, input_op, output_op, ret):
 
     method = wad_ray.get_contract_function(fn)
 
-    res = getattr((await method(input_val).call()).result, ret)
+    res = getattr((await method(input_val).execute()).result, ret)
     assert res == expected_py
 
 
@@ -357,4 +357,4 @@ async def test_uint_conversion_pass(wad_ray, val, fn, input_op, output_op, ret):
 async def test_from_uint_fail(wad_ray, val):
     val = to_uint(val)
     with pytest.raises(StarkException, match="WadRay: Result is out of bounds"):
-        await wad_ray.test_from_uint(val).call()
+        await wad_ray.test_from_uint(val).execute()
