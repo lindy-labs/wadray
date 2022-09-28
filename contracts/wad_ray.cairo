@@ -9,6 +9,8 @@ from starkware.cairo.common.math import (
 
 from starkware.cairo.common.uint256 import Uint256
 
+from contracts.aliases import ray, wad
+
 namespace WadRay {
     const BOUND = 2 ** 125;
     const WAD_SCALE = 10 ** 18;
@@ -34,14 +36,14 @@ namespace WadRay {
         return ();
     }
 
-    func floor{range_check_ptr}(n) -> (wad: felt) {
+    func floor{range_check_ptr}(n) -> wad {
         let (int_val, mod_val) = signed_div_rem(n, WAD_ONE, BOUND);
         let floored = n - mod_val;
         assert_result_valid(floored);
-        return (wad=floored);
+        return floored;
     }
 
-    func ceil{range_check_ptr}(n) -> (wad: felt) {
+    func ceil{range_check_ptr}(n) -> wad {
         let (int_val, mod_val) = signed_div_rem(n, WAD_ONE, BOUND);
 
         if (mod_val == 0) {
@@ -52,41 +54,41 @@ namespace WadRay {
             tempvar range_check_ptr = range_check_ptr;
         }
         assert_result_valid(ceiled);
-        return (wad=ceiled);
+        return ceiled;
     }
 
-    func add{range_check_ptr}(a, b) -> (wad: felt) {
+    func add{range_check_ptr}(a, b) -> wad {
         let sum = a + b;
         assert_result_valid(sum);
-        return (wad=sum);
+        return sum;
     }
 
-    func add_unsigned{range_check_ptr}(a, b) -> (wad: felt) {
+    func add_unsigned{range_check_ptr}(a, b) -> wad {
         let sum = a + b;
         assert_result_valid_unsigned(sum);
-        return (wad=sum);
+        return sum;
     }
 
-    func sub{range_check_ptr}(a, b) -> (wad: felt) {
+    func sub{range_check_ptr}(a, b) -> wad {
         let diff = a - b;
         assert_result_valid(diff);
-        return (wad=diff);
+        return diff;
     }
 
-    func sub_unsigned{range_check_ptr}(a, b) -> (wad: felt) {
+    func sub_unsigned{range_check_ptr}(a, b) -> wad {
         let diff = a - b;
         assert_result_valid_unsigned(diff);
-        return (wad=diff);
+        return diff;
     }
 
-    func wmul{range_check_ptr}(a, b) -> (wad: felt) {
+    func wmul{range_check_ptr}(a, b) -> wad {
         tempvar prod = a * b;
         // `signed_div_rem` asserts -BOUND <= `scaled_prod` < BOUND
         let (scaled_prod, _) = signed_div_rem(prod, WAD_SCALE, BOUND);
-        return (wad=scaled_prod);
+        return scaled_prod;
     }
 
-    func wsigned_div{range_check_ptr}(a, b) -> (wad: felt) {
+    func wsigned_div{range_check_ptr}(a, b) -> wad {
         alloc_locals;
         // `signed_div_rem` assumes 0 < div <= PRIME / rc_bound
         let div = abs_value(b);
@@ -95,52 +97,52 @@ namespace WadRay {
         tempvar prod = a * WAD_SCALE;
         // `signed_div_rem` asserts -BOUND <= `wad_u` < BOUND
         let (wad_u, _) = signed_div_rem(prod, div, BOUND);
-        return (wad=wad_u * div_sign);
+        return wad_u * div_sign;
     }
 
-    func wunsigned_div{range_check_ptr}(a, b) -> (wad: felt) {
+    func wunsigned_div{range_check_ptr}(a, b) -> wad {
         tempvar product = a * WAD_SCALE;
         let (q, _) = unsigned_div_rem(product, b);
         assert_result_valid(q);
-        return (wad=q);
+        return q;
     }
 
     // No overflow check - use only if the quotient of `a` and `b` is guaranteed not to overflow
-    func wunsigned_div_unchecked{range_check_ptr}(a, b) -> (wad: felt) {
+    func wunsigned_div_unchecked{range_check_ptr}(a, b) -> wad {
         tempvar product = a * WAD_SCALE;
         let (q, _) = unsigned_div_rem(product, b);
-        return (wad=q);
+        return q;
     }
 
-    func rmul{range_check_ptr}(a, b) -> (ray: felt) {
+    func rmul{range_check_ptr}(a, b) -> ray {
         tempvar prod = a * b;
         // `signed_div_rem` asserts -BOUND <= `scaled_prod` < BOUND
         let (scaled_prod, _) = signed_div_rem(prod, RAY_SCALE, BOUND);
-        return (ray=scaled_prod);
+        return scaled_prod;
     }
 
-    func rsigned_div{range_check_ptr}(a, b) -> (ray: felt) {
+    func rsigned_div{range_check_ptr}(a, b) -> ray {
         alloc_locals;
         let div = abs_value(b);
         let div_sign = sign(b);
         tempvar prod = a * RAY_SCALE;
         // `signed_div_rem` asserts -BOUND <= `ray_u` < BOUND
         let (ray_u, _) = signed_div_rem(prod, div, BOUND);
-        return (ray=ray_u * div_sign);
+        return ray_u * div_sign;
     }
 
-    func runsigned_div{range_check_ptr}(a, b) -> (ray: felt) {
+    func runsigned_div{range_check_ptr}(a, b) -> ray {
         tempvar product = a * RAY_SCALE;
         let (q, _) = unsigned_div_rem(product, b);
         assert_result_valid(q);
-        return (ray=q);
+        return q;
     }
 
     // No overflow check - use only if the quotient of `a` and `b` is guaranteed not to overflow
-    func runsigned_div_unchecked{range_check_ptr}(a, b) -> (ray: felt) {
+    func runsigned_div_unchecked{range_check_ptr}(a, b) -> ray {
         tempvar product = a * RAY_SCALE;
         let (q, _) = unsigned_div_rem(product, b);
-        return (ray=q);
+        return q;
     }
 
     //
@@ -152,37 +154,37 @@ namespace WadRay {
         return (uint,);
     }
 
-    func from_uint{range_check_ptr}(n: Uint256) -> (wad: felt) {
+    func from_uint{range_check_ptr}(n: Uint256) -> wad {
         assert n.high = 0;
         assert_result_valid(n.low);
-        return (wad=n.low);
+        return n.low;
     }
 
-    func to_wad{range_check_ptr}(n) -> (wad: felt) {
+    func to_wad{range_check_ptr}(n) -> wad {
         let n_wad = n * WAD_SCALE;
         assert_result_valid(n_wad);
-        return (wad=n_wad);
+        return n_wad;
     }
 
     // Truncates fractional component
-    func wad_to_felt{range_check_ptr}(n) -> (wad: felt) {
-        let (wad, _) = signed_div_rem(n, WAD_SCALE, BOUND);
-        return (wad,);
+    func wad_to_felt{range_check_ptr}(n) -> wad {
+        let (converted, _) = signed_div_rem(n, WAD_SCALE, BOUND);
+        return converted;
     }
 
-    func wad_to_ray{range_check_ptr}(n) -> (ray: felt) {
-        let ray = n * DIFF;
-        assert_result_valid(ray);
-        return (ray,);
+    func wad_to_ray{range_check_ptr}(n) -> ray {
+        let converted = n * DIFF;
+        assert_result_valid(converted);
+        return converted;
     }
 
-    func wad_to_ray_unchecked(n) -> (ray: felt) {
-        return (ray=n * DIFF);
+    func wad_to_ray_unchecked(n) -> ray {
+        return n * DIFF;
     }
 
     // Truncates a ray to return a wad
-    func ray_to_wad{range_check_ptr}(n) -> (wad: felt) {
-        let (wad, _) = unsigned_div_rem(n, DIFF);
-        return (wad,);
+    func ray_to_wad{range_check_ptr}(ray) -> wad {
+        let (converted, _) = unsigned_div_rem(ray, DIFF);
+        return converted;
     }
 }

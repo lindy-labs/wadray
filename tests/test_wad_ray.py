@@ -105,7 +105,7 @@ async def test_floor(wad_ray, val):
         with pytest.raises(StarkException, match="WadRay: Result is out of bounds"):
             await wad_ray.test_floor(input_val).execute()
     else:
-        res = (await wad_ray.test_floor(input_val).execute()).result.wad
+        res = (await wad_ray.test_floor(input_val).execute()).result.res
         assert res == expected_cairo
 
 
@@ -147,7 +147,7 @@ async def test_ceil(wad_ray, val):
         with pytest.raises(StarkException, match="WadRay: Result is out of bounds"):
             await wad_ray.test_ceil(input_val).execute()
     else:
-        res = (await wad_ray.test_ceil(input_val).execute()).result.wad
+        res = (await wad_ray.test_ceil(input_val).execute()).result.res
         assert res == expected_cairo
 
 
@@ -174,7 +174,7 @@ async def test_add_sub(wad_ray, left, right, fn, op):
             await method(left_input_val, right_input_val).execute()
 
     else:
-        res = (await method(left_input_val, right_input_val).execute()).result.wad
+        res = (await method(left_input_val, right_input_val).execute()).result.res
         assert res == expected_cairo
 
 
@@ -196,7 +196,7 @@ async def test_add_sub_unsigned(wad_ray, left, right, fn, op):
             await method(left, right).execute()
 
     else:
-        res = (await method(left, right).execute()).result.wad
+        res = (await method(left, right).execute()).result.res
         assert res == expected_cairo
 
 
@@ -211,10 +211,10 @@ async def test_add_sub_unsigned(wad_ray, left, right, fn, op):
 @pytest.mark.parametrize(
     "fn,op,scale,ret",
     [
-        ("test_wmul", operator.mul, WAD_SCALE, "wad"),
-        ("test_wsigned_div", operator.floordiv, WAD_SCALE, "wad"),
-        ("test_rmul", operator.mul, RAY_SCALE, "ray"),
-        ("test_rsigned_div", operator.floordiv, RAY_SCALE, "ray"),
+        ("test_wmul", operator.mul, WAD_SCALE, "res"),
+        ("test_wsigned_div", operator.floordiv, WAD_SCALE, "res"),
+        ("test_rmul", operator.mul, RAY_SCALE, "res"),
+        ("test_rsigned_div", operator.floordiv, RAY_SCALE, "res"),
     ],
 )
 @pytest.mark.asyncio
@@ -266,10 +266,10 @@ async def test_mul_div_signed(wad_ray, left, right, fn, op, scale, ret):
 @pytest.mark.parametrize(
     "fn,op,scale,ret",
     [
-        ("test_wunsigned_div", operator.floordiv, WAD_SCALE, "wad"),
-        ("test_wunsigned_div_unchecked", operator.floordiv, WAD_SCALE, "wad"),
-        ("test_runsigned_div", operator.floordiv, RAY_SCALE, "ray"),
-        ("test_runsigned_div_unchecked", operator.floordiv, RAY_SCALE, "ray"),
+        ("test_wunsigned_div", operator.floordiv, WAD_SCALE, "res"),
+        ("test_wunsigned_div_unchecked", operator.floordiv, WAD_SCALE, "res"),
+        ("test_runsigned_div", operator.floordiv, RAY_SCALE, "res"),
+        ("test_runsigned_div_unchecked", operator.floordiv, RAY_SCALE, "res"),
     ],
 )
 @pytest.mark.asyncio
@@ -310,10 +310,10 @@ async def test_div_unsigned(wad_ray, left, right, fn, op, scale, ret):
 @pytest.mark.parametrize(
     "fn,input_op,output_op,ret",
     [
-        ("test_to_wad", int, to_wad, "wad"),
-        ("test_wad_to_felt", to_wad, int, "wad"),
-        ("test_wad_to_ray", int, wad_to_ray, "ray"),
-        ("test_wad_to_ray_unchecked", int, wad_to_ray, "ray"),
+        ("test_to_wad", int, to_wad, "res"),
+        ("test_wad_to_felt", to_wad, int, "res"),
+        ("test_wad_to_ray", int, wad_to_ray, "res"),
+        ("test_wad_to_ray_unchecked", int, wad_to_ray, "res"),
     ],
 )
 @pytest.mark.asyncio
@@ -339,7 +339,7 @@ async def test_wadray_conversions_pass(wad_ray, val, fn, input_op, output_op, re
 @settings(max_examples=50, deadline=None)
 @given(val=st_uint125)
 @pytest.mark.parametrize(
-    "fn,input_op,output_op,ret", [("test_to_uint", int, to_uint, "uint"), ("test_from_uint", to_uint, int, "wad")]
+    "fn,input_op,output_op,ret", [("test_to_uint", int, to_uint, "uint"), ("test_from_uint", to_uint, int, "res")]
 )
 @pytest.mark.asyncio
 async def test_uint_conversion_pass(wad_ray, val, fn, input_op, output_op, ret):
