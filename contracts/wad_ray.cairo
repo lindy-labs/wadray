@@ -1,8 +1,8 @@
 from starkware.cairo.common.math import (
+    abs_value,
     assert_le,
     assert_nn_le,
     sign,
-    abs_value,
     signed_div_rem,
     unsigned_div_rem,
 )
