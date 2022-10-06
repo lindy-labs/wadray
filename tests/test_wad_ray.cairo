@@ -6,14 +6,14 @@ from contracts.aliases import ray, wad
 from contracts.wad_ray import WadRay
 
 @view
-func test_assert_result_valid{range_check_ptr}(n) {
-    WadRay.assert_result_valid(n);
+func test_assert_valid{range_check_ptr}(n) {
+    WadRay.assert_valid(n);
     return ();
 }
 
 @view
-func test_assert_result_valid_unsigned{range_check_ptr}(n) {
-    WadRay.assert_result_valid_unsigned(n);
+func test_assert_valid_unsigned{range_check_ptr}(n) {
+    WadRay.assert_valid_unsigned(n);
     return ();
 }
 
