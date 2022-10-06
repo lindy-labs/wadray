@@ -358,6 +358,7 @@ async def test_from_uint_fail(wad_ray, val):
     with pytest.raises(StarkException, match="WadRay: out of bounds"):
         await wad_ray.test_from_uint(val).execute()
 
+
 @pytest.mark.parametrize("func", ["add_unsigned", "sub_unsigned", "wunsigned_div", "runsigned_div"])
 @pytest.mark.asyncio
 async def test_out_of_bounds_unsigned(wad_ray, func):
