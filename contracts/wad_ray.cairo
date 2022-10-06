@@ -9,7 +9,7 @@ from starkware.cairo.common.math import (
 
 from starkware.cairo.common.uint256 import Uint256
 
-from contracts.aliases import ray, wad, ufelt
+from contracts.aliases import ray, ufelt, wad
 
 // Wad: signed felt scaled by 10**18 (meaning 10**18 = 1)
 namespace WadRay {
