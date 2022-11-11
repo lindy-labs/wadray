@@ -89,7 +89,7 @@ func test_runsigned_div_unchecked{range_check_ptr}(a, b) -> (res: ray) {
 }
 
 @view
-func test_to_uint(n) -> (uint: Uint256) {
+func test_to_uint{range_check_ptr}(n) -> (uint: Uint256) {
     return WadRay.to_uint(n);
 }
 
