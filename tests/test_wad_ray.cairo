@@ -41,22 +41,22 @@ func test_unsigned_min{range_check_ptr}(a, b) -> (res: ufelt) {
 }
 
 @view
-func test_add{range_check_ptr}(a, b) -> (res: wad) {
+func test_add{range_check_ptr}(a, b) -> (res: felt) {
     return (WadRay.add(a, b),);
 }
 
 @view
-func test_unsigned_add{range_check_ptr}(a, b) -> (res: wad) {
+func test_unsigned_add{range_check_ptr}(a, b) -> (res: ufelt) {
     return (WadRay.unsigned_add(a, b),);
 }
 
 @view
-func test_sub{range_check_ptr}(a, b) -> (res: wad) {
+func test_sub{range_check_ptr}(a, b) -> (res: felt) {
     return (WadRay.sub(a, b),);
 }
 
 @view
-func test_unsigned_sub{range_check_ptr}(a, b) -> (res: felt) {
+func test_unsigned_sub{range_check_ptr}(a, b) -> (res: ufelt) {
     return (WadRay.unsigned_sub(a, b),);
 }
 
