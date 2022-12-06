@@ -25,7 +25,6 @@ from tests.utils import (
     wad_to_ray,
 )
 
-
 st_int = st.integers(min_value=-(2**250), max_value=2**250)
 st_int125 = st.integers(min_value=-(2**125), max_value=2**125)
 st_uint125 = st.integers(min_value=1, max_value=2**125)
