@@ -1,9 +1,9 @@
 from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.math import (
+    abs_value,
     assert_le,
     assert_nn_le,
     sign,
-    abs_value,
     signed_div_rem,
     unsigned_div_rem,
 )
@@ -11,7 +11,6 @@ from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.uint256 import Uint256
 
 from contracts.aliases import ray, ufelt, wad
-
 
 namespace WadRay {
     const BOUND = 2 ** 125;
@@ -23,6 +22,7 @@ namespace WadRay {
     const RAY_ONE = RAY_SCALE;
     const WAD_ONE = WAD_SCALE;
 
+    // Reverts if `n` overflows or underflows
     func assert_valid{range_check_ptr}(n) {
         with_attr error_message("WadRay: Out of bounds") {
             assert_le(n, BOUND);
@@ -133,7 +133,7 @@ namespace WadRay {
         assert_valid(a);
         assert_valid(b);
 
-        // `signed_div_rem` assumes 0 < div <= PRIME / rc_bound
+        // `signed_div_rem` assumes 0 < div <= CAIRO_PRIME / rc_bound
         let div = abs_value(b);
         // `sign` assumes -rc_bound < value < rc_bound
         let div_sign = sign(b);
@@ -153,13 +153,15 @@ namespace WadRay {
         return q;
     }
 
-    // No overflow check - use only if the quotient of `a` and `b` is guaranteed not to overflow
+    // Assumes both a and b are unsigned
+    // No overflow check - use only if the quotient of a and b is guaranteed not to overflow
     func wunsigned_div_unchecked{range_check_ptr}(a, b) -> wad {
         tempvar product = a * WAD_SCALE;
         let (q, _) = unsigned_div_rem(product, b);
         return q;
     }
 
+    // Operations with rays
     func rmul{range_check_ptr}(a, b) -> ray {
         assert_valid(a);
         assert_valid(b);
@@ -194,18 +196,19 @@ namespace WadRay {
         return q;
     }
 
-    // No overflow check - use only if the quotient of `a` and `b` is guaranteed not to overflow
+    // Assumes both a and b are unsigned
+    // No overflow check - use only if the quotient of a and b is guaranteed not to overflow
     func runsigned_div_unchecked{range_check_ptr}(a, b) -> ray {
         tempvar product = a * RAY_SCALE;
         let (q, _) = unsigned_div_rem(product, b);
         return q;
     }
-
     //
     // Conversions
     //
 
     func to_uint{range_check_ptr}(n) -> (uint: Uint256) {
+        assert_valid_unsigned(n);
         let uint = Uint256(low=n, high=0);
         return (uint,);
     }

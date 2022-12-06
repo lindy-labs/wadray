@@ -29,7 +29,6 @@ from tests.utils import (
 st_int = st.integers(min_value=-(2**250), max_value=2**250)
 st_int125 = st.integers(min_value=-(2**125), max_value=2**125)
 st_uint125 = st.integers(min_value=1, max_value=2**125)
-st_uint128 = st.integers(min_value=1, max_value=2**128)
 st_uint = st.integers(min_value=0, max_value=2 * 200)
 rogue_uint = st.integers(min_value=2**128, max_value=CAIRO_PRIME - 1)
 

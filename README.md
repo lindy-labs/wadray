@@ -114,7 +114,7 @@ pytest
 ```
 
 ## Formal Verification
-The WadRay library is not currently formally verified, but it will soon be formally verified by Lindy Lab's formal verification unit. 
+The WadRay library is not currently formally verified, but it will soon be formally verified by Lindy Labs' formal verification unit. 
 
 
 ## Contribute
