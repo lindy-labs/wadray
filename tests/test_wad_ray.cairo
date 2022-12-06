@@ -2,7 +2,7 @@
 
 from starkware.cairo.common.uint256 import Uint256
 
-from contracts.aliases import ray, wad
+from contracts.aliases import ray, ufelt, wad
 from contracts.wad_ray import WadRay
 
 @view
@@ -29,23 +29,35 @@ func test_ceil{range_check_ptr}(n) -> (res: wad) {
 }
 
 @view
-func test_add{range_check_ptr}(a, b) -> (res: wad) {
+func test_unsigned_max{range_check_ptr}(a, b) -> (res: ufelt) {
+    let res: felt = WadRay.unsigned_max(a, b);
+    return (res,);
+}
+
+@view
+func test_unsigned_min{range_check_ptr}(a, b) -> (res: ufelt) {
+    let res: felt = WadRay.unsigned_min(a, b);
+    return (res,);
+}
+
+@view
+func test_add{range_check_ptr}(a, b) -> (res: felt) {
     return (WadRay.add(a, b),);
 }
 
 @view
-func test_add_unsigned{range_check_ptr}(a, b) -> (res: wad) {
-    return (WadRay.add_unsigned(a, b),);
+func test_unsigned_add{range_check_ptr}(a, b) -> (res: ufelt) {
+    return (WadRay.unsigned_add(a, b),);
 }
 
 @view
-func test_sub{range_check_ptr}(a, b) -> (res: wad) {
+func test_sub{range_check_ptr}(a, b) -> (res: felt) {
     return (WadRay.sub(a, b),);
 }
 
 @view
-func test_sub_unsigned{range_check_ptr}(a, b) -> (res: wad) {
-    return (WadRay.sub_unsigned(a, b),);
+func test_unsigned_sub{range_check_ptr}(a, b) -> (res: ufelt) {
+    return (WadRay.unsigned_sub(a, b),);
 }
 
 @view

@@ -9,12 +9,13 @@ from starkware.starknet.services.api.contract_class import ContractClass
 
 Uint256 = namedtuple("Uint256", "low high")
 
-PRIME = 2**251 + 17 * 2**192 + 1
+CAIRO_PRIME = 2**251 + 17 * 2**192 + 1
 RANGE_CHECK_BOUND = 2**128
 
 WAD_SCALE = 10**18
 RAY_SCALE = 10**27
 WAD_RAY_DIFF = RAY_SCALE // WAD_SCALE
+WAD_RAY_BOUND = 2**125
 
 
 def here() -> str:
@@ -41,7 +42,7 @@ def signed_int_to_felt(a: int) -> int:
     # Takes in integer value, returns input if positive, otherwise return PRIME + input
     if a >= 0:
         return a
-    return PRIME + a
+    return CAIRO_PRIME + a
 
 
 def to_ray(n: Union[int, float, Decimal]) -> int:

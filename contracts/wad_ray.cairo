@@ -1,3 +1,4 @@
+from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.math import (
     abs_value,
     assert_le,
@@ -6,12 +7,11 @@ from starkware.cairo.common.math import (
     signed_div_rem,
     unsigned_div_rem,
 )
-
+from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.uint256 import Uint256
 
 from contracts.aliases import ray, ufelt, wad
 
-// Wad: signed felt scaled by 10**18 (meaning 10**18 = 1)
 namespace WadRay {
     const BOUND = 2 ** 125;
     const WAD_SCALE = 10 ** 18;
@@ -38,6 +38,28 @@ namespace WadRay {
         return ();
     }
 
+    func unsigned_min{range_check_ptr}(a, b) -> ufelt {
+        assert_valid_unsigned(a);
+        assert_valid_unsigned(b);
+
+        let le = is_le(a, b);
+        if (le == TRUE) {
+            return a;
+        }
+        return b;
+    }
+
+    func unsigned_max{range_check_ptr}(a, b) -> ufelt {
+        assert_valid_unsigned(a);
+        assert_valid_unsigned(b);
+
+        let le = is_le(a, b);
+        if (le == TRUE) {
+            return b;
+        }
+        return a;
+    }
+
     func floor{range_check_ptr}(n) -> wad {
         let (int_val, mod_val) = signed_div_rem(n, WAD_ONE, BOUND);
         let floored = n - mod_val;
@@ -59,7 +81,7 @@ namespace WadRay {
         return ceiled;
     }
 
-    func add{range_check_ptr}(a, b) -> wad {
+    func add{range_check_ptr}(a, b) -> felt {
         assert_valid(a);
         assert_valid(b);
 
@@ -68,7 +90,7 @@ namespace WadRay {
         return sum;
     }
 
-    func add_unsigned{range_check_ptr}(a, b) -> wad {
+    func unsigned_add{range_check_ptr}(a, b) -> ufelt {
         assert_valid_unsigned(a);
         assert_valid_unsigned(b);
 
@@ -77,7 +99,7 @@ namespace WadRay {
         return sum;
     }
 
-    func sub{range_check_ptr}(a, b) -> wad {
+    func sub{range_check_ptr}(a, b) -> felt {
         assert_valid(a);
         assert_valid(b);
 
@@ -86,7 +108,7 @@ namespace WadRay {
         return diff;
     }
 
-    func sub_unsigned{range_check_ptr}(a, b) -> wad {
+    func unsigned_sub{range_check_ptr}(a, b) -> ufelt {
         assert_valid_unsigned(a);
         assert_valid_unsigned(b);
 
@@ -121,7 +143,6 @@ namespace WadRay {
         return wad_u * div_sign;
     }
 
-    // Assumes both a and b are positive integers
     func wunsigned_div{range_check_ptr}(a, b) -> wad {
         assert_valid_unsigned(a);
         assert_valid_unsigned(b);
@@ -165,7 +186,6 @@ namespace WadRay {
         return ray_u * div_sign;
     }
 
-    // Assumes both a and b are positive integers
     func runsigned_div{range_check_ptr}(a, b) -> ray {
         assert_valid_unsigned(a);
         assert_valid_unsigned(b);
@@ -222,8 +242,8 @@ namespace WadRay {
     }
 
     // Truncates a ray to return a wad
-    func ray_to_wad{range_check_ptr}(ray) -> wad {
-        let (converted, _) = unsigned_div_rem(ray, DIFF);
+    func ray_to_wad{range_check_ptr}(n) -> wad {
+        let (converted, _) = unsigned_div_rem(n, DIFF);
         return converted;
     }
 }
