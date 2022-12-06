@@ -19,9 +19,9 @@ This library includes arithmetic, aggregation, conversion and bounds check funct
 These functions operate on both `wad` and `ray`.
 
 - `add(a, b)`: Addition `a` and `b` with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
-- `add_unsigned(a, b)`: Unsigned addition of `a` and `b` with a bounds check that the result is within the range [0, 2<sup>125</sup>]
+- `unsigned_add(a, b)`: Unsigned addition of `a` and `b` with a bounds check that the result is within the range [0, 2<sup>125</sup>]
 - `sub(a, b)`: Subtraction of `b` from `a` with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
-- `sub_unsigned(a, b)`: Unsigned subtraction of `a` and `b` with a bounds check that the result is within the range [0, 2<sup>125</sup>]
+- `unsigned_sub(a, b)`: Unsigned subtraction of `a` and `b` with a bounds check that the result is within the range [0, 2<sup>125</sup>]
 
 #### Multiplication and Division
 
@@ -38,6 +38,10 @@ These functions operate on `wad` only.
 
 - `floor(n)` - Round a value down to the nearest `wad`
 - `ceil(n)` - Round a value up to the nearest `wad`
+
+These functions operate on any `ufelt` values in the range [0, 2<sup>125</sup>], including `wad` and `ray`.
+- `unsigned_min(n)` - Returns the smaller of two values
+- `unsigned_max(n)` - Returns the larger of two values
 
 ### Conversion
 
