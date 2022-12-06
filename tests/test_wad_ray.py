@@ -10,12 +10,13 @@ from starkware.starknet.testing.starknet import Starknet
 from starkware.starkware_utils.error_handling import StarkException
 
 from tests.utils import (
-    PRIME,
+    CAIRO_PRIME,
     RANGE_CHECK_BOUND,
     RAY_SCALE,
     WAD_RAY_BOUND,
     WAD_RAY_DIFF,
     WAD_SCALE,
+    Uint256,
     compile_contract,
     signed_int_to_felt,
     to_ray,
@@ -30,6 +31,7 @@ st_int125 = st.integers(min_value=-(2**125), max_value=2**125)
 st_uint125 = st.integers(min_value=1, max_value=2**125)
 st_uint128 = st.integers(min_value=1, max_value=2**128)
 st_uint = st.integers(min_value=0, max_value=2 * 200)
+rogue_uint = st.integers(min_value=2**128, max_value=CAIRO_PRIME - 1)
 
 
 @pytest.fixture(scope="session")
@@ -240,8 +242,8 @@ async def test_mul_div_signed(wad_ray, left, right, fn, op, scale):
         sign = -1 if right < 0 else 1
         # Convert right to absolute value before converting it to felt
         right = abs(right)
-        # `signed_div_rem` assumes 0 < right <= PRIME / RANGE_CHECK_BOUND
-        assume(right <= PRIME // RANGE_CHECK_BOUND)
+        # `signed_div_rem` assumes 0 < right <= CAIRO_PRIME / RANGE_CHECK_BOUND
+        assume(right <= CAIRO_PRIME // RANGE_CHECK_BOUND)
         # Scale left by wad after converting it to felt for computation of python value
         left *= scale
 
@@ -285,11 +287,11 @@ async def test_mul_div_signed(wad_ray, left, right, fn, op, scale):
 )
 @pytest.mark.asyncio
 async def test_div_unsigned(wad_ray, left, right, fn, op, scale):
-    # `unsigned_div_rem` assumes 0 < right <= PRIME / RANGE_CHECK_BOUND
-    assume(right <= PRIME // RANGE_CHECK_BOUND)
+    # `unsigned_div_rem` assumes 0 < right <= CAIRO_PRIME / RANGE_CHECK_BOUND
+    assume(right <= CAIRO_PRIME // RANGE_CHECK_BOUND)
     scaled_left = left * scale
     # Exclude values greater than felt after scaling
-    assume(scaled_left <= PRIME)
+    assume(scaled_left <= CAIRO_PRIME)
     expected_py = op(scaled_left, right)
     expected_cairo = signed_int_to_felt(expected_py)
     method = wad_ray.get_contract_function(fn)
@@ -369,3 +371,49 @@ async def test_from_uint_fail(wad_ray, val):
     val = to_uint(val)
     with pytest.raises(StarkException, match="WadRay: Out of bounds"):
         await wad_ray.test_from_uint(val).execute()
+
+
+@settings(max_examples=50, deadline=None)
+@given(low=rogue_uint)
+@example(low=-1)
+@pytest.mark.asyncio
+async def test_from_uint_fail_on_rogue_input(wad_ray, low):
+    with pytest.raises(StarkException, match="WadRay: Out of bounds"):
+        uint = Uint256(low=low, high=0)
+        await wad_ray.test_from_uint(uint).execute()
+
+
+@pytest.mark.parametrize("func", ["unsigned_add", "unsigned_sub", "wunsigned_div", "runsigned_div"])
+@pytest.mark.asyncio
+async def test_out_of_bounds_unsigned(wad_ray, func):
+    test_func = getattr(wad_ray, "test_" + func)
+
+    with pytest.raises(StarkException, match="WadRay: Out of bounds"):
+        await test_func(2**125 + 1, 0).execute()
+
+    with pytest.raises(StarkException, match="WadRay: Out of bounds"):
+        await test_func(-1, 0).execute()
+
+    with pytest.raises(StarkException, match="WadRay: Out of bounds"):
+        await test_func(0, 2**125 + 1).execute()
+
+    with pytest.raises(StarkException, match="WadRay: Out of bounds"):
+        await test_func(0, -1).execute()
+
+
+@pytest.mark.parametrize("func", ["add", "sub", "wsigned_div", "rsigned_div"])
+@pytest.mark.asyncio
+async def test_out_of_bounds_signed(wad_ray, func):
+    test_func = getattr(wad_ray, "test_" + func)
+
+    with pytest.raises(StarkException, match="WadRay: Out of bounds"):
+        await test_func(2**125 + 1, 0).execute()
+
+    with pytest.raises(StarkException, match="WadRay: Out of bounds"):
+        await test_func(-(2**125) - 1, 0).execute()
+
+    with pytest.raises(StarkException, match="WadRay: Out of bounds"):
+        await test_func(0, 2**125 + 1).execute()
+
+    with pytest.raises(StarkException, match="WadRay: Out of bounds"):
+        await test_func(0, -(2**125) - 1).execute()
