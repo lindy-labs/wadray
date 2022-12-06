@@ -40,8 +40,8 @@ These functions operate on `wad` only.
 - `ceil(n)` - Round a value up to the nearest `wad`
 
 These functions operate on any `ufelt` values in the range [0, 2<sup>125</sup>], including `wad` and `ray`.
-- `unsigned_min(n)` - Returns the smaller of two values
-- `unsigned_max(n)` - Returns the larger of two values
+- `unsigned_min(a, b)` - Returns the smaller of two values
+- `unsigned_max(a, b)` - Returns the larger of two values
 
 ### Conversion
 
