@@ -1,5 +1,3 @@
-__pycache__
-.pytest_cache
+target/
 
-# Hypothesis
-.hypothesis
+.snfoundry_cache/

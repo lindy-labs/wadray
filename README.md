@@ -2,111 +2,115 @@
 
 ![tests](https://github.com/lindy-labs/cairo-wadray/actions/workflows/tests.yml/badge.svg)
 
-This library provides a felt-based implementation of arithmetic functions for two types of fixed-point decimal numbers, `wad` (18 decimals of precision) and `ray` (27 decimals of decimal numbers), written in Cairo for [StarkNet](https://www.cairo-lang.org/docs/).
-
-The library has been extensively tested with Hypothesis. For more details on running the tests, refer to this [section](#run-tests).
-
-The design of this library was originally inspired by Influenceth's [64x61 fixed-point math library](https://github.com/influenceth/cairo-math-64x61).
+This library provides a felt-based implementation of arithmetic functions for two types of fixed-point decimal numbers, `Wad` (18 decimals of precision) and `Ray` (27 decimals of decimal numbers), written in Cairo for [StarkNet](https://docs.cairo-lang.org/index.html).
 
 ## Overview
 
-This library includes arithmetic, aggregation, conversion and bounds check functions.
+This library includes arithmetic, comparison and conversion functions.
 
 ### Arithmetic
 
 #### Addition and Subtraction
 
-These functions operate on both `wad` and `ray`.
+Both `Wad` and `Ray` implement the `Add`, `AddEq`, `Sub` and `SubEq` traits.
 
-- `add(a, b)`: Addition `a` and `b` with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
-- `add_unsigned(a, b)`: Unsigned addition of `a` and `b` with a bounds check that the result is within the range [0, 2<sup>125</sup>]
-- `sub(a, b)`: Subtraction of `b` from `a` with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
-- `sub_unsigned(a, b)`: Unsigned subtraction of `a` and `b` with a bounds check that the result is within the range [0, 2<sup>125</sup>]
+Addition and subtraction can be performed as follows:
+- `a + b`
+- `a += b`
+- `a - b`
+- `a -= b`
+where both `a` and `b` are of the same type.
 
 #### Multiplication and Division
 
-The prefixes `w` and `r` denotes whether the function operates on `wad` or `ray` respectively.
+Both `Wad` and `Ray` implement the `Mul`, `MulEq`, `Div` and `DivEq` traits.
 
-- `wmul(a, b)`, `rmul(a, b)`: Multiplication of `a` and `b`
-- `wsigned_div(a, b)`, `rsigned_div(a, b)`: Signed division of `a` by `b`
-- `wunsigned_div(a, b)`, `runsigned_div(a, b)`: Unsigned division of `a` by `b` with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
-- `wunsigned_div_unchecked(a, b)`, `runsigned_div_unchecked(a, b)`: Unsigned division of `a` by `b`
+Multiplication and division can be performed as follows:
+- `a * b`
+- `a *= b`
+- `a / b`
+- `a /= b`
+where both `a` and `b` are of the same type.
 
-### Aggregation
+There is also a set of functions for operations involving a `Wad` and a `Ray`:
+- `wmul_wr`/`wmul_rw`: Multiply a `Wad` value with a `Ray` value, and divide the product by one `Wad` scale to return a `Ray`
+- `wdiv_rw`: Scale up a `Ray` value by one `Wad` scale and divide the scaled value by a `Wad` value to return a `Ray`
+- `rmul_wr`/`rmul_rw`: Multiply a `Wad` value with a `Ray` value, and divide the product by one `Ray` scale to return a `Wad`
+- `rdiv_wr`: Scale up a `Wad` value by one `Ray` scale and divide the scaled value by a `Ray` to return a `Wad`
+- `rdiv_ww`: Scale up a `Wad` value by one `Ray` scale and divide the scaled value by a `Wad` to return a `Ray`
 
-These functions operate on `wad` only.
+For multiplication, the prefixes `w` and `r` denote whether the product is divided (i.e. scaled down) by a `Wad` or `Ray` respectively. For division, the prefixes `w` and `r` denote whether the first operand is multiplied (i.e. scaled up) by a `Wad` or `Ray` before the division respectively.
 
-- `floor(n)` - Round a value down to the nearest `wad`
-- `ceil(n)` - Round a value up to the nearest `wad`
+#### Zero and one values
+
+Both `Wad` and `Ray` implement the `Zeroable` and `Oneable` traits.
+- `WadZeroable::zero()`/`RayZeroable::zero()`: Returns the zero value for `Wad` and `Ray` respectively
+- `is_zero()`: Returns true if the `Wad` or `Ray` value is zero
+- `is_non_zero()` Returns true if the `Wad` or `Ray` value is not zero
+
+#### Bound values
+
+Both `Wad` and `Ray` implement the `BoundedInt` trait.
+- `BoundedWad::max()`: Returns the maximum `Wad` value of 2<sup>128</sup> - 1
+- `BoundedWad::min()`: Returns the minimum `Wad` value of 0
+- `BoundedRay::max()`: Returns the maximum `Ray` value of 2<sup>128</sup> - 1
+- `BoundedRay::min()`: Returns the minimum `Ray` value of 0
+
+### Comparisons
+
+Both `Wad` and `Ray` implement the `PartialEq` and `PartialOrd` traits.
+
+Comparison can be performed as follows:
+- `a == b`
+- `a != b`
+- `a > b`
+- `a >= b`
+- `a < b`
+- `a <= b`
+where both `a` and `b` are of the same type.
 
 ### Conversion
 
-- `to_uint(n)`: Convert a felt value to `Uint256`
-- `from_uint(n)`: Convert a `Uint256` value to felt with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
-- `to_wad(n)`: Multiply `n` by 10<sup>18</sup> with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
-- `wad_to_ray(n)`: Multiply `n` by 10<sup>9</sup> with a bounds check that the result is within the range [-2<sup>125</sup>, 2<sup>125</sup>]
-- `ray_to_wad(n)`: Divide `n` by 10<sup>9</sup>
+The following conversions are supported by implementing the `Into` trait:
+- `Ray` -> `Wad`: Divide the `Ray` value by 10<sup>9</sup> and return a `Wad`
+- `Wad` -> `felt252`: Convert a `Wad` to a `felt252`
+- `Wad` -> `u256`: Convert a `Wad` to a `u256`
 
-### Bounds Check
-
-These functions operate on both `wad` and `ray`.
-
-- `assert_result_valid(n)`: Raises an error if `n` is not in the range [-2<sup>125</sup>, 2<sup>125</sup>]
-- `assert_result_valid_unsigned(n)`: Raises an error if `n` is not in the range [0, 2<sup>125</sup>]
+The following conversions are supported by implementing the `TryInto` trait:
+- `Wad` -> `Option::<Ray>`: Multiply the `Wad` value by 10<sup>9</sup> and return `Option::Some<Ray>` if there is no overflow or `Option::None` otherwise.
+- `u256` -> `Option::<Wad>`: Returns `Option::Some<Wad>` if the value is within bounds of `u128` or `Option::None` otherwise.
 
 ## Usage
 
-To use this library, include a copy of `wad_ray.cairo` in your project, and import the library into your Cairo contracts.
+To use this library, include a copy of `wadray.cairo` in your project, and import the library into your Cairo contracts.
 
-For example, assuming you have a `contracts/` folder with `wad_ray.cairo` and you want to import it into a Cairo file within the same folder:
+For example, assuming you have a `src/utils` folder with `wad_ray.cairo` and you want to import it into a Cairo file within the same folder:
 
 ```cairo
-%lang starknet
+use src::utils::wadray::Wad;
+use src::utils::wadray;
 
-from starkware.cairo.common.cairo_builtins import HashBuiltin
-from contracts.wad_ray import WadRay
-
-@external
-func add_wad{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    a: felt, b: felt
-) -> (c: felt):
-    let c: felt = WadRay.add(a, b)
-    return (c)
-end
+fn add_wad(a: Wad, b: Wad) -> Wad {
+    a + b
+}
 ```
 
-You can also refer to the test file `tests/test_wad_ray.cairo` for another example.
+You can also refer to the test file `src/test_wadray.cairo` for another example.
 
 ## Development
 
-### Set up the project
+### Prerequisites
 
-Clone the repository
-
-```bash
-git clone git@github.com:lindy-labs/cairo-wadray.git
-```
-
-`cd` into it and create a Python virtual environment:
-
-```bash
-cd cairo-wadray
-python3 -m venv env
-source env/bin/activate
-```
-
-Install dependencies:
-
-```bash
-python -m pip install -r requirements.txt
-```
+- [Cairo](https://github.com/starkware-libs/cairo)
+- [Scarb](https://docs.swmansion.com/scarb)
+- [Starknet Foundry](https://github.com/foundry-rs/starknet-foundry)
 
 ### Run tests
 
 To run the tests:
 
 ```bash
-pytest
+scarb test
 ```
 
 ## Formal Verification
