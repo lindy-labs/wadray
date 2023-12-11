@@ -22,4 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: foundry-rs/setup-snfoundry@v2
+        with:
+          starknet-foundry-version: "0.11.0"
       - run: snforge test
