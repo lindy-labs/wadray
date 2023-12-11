@@ -5,22 +5,21 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - uses: software-mansion/setup-scarb@v1
-          with:
-            scarb-version: "2.3.1"
-        - run: scarb fmt --check
-        - run: scarb build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: software-mansion/setup-scarb@v1
+        with:
+          scarb-version: "2.3.1"
+      - run: scarb fmt --check
+      - run: scarb build
 
   test:
     runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - uses: foundry-rs/setup-snfoundry@v2
-        - run: snforge test
+    steps:
+      - uses: actions/checkout@v3
+      - uses: foundry-rs/setup-snfoundry@v2
+      - run: snforge test
