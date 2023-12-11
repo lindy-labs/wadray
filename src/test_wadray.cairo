@@ -1,6 +1,6 @@
 use cairo_wadray::wadray::{
-    DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, rdiv_wr, rmul_rw, rmul_wr, Wad, WAD_ONE,
-    WAD_DECIMALS, WAD_SCALE, wdiv_rw, rdiv_ww, wmul_rw, wmul_wr
+    DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, rdiv_wr, rmul_rw, rmul_wr, Wad, WAD_ONE, WAD_DECIMALS, WAD_SCALE, wdiv_rw,
+    rdiv_ww, wmul_rw, wmul_wr
 };
 use cairo_wadray::wadray;
 
@@ -118,24 +118,16 @@ fn test_mul() {
     );
 
     // wmul(ray, wad) -> ray
-    assert(
-        wmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }) == Ray { val: RAY_ONE }, 'Incorrect multiplication #9'
-    );
+    assert(wmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }) == Ray { val: RAY_ONE }, 'Incorrect multiplication #9');
 
     // wmul(wad, ray) -> ray
-    assert(
-        wmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }) == Ray { val: RAY_ONE }, 'Incorrect multiplication #10'
-    );
+    assert(wmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }) == Ray { val: RAY_ONE }, 'Incorrect multiplication #10');
 
     // rmul(ray, wad) -> wad
-    assert(
-        rmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }) == Wad { val: WAD_ONE }, 'Incorrect multiplication #11'
-    );
+    assert(rmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }) == Wad { val: WAD_ONE }, 'Incorrect multiplication #11');
 
     // rmul(wad, ray) -> wad
-    assert(
-        rmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }) == Wad { val: WAD_ONE }, 'Incorrect multiplication #12'
-    );
+    assert(rmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }) == Wad { val: WAD_ONE }, 'Incorrect multiplication #12');
 }
 
 #[test]
@@ -152,14 +144,10 @@ fn test_mul_eq() {
 #[test]
 fn test_div() {
     // 2 / (1 / 2) = 4 (wad)
-    assert(
-        Wad { val: 2 * WAD_ONE } / Wad { val: WAD_ONE / 2 } == Wad { val: 4 * WAD_ONE }, 'Incorrect division #1'
-    );
+    assert(Wad { val: 2 * WAD_ONE } / Wad { val: WAD_ONE / 2 } == Wad { val: 4 * WAD_ONE }, 'Incorrect division #1');
 
     // 2 / (1 / 2) = 4 (ray)
-    assert(
-        Ray { val: 2 * RAY_ONE } / Ray { val: RAY_ONE / 2 } == Ray { val: 4 * RAY_ONE }, 'Incorrect division #2'
-    );
+    assert(Ray { val: 2 * RAY_ONE } / Ray { val: RAY_ONE / 2 } == Ray { val: 4 * RAY_ONE }, 'Incorrect division #2');
 
     // wdiv(ray, wad) -> ray
     assert(wdiv_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }) == Ray { val: RAY_ONE }, 'Incorrect division #3');
