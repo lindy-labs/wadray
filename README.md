@@ -81,13 +81,15 @@ The following conversions can be performed via the `TryInto` trait:
 
 ## Usage
 
-To use this library, include a copy of `wadray.cairo` in your project, and import the library into your Cairo contracts.
+To use this library, add the repository as a dependency in your `Scarb.toml`:
 
-For example, assuming you have a `src/utils` folder with `wad_ray.cairo` and you want to import it into a Cairo file within the same folder:
-
+```
+[dependencies]
+wadray = { git = "https://github.com/lindy-labs/cairo-wadray.git" }
+```
+then add the following line in your `.cairo` file
 ```cairo
-use src::utils::wadray::Wad;
-use src::utils::wadray;
+use wadray::wadray::Wad
 
 fn add_wad(a: Wad, b: Wad) -> Wad {
     a + b
