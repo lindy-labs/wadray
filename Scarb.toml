@@ -4,6 +4,8 @@ version = "0.1.0"
 
 [dependencies]
 starknet = "2.3.1"
+
+[dev-dependencies]
 snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry.git", tag = "v0.11.0" }
 
 [tool.fmt]
