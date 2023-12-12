@@ -1,5 +1,5 @@
 [package]
-name = "cairo_wadray"
+name = "wadray"
 version = "0.1.0"
 
 [dependencies]

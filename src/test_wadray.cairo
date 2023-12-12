@@ -1,8 +1,7 @@
-use cairo_wadray::wadray::{
-    DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, rdiv_wr, rmul_rw, rmul_wr, Wad, WAD_ONE, WAD_DECIMALS, WAD_SCALE, wdiv_rw,
-    rdiv_ww, wmul_rw, wmul_wr
+use wadray::wadray::{
+    BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr, Wad, WAD_ONE,
+    WAD_DECIMALS, WAD_SCALE, wdiv_rw, wmul_rw, wmul_wr,
 };
-use cairo_wadray::wadray;
 
 #[test]
 fn test_add() {
@@ -228,11 +227,11 @@ fn test_conversions_from_primitive_types() {
 fn test_bounded() {
     let max_u128 = 0xffffffffffffffffffffffffffffffff;
 
-    assert(wadray::BoundedWad::min() == Wad { val: 0 }, 'Wad min');
-    assert(wadray::BoundedWad::max() == Wad { val: max_u128 }, 'Wad max');
+    assert(BoundedWad::min() == Wad { val: 0 }, 'Wad min');
+    assert(BoundedWad::max() == Wad { val: max_u128 }, 'Wad max');
 
-    assert(wadray::BoundedRay::min() == Ray { val: 0 }, 'Ray min');
-    assert(wadray::BoundedRay::max() == Ray { val: max_u128 }, 'Ray max');
+    assert(BoundedRay::min() == Ray { val: 0 }, 'Ray min');
+    assert(BoundedRay::max() == Ray { val: max_u128 }, 'Ray max');
 }
 
 #[test]
