@@ -2,7 +2,7 @@
 
 ![tests](https://github.com/lindy-labs/cairo-wadray/actions/workflows/tests.yml/badge.svg)
 
-This library implements two types of fixed-point decimal numbers, "wad" (18 decimals of precision) and "ray" (27 decimals of decimal numbers), as both signed (`SignedWad` and `SignedRay`) and unsigned types (`Wad` and `Ray`), written in Cairo for [Starknet](https://docs.cairo-lang.org/index.html).
+This library implements two types of fixed-point decimal numbers, "wad" (18 decimals of precision) and "ray" (27 decimals of decimal numbers), available in signed (`SignedWad` and `SignedRay`) and unsigned (`Wad` and `Ray`) versions, written in Cairo for [Starknet](https://docs.cairo-lang.org/index.html).
 
 `Wad` and `Ray` are implemented as structs with a single `u128` member for the value, while `SignedWad` and `SignedRay` are implemented as structs with a `u128` member for the value and `bool` member for the `sign` (i.e. if the `sign` is `true`, then the value is negative). 
 
@@ -44,7 +44,7 @@ As these are fixed point operations, do take note that there will be a loss of p
 
 #### Zero and one values
 
-The following values and functions for both `Wad` and `Ray` are available via the `Zeroable` and `Oneable` traits.
+The following values and functions for both `Wad` and `Ray`, and `SignedWad` and `SignedRay`, are available via the `Zeroable` and `Oneable` traits.
 
 ##### Unsigned
 - `WadZeroable::zero()`/`RayZeroable::zero()`: Returns the zero value for `Wad` and `Ray` respectively
