@@ -17,6 +17,7 @@ Addition and subtraction can be performed via the `Add`, `AddEq`, `Sub` and `Sub
 - `a += b`
 - `a - b`
 - `a -= b`
+
 where both `a` and `b` are of the same type.
 
 #### Multiplication and Division
@@ -45,9 +46,9 @@ The following values and functions for both `Wad` and `Ray` are available via th
 - `WadZeroable::zero()`/`RayZeroable::zero()`: Returns the zero value for `Wad` and `Ray` respectively
 - `is_zero()`: Returns true if the `Wad` or `Ray` value is zero
 - `is_non_zero()` Returns true if the `Wad` or `Ray` value is not zero
-- `WadOneable::one()`/`RayOneable::one()`: Returns the scale value for `Wad` (i.e. one `Wad` scale) and `Ray` (i.e. one `Ray` scale) respectively
-- `is_one()`: Returns true if the `Wad` or `Ray` value is one
-- `is_non_one()` Returns true if the `Wad` or `Ray` value is not one
+- `WadOneable::one()`/`RayOneable::one()`: Returns the scale value for `Wad` (i.e. 10<sup>18</sup>) and `Ray` (i.e. 10<sup>27</sup>) respectively
+- `is_one()`: Returns true if the `Wad` or `Ray` value is the scale value (i.e. 10<sup>18</sup> and 10<sup>27</sup> respectively)
+- `is_non_one()` Returns true if the `Wad` or `Ray` value is not the scale value (i.e. 10<sup>18</sup> and 10<sup>27</sup> respectively)
 
 #### Bound values
 
@@ -66,14 +67,15 @@ Comparison for both `Wad` and `Ray` can be performed via the `PartialEq` and `Pa
 - `a >= b`
 - `a < b`
 - `a <= b`
+
 where both `a` and `b` are of the same type.
 
 ### Conversion
 
 The following conversions can be performed via the `Into` trait:
 - `Ray` -> `Wad`: Divide the `Ray` value by 10<sup>9</sup> and return a `Wad`
-- `Wad` -> `felt252`: Convert a `Wad` to a `felt252`
-- `Wad` -> `u256`: Convert a `Wad` to a `u256`
+- `Wad` -> `felt252`: Convert a `Wad` to a `felt252` without modifying the value
+- `Wad` -> `u256`: Convert a `Wad` to a `u256` without modifying the value
 
 The following conversions can be performed via the `TryInto` trait:
 - `Wad` -> `Option::<Ray>`: Multiply the `Wad` value by 10<sup>9</sup> and return `Option::Some<Ray>` if there is no overflow or `Option::None` otherwise.
