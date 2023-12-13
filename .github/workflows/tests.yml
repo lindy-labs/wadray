@@ -7,51 +7,17 @@ on:
   pull_request:
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Python setup
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.9'
-          cache: pip
-          cache-dependency-path: '**/requirements.txt'
-
-      - name: Env setup
-        run: pip install -r requirements.txt
-
-      - name: Lint Cairo code
-        run: find contracts -type f -name '*.cairo' | xargs cairo-format -c
-
-      - name: Run black
-        run: black --check .
-
-      - name: Run flake8
-        run: flake8
-
-      - name: Run isort
-        run: isort --check-only --diff tests/
-
   test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Python setup
-        uses: actions/setup-python@v3
+      - uses: actions/checkout@v3
+      - uses: software-mansion/setup-scarb@v1
         with:
-          python-version: '3.9'
-          cache: pip
-          cache-dependency-path: '**/requirements.txt'
+          scarb-version: "2.3.1"
+      - run: scarb fmt --check
+      - run: scarb build
 
-      - name: Env setup
-        run: pip install -r requirements.txt
-
-      - name: Run tests
-        run: pytest -sv -r A tests
+      - uses: foundry-rs/setup-snfoundry@v2
+        with:
+          starknet-foundry-version: "0.11.0"
+      - run: snforge test
