@@ -270,6 +270,10 @@ mod test_wadray_signed {
         assert(one.is_one(), 'Oneable is_one fail');
         assert(!one.is_non_one(), 'Oneable is_non_one fail');
 
+        let minus_one = SignedWad { val: WAD_ONE, sign: true };
+        assert(!minus_one.is_one(), 'Oneable minus_one is_one fail');
+        assert(minus_one.is_non_one(), 'Oneable minus_one is_non_one f');
+
         let non_one = SignedWad { val: 200, sign: false };
         assert(!non_one.is_one(), 'Oneable non_one fail');
         assert(non_one.is_non_one(), 'Oneable non_one fail');
@@ -291,6 +295,10 @@ mod test_wadray_signed {
         assert(!one.sign, 'Oneable one sign fail');
         assert(one.is_one(), 'Oneable is_one fail');
         assert(!one.is_non_one(), 'Oneable is_non_one fail');
+
+        let minus_one = SignedRay { val: RAY_ONE, sign: true };
+        assert(!minus_one.is_one(), 'Oneable minus_one is_one fail');
+        assert(minus_one.is_non_one(), 'Oneable minus_one is_non_one f');
 
         let non_one = SignedRay { val: 200, sign: false };
         assert(!non_one.is_one(), 'Oneable non_one fail');
