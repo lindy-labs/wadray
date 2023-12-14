@@ -2,7 +2,9 @@
 
 ![tests](https://github.com/lindy-labs/cairo-wadray/actions/workflows/tests.yml/badge.svg)
 
-This library provides a felt-based implementation of arithmetic functions for two types of fixed-point decimal numbers, `Wad` (18 decimals of precision) and `Ray` (27 decimals of decimal numbers), written in Cairo for [Starknet](https://docs.cairo-lang.org/index.html).
+This library implements two types of fixed-point decimal numbers, "wad" (18 decimals of precision) and "ray" (27 decimals of decimal numbers), available in signed (`SignedWad` and `SignedRay`) and unsigned (`Wad` and `Ray`) versions, written in Cairo for [Starknet](https://docs.cairo-lang.org/index.html).
+
+`Wad` and `Ray` are implemented as structs with a single `u128` member for the value, while `SignedWad` and `SignedRay` are implemented as structs with a `u128` member for the value and `bool` member for the `sign` (i.e. if the `sign` is `true`, then the value is negative). 
 
 ## Overview
 
@@ -42,13 +44,23 @@ As these are fixed point operations, do take note that there will be a loss of p
 
 #### Zero and one values
 
-The following values and functions for both `Wad` and `Ray` are available via the `Zeroable` and `Oneable` traits.
+The following values and functions for both `Wad` and `Ray`, and `SignedWad` and `SignedRay`, are available via the `Zeroable` and `Oneable` traits.
+
+##### Unsigned
 - `WadZeroable::zero()`/`RayZeroable::zero()`: Returns the zero value for `Wad` and `Ray` respectively
 - `is_zero()`: Returns true if the `Wad` or `Ray` value is zero
 - `is_non_zero()` Returns true if the `Wad` or `Ray` value is not zero
 - `WadOneable::one()`/`RayOneable::one()`: Returns the scale value for `Wad` (i.e. 10<sup>18</sup>) and `Ray` (i.e. 10<sup>27</sup>) respectively
 - `is_one()`: Returns true if the `Wad` or `Ray` value is the scale value (i.e. 10<sup>18</sup> and 10<sup>27</sup> respectively)
 - `is_non_one()` Returns true if the `Wad` or `Ray` value is not the scale value (i.e. 10<sup>18</sup> and 10<sup>27</sup> respectively)
+
+##### Signed
+- `SignedWadZeroable::zero()`/`SignedRayZeroable::zero()`: Returns the zero value for `Wad` and `Ray` respectively
+- `is_zero()`: Returns true if the `SignedWad` or `SignedRay` value is zero, regardless of the `sign`.
+- `is_non_zero()` Returns true if the `SignedWad` or `SignedRay` value is not zero
+- `SignedWadOneable::one()`/`SignedRayOneable::one()`: Returns the positive scale value for "wad" (i.e. 10<sup>18</sup>) and "ray" (i.e. 10<sup>27</sup>) respectively
+- `is_one()`: Returns true if the `SignedWad` or `SignedRay` value is the positive scale value (i.e. 10<sup>18</sup> and 10<sup>27</sup> respectively)
+- `is_non_one()` Returns true if the `SignedWad` or `SignedRay` value is not the positive scale value (i.e. 10<sup>18</sup> and 10<sup>27</sup> respectively)
 
 #### Bound values
 
@@ -60,7 +72,7 @@ The bound values for both `Wad` and `Ray` can be obtained via the `BoundedInt` t
 
 ### Comparisons
 
-Comparison for both `Wad` and `Ray` can be performed via the `PartialEq` and `PartialOrd` traits as follows:
+Comparison for both `Wad` and `Ray`, and `SignedWad` and `SignedRay`, can be performed via the `PartialEq` and `PartialOrd` traits as follows:
 - `a == b`
 - `a != b`
 - `a > b`
@@ -72,14 +84,33 @@ where both `a` and `b` are of the same type.
 
 ### Conversion
 
-The following conversions can be performed via the `Into` trait:
-- `Ray` -> `Wad`: Divide the `Ray` value by 10<sup>9</sup> and return a `Wad`
+Any type that can be converted to a `u128` via the `Into` trait can similarly be converted to a `Wad` or `Ray` via the `Into` trait.
+
+Additionally, the following conversions from integer types are supported for `SignedWad` and `SignedRay` via the `Into` trait`:
+- `u128` -> `SignedWad`: Convert a `u128` to a `SignedWad` without modifying the value, with the `sign` set to `false`
+- `u128` -> `SignedRay`: Convert a `u128` to a `SignedRay` without modifying the value, with the `sign` set to `false`
+
+The following conversions from this library's types can also be performed via the `Into` trait:
 - `Wad` -> `felt252`: Convert a `Wad` to a `felt252` without modifying the value
 - `Wad` -> `u256`: Convert a `Wad` to a `u256` without modifying the value
+- `Wad` -> `SignedWad`: Convert a `Wad` to a `SignedWad` without modifying the value, with the `sign` set to `false`
+- `Wad` -> `SignedRay`: Multiply the `Wad` by 10<sup>9</sup> and return a `SignedRay` with the `sign` set to `false`
+- `Ray` -> `Wad`: Divide the `Ray` value by 10<sup>9</sup> and return a `Wad`
+- `Ray` -> `SignedRay`: Convert a `Ray` to a `SignedRay` without modifying the value, with the `sign` set to `false`
+- `SignedWad` -> `felt252`: Convert a `SignedWad` to a `felt252` without modifying the value
+- `SignedRay` -> `felt252`: Convert a `SignedRay` to a `felt252` without modifying the value
 
 The following conversions can be performed via the `TryInto` trait:
-- `Wad` -> `Option::<Ray>`: Multiply the `Wad` value by 10<sup>9</sup> and return `Option::Some<Ray>` if there is no overflow or `Option::None` otherwise.
-- `u256` -> `Option::<Wad>`: Returns `Option::Some<Wad>` if the value is within bounds of `u128` or `Option::None` otherwise.
+- `Wad` -> `Option::<Ray>`: Multiply the `Wad` value by 10<sup>9</sup> and return `Option::Some<Ray>` if there is no overflow or `Option::None` otherwise
+- `u256` -> `Option::<Wad>`: Returns `Option::Some<Wad>` if the value is within bounds of `u128` or `Option::None` otherwise
+- `SignedWad` -> `Option::<Wad>`: Returns `Option::Some<Wad>` if `sign` is false or `Option::None` otherwise
+- `SignedRay` -> `Option::<Ray>`: Returns `Option::Some<Ray>` if `sign` is false or `Option::None` otherwise
+
+### Signed
+
+The following functions are available for `SignedWad` and `SignedRay` via the `Signed` trait:
+- `is_negative()`: Returns true if the value is less than zero
+- `is_positive()`: Returns true if the value is greater than zero
 
 ## Usage
 
@@ -117,7 +148,7 @@ scarb test
 ```
 
 ## Formal Verification
-The WadRay library is in the process of being formally verified by the Lindy Labs FV unit.
+This library is in the process of being formally verified by the Lindy Labs FV unit.
 
 ## Contribute
 
