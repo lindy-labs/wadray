@@ -180,19 +180,19 @@ impl SignedRayDivEq of DivEq<SignedRay> {
 }
 
 
-// Signed
-impl SignedWadSigned of Signed<SignedWad> {
-    fn is_negative(self: SignedWad) -> bool {
-        self.val > 0 && self.sign
-    }
-
-    fn is_positive(self: SignedWad) -> bool {
-        self.val > 0 && !self.sign
+// Conversions
+impl U128IntoSignedWad of Into<u128, SignedWad> {
+    fn into(self: u128) -> SignedWad {
+        SignedWad { val: self, sign: false }
     }
 }
 
+impl U128IntoSignedRay of Into<u128, SignedRay> {
+    fn into(self: u128) -> SignedRay {
+        SignedRay { val: self, sign: false }
+    }
+}
 
-// Conversions
 impl SignedWadIntoFelt252 of Into<SignedWad, felt252> {
     fn into(self: SignedWad) -> felt252 {
         let mag_felt: felt252 = self.val.into();
@@ -205,15 +205,33 @@ impl SignedWadIntoFelt252 of Into<SignedWad, felt252> {
     }
 }
 
-impl U128IntoSignedWad of Into<u128, SignedWad> {
-    fn into(self: u128) -> SignedWad {
-        SignedWad { val: self, sign: false }
+impl SignedRayIntoFelt252 of Into<SignedRay, felt252> {
+    fn into(self: SignedRay) -> felt252 {
+        let mag_felt: felt252 = self.val.into();
+
+        if self.sign {
+            return mag_felt * -1;
+        } else {
+            return mag_felt;
+        }
     }
 }
 
 impl WadIntoSignedWad of Into<Wad, SignedWad> {
     fn into(self: Wad) -> SignedWad {
         SignedWad { val: self.val, sign: false }
+    }
+}
+
+impl WadIntoSignedRay of Into<Wad, SignedRay> {
+    fn into(self: Wad) -> SignedRay {
+        SignedRay { val: self.val * DIFF, sign: false }
+    }
+}
+
+impl RayIntoSignedRay of Into<Ray, SignedRay> {
+    fn into(self: Ray) -> SignedRay {
+        SignedRay { val: self.val, sign: false }
     }
 }
 
@@ -224,24 +242,6 @@ impl SignedWadTryIntoWad of TryInto<SignedWad, Wad> {
         } else {
             return Option::None;
         }
-    }
-}
-
-impl U128IntoSignedRay of Into<u128, SignedRay> {
-    fn into(self: u128) -> SignedRay {
-        SignedRay { val: self, sign: false }
-    }
-}
-
-impl RayIntoSignedRay of Into<Ray, SignedRay> {
-    fn into(self: Ray) -> SignedRay {
-        SignedRay { val: self.val, sign: false }
-    }
-}
-
-impl WadIntoSignedRay of Into<Wad, SignedRay> {
-    fn into(self: Wad) -> SignedRay {
-        SignedRay { val: self.val * DIFF, sign: false }
     }
 }
 
@@ -468,6 +468,16 @@ trait Signed<T> {
     fn is_positive(self: T) -> bool;
 }
 
+impl SignedWadSigned of Signed<SignedWad> {
+    fn is_negative(self: SignedWad) -> bool {
+        self.val > 0 && self.sign
+    }
+
+    fn is_positive(self: SignedWad) -> bool {
+        self.val > 0 && !self.sign
+    }
+}
+
 impl SignedRaySigned of Signed<SignedRay> {
     fn is_negative(self: SignedRay) -> bool {
         self.val > 0 && self.sign
@@ -475,17 +485,5 @@ impl SignedRaySigned of Signed<SignedRay> {
 
     fn is_positive(self: SignedRay) -> bool {
         self.val > 0 && !self.sign
-    }
-}
-
-impl SignedRayIntoFelt252 of Into<SignedRay, felt252> {
-    fn into(self: SignedRay) -> felt252 {
-        let mag_felt: felt252 = self.val.into();
-
-        if self.sign {
-            return mag_felt * -1;
-        } else {
-            return mag_felt;
-        }
     }
 }
