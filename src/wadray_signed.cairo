@@ -1,4 +1,5 @@
 use debug::PrintTrait;
+use integer::BoundedInt;
 use math::Oneable;
 use wadray::wadray::{DIFF, Ray, RAY_ONE, rdiv_internal, rmul_internal, Wad, WAD_ONE, wdiv_internal, wmul_internal};
 
@@ -316,6 +317,32 @@ impl SignedRayPartialOrd of PartialOrd<SignedRay> {
         } else {
             (lhs.val != rhs.val) && ((lhs.val > rhs.val) ^ lhs.sign)
         }
+    }
+}
+
+
+// Bounded
+impl BoundedSignedWad of BoundedInt<SignedWad> {
+    #[inline(always)]
+    fn min() -> SignedWad nopanic {
+        SignedWad { val: integer::BoundedU128::max(), sign: true }
+    }
+
+    #[inline(always)]
+    fn max() -> SignedWad nopanic {
+        SignedWad { val: integer::BoundedU128::max(), sign: false }
+    }
+}
+
+impl BoundedSignedRay of BoundedInt<SignedRay> {
+    #[inline(always)]
+    fn min() -> SignedRay nopanic {
+        SignedRay { val: integer::BoundedU128::max(), sign: true }
+    }
+
+    #[inline(always)]
+    fn max() -> SignedRay nopanic {
+        SignedRay { val: integer::BoundedU128::max(), sign: false }
     }
 }
 

@@ -3,7 +3,8 @@ mod test_wadray_signed {
     use math::Oneable;
     use wadray::wadray::{DIFF, Ray, RAY_ONE, Wad, WAD_ONE};
     use wadray::wadray_signed::{
-        Signed, SignedRay, SignedRayOneable, SignedRayZeroable, SignedWad, SignedWadOneable, SignedWadZeroable
+        BoundedSignedWad, BoundedSignedRay, Signed, SignedRay, SignedRayOneable, SignedRayZeroable, SignedWad,
+        SignedWadOneable, SignedWadZeroable
     };
 
     #[test]
@@ -143,6 +144,17 @@ mod test_wadray_signed {
         assert(zero <= zero, '0 <= 0');
         assert(zero <= a, '0 <= a');
         assert(!(a <= zero), 'a <= 0');
+    }
+
+    #[test]
+    fn test_bounded() {
+        let max_u128 = 0xffffffffffffffffffffffffffffffff;
+
+        assert(BoundedSignedWad::min() == SignedWad { val: max_u128, sign: true }, 'SignedWad min');
+        assert(BoundedSignedWad::max() == SignedWad { val: max_u128, sign: false }, 'SignedWad max');
+
+        assert(BoundedSignedRay::min() == SignedRay { val: max_u128, sign: true }, 'SignedRay min');
+        assert(BoundedSignedRay::max() == SignedRay { val: max_u128, sign: false }, 'SignedRay max');
     }
 
     #[test]
