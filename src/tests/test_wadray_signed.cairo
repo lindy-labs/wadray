@@ -3,7 +3,8 @@ mod test_wadray_signed {
     use math::Oneable;
     use wadray::wadray::{DIFF, Ray, RAY_ONE, Wad, WAD_ONE};
     use wadray::wadray_signed::{
-        Signed, SignedRay, SignedRayOneable, SignedRayZeroable, SignedWad, SignedWadOneable, SignedWadZeroable
+        BoundedSignedWad, BoundedSignedRay, Signed, SignedRay, SignedRayOneable, SignedRayZeroable, SignedWad,
+        SignedWadOneable, SignedWadZeroable
     };
 
     #[test]
@@ -27,6 +28,26 @@ mod test_wadray_signed {
         assert(b - a == SignedRay { val: 200, sign: true }, 'b - a != -200');
         assert(a + c == SignedRay { val: 60, sign: false }, 'a + c != 60');
         assert(a - c == SignedRay { val: 140, sign: false }, 'a - c != 140');
+    }
+
+    #[test]
+    fn test_add_eq() {
+        let mut a1 = SignedWad { val: 5, sign: true };
+        let a2 = SignedWad { val: 5, sign: true };
+        let b = SignedWad { val: 3, sign: false };
+
+        a1 += b;
+        assert(a1 == a2 + b, 'Incorrect AddEq #1');
+    }
+
+    #[test]
+    fn test_sub_eq() {
+        let mut a1 = SignedWad { val: 5, sign: true };
+        let a2 = SignedWad { val: 5, sign: true };
+        let b = SignedWad { val: 3, sign: false };
+
+        a1 -= b;
+        assert(a1 == a2 - b, 'Incorrect SubEq #1');
     }
 
     #[test]
@@ -60,6 +81,26 @@ mod test_wadray_signed {
         assert((c / a) == SignedRay { val: 5 * RAY_ONE, sign: false }, 'c / a != 5.0');
         assert((a / d) == SignedRay { val: 1 * RAY_ONE, sign: true }, 'a / d != -1.0');
         assert((b / d) == SignedRay { val: 2 * RAY_ONE, sign: false }, 'b / d != 2.0');
+    }
+
+    #[test]
+    fn test_mul_eq() {
+        let mut a1 = SignedWad { val: 5, sign: true };
+        let a2 = SignedWad { val: 5, sign: true };
+        let b = SignedWad { val: 3, sign: false };
+
+        a1 *= b;
+        assert(a1 == a2 * b, 'Incorrect MulEq #1');
+    }
+
+    #[test]
+    fn test_div_eq() {
+        let mut a1 = SignedWad { val: 15, sign: true };
+        let a2 = SignedWad { val: 15, sign: true };
+        let b = SignedWad { val: 3, sign: false };
+
+        a1 /= b;
+        assert(a1 == a2 / b, 'Incorrect DivEq #1');
     }
 
     #[test]
@@ -143,6 +184,17 @@ mod test_wadray_signed {
         assert(zero <= zero, '0 <= 0');
         assert(zero <= a, '0 <= a');
         assert(!(a <= zero), 'a <= 0');
+    }
+
+    #[test]
+    fn test_bounded() {
+        let max_u128 = 0xffffffffffffffffffffffffffffffff;
+
+        assert(BoundedSignedWad::min() == SignedWad { val: max_u128, sign: true }, 'SignedWad min');
+        assert(BoundedSignedWad::max() == SignedWad { val: max_u128, sign: false }, 'SignedWad max');
+
+        assert(BoundedSignedRay::min() == SignedRay { val: max_u128, sign: true }, 'SignedRay min');
+        assert(BoundedSignedRay::max() == SignedRay { val: max_u128, sign: false }, 'SignedRay max');
     }
 
     #[test]
