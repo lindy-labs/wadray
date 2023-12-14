@@ -101,6 +101,20 @@ impl SignedRaySub of Sub<SignedRay> {
     }
 }
 
+impl SignedWadSubEq of SubEq<SignedWad> {
+    #[inline(always)]
+    fn sub_eq(ref self: SignedWad, other: SignedWad) {
+        self = self - other;
+    }
+}
+
+impl SignedRaySubEq of SubEq<SignedRay> {
+    #[inline(always)]
+    fn sub_eq(ref self: SignedRay, other: SignedRay) {
+        self = self - other;
+    }
+}
+
 
 // Multiplication
 impl SignedWadMul of Mul<SignedWad> {
@@ -116,6 +130,20 @@ impl SignedRayMul of Mul<SignedRay> {
         let sign = sign_from_mul(lhs.sign, rhs.sign);
         let val = rmul_internal(lhs.val, rhs.val);
         SignedRay { val: val, sign: sign }
+    }
+}
+
+impl SignedWadMulEq of MulEq<SignedWad> {
+    #[inline(always)]
+    fn mul_eq(ref self: SignedWad, other: SignedWad) {
+        self = self * other;
+    }
+}
+
+impl SignedRayMulEq of MulEq<SignedRay> {
+    #[inline(always)]
+    fn mul_eq(ref self: SignedRay, other: SignedRay) {
+        self = self * other;
     }
 }
 
@@ -136,6 +164,21 @@ impl SignedRayDiv of Div<SignedRay> {
         SignedRay { val: val, sign: sign }
     }
 }
+
+impl SignedWadDivEq of DivEq<SignedWad> {
+    #[inline(always)]
+    fn div_eq(ref self: SignedWad, other: SignedWad) {
+        self = self / other;
+    }
+}
+
+impl SignedRayDivEq of DivEq<SignedRay> {
+    #[inline(always)]
+    fn div_eq(ref self: SignedRay, other: SignedRay) {
+        self = self / other;
+    }
+}
+
 
 // Signed
 impl SignedWadSigned of Signed<SignedWad> {

@@ -31,6 +31,26 @@ mod test_wadray_signed {
     }
 
     #[test]
+    fn test_add_eq() {
+        let mut a1 = SignedWad { val: 5, sign: true };
+        let a2 = SignedWad { val: 5, sign: true };
+        let b = SignedWad { val: 3, sign: false };
+
+        a1 += b;
+        assert(a1 == a2 + b, 'Incorrect AddEq #1');
+    }
+
+    #[test]
+    fn test_sub_eq() {
+        let mut a1 = SignedWad { val: 5, sign: true };
+        let a2 = SignedWad { val: 5, sign: true };
+        let b = SignedWad { val: 3, sign: false };
+
+        a1 -= b;
+        assert(a1 == a2 - b, 'Incorrect SubEq #1');
+    }
+
+    #[test]
     fn test_mul_div() {
         let a = SignedWad { val: WAD_ONE, sign: false }; // 1.0 ray
         let b = SignedWad { val: 2 * WAD_ONE, sign: true }; // -2.0 ray
@@ -61,6 +81,26 @@ mod test_wadray_signed {
         assert((c / a) == SignedRay { val: 5 * RAY_ONE, sign: false }, 'c / a != 5.0');
         assert((a / d) == SignedRay { val: 1 * RAY_ONE, sign: true }, 'a / d != -1.0');
         assert((b / d) == SignedRay { val: 2 * RAY_ONE, sign: false }, 'b / d != 2.0');
+    }
+
+    #[test]
+    fn test_mul_eq() {
+        let mut a1 = SignedWad { val: 5, sign: true };
+        let a2 = SignedWad { val: 5, sign: true };
+        let b = SignedWad { val: 3, sign: false };
+
+        a1 *= b;
+        assert(a1 == a2 * b, 'Incorrect MulEq #1');
+    }
+
+    #[test]
+    fn test_div_eq() {
+        let mut a1 = SignedWad { val: 15, sign: true };
+        let a2 = SignedWad { val: 15, sign: true };
+        let b = SignedWad { val: 3, sign: false };
+
+        a1 /= b;
+        assert(a1 == a2 / b, 'Incorrect DivEq #1');
     }
 
     #[test]
