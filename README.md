@@ -122,7 +122,7 @@ wadray = { git = "https://github.com/lindy-labs/cairo-wadray.git" }
 ```
 then add the following line in your `.cairo` file
 ```cairo
-use wadray::wadray::Wad
+use wadray::Wad;
 
 fn add_wad(a: Wad, b: Wad) -> Wad {
     a + b
