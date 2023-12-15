@@ -1,4 +1,4 @@
-use wadray::wadray::{
+use wadray::{
     BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr, Wad, WAD_ONE,
     WAD_DECIMALS, WAD_SCALE, wdiv_rw, wmul_rw, wmul_wr,
 };

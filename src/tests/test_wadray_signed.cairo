@@ -1,11 +1,11 @@
 mod test_wadray_signed {
     use debug::PrintTrait;
     use math::Oneable;
-    use wadray::wadray::{DIFF, Ray, RAY_ONE, Wad, WAD_ONE};
-    use wadray::wadray_signed::{
+    use wadray::{
         BoundedSignedWad, BoundedSignedRay, Signed, SignedRay, SignedRayOneable, SignedRayZeroable, SignedWad,
         SignedWadOneable, SignedWadZeroable
     };
+    use wadray::{DIFF, Ray, RAY_ONE, Wad, WAD_ONE};
 
     #[test]
     fn test_add_sub() {
