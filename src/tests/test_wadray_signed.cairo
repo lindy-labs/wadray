@@ -2,8 +2,8 @@ mod test_wadray_signed {
     use debug::PrintTrait;
     use math::Oneable;
     use wadray::{
-        BoundedSignedWad, BoundedSignedRay, DIFF, Ray, RAY_ONE, Signed, SignedRay, SignedRayOneable, SignedRayZeroable, SignedWad,
-        SignedWadOneable, SignedWadZeroable, Wad, WAD_ONE
+        BoundedSignedWad, BoundedSignedRay, DIFF, Ray, RAY_ONE, Signed, SignedRay, SignedRayOneable, SignedRayZeroable,
+        SignedWad, SignedWadOneable, SignedWadZeroable, Wad, WAD_ONE
     };
 
     #[test]
