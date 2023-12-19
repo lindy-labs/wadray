@@ -1,6 +1,6 @@
 # WadRay library for Cairo
 
-![tests](https://github.com/lindy-labs/cairo-wadray/actions/workflows/tests.yml/badge.svg)
+![tests](https://github.com/lindy-labs/wadray/actions/workflows/tests.yml/badge.svg)
 
 This library implements two types of fixed-point decimal numbers, "wad" (18 decimals of precision) and "ray" (27 decimals of decimal numbers), available in signed (`SignedWad` and `SignedRay`) and unsigned (`Wad` and `Ray`) versions, written in Cairo for [Starknet](https://docs.cairo-lang.org/index.html).
 
