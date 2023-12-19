@@ -118,7 +118,7 @@ To use this library, add the repository as a dependency in your `Scarb.toml`:
 
 ```
 [dependencies]
-wadray = { git = "https://github.com/lindy-labs/cairo-wadray.git" }
+wadray = { git = "https://github.com/lindy-labs/wadray.git" }
 ```
 then add the following line in your `.cairo` file
 ```cairo
