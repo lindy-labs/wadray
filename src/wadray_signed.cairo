@@ -1,7 +1,7 @@
 use debug::PrintTrait;
 use integer::BoundedInt;
 use math::Oneable;
-use wadray::wadray::{DIFF, Ray, RAY_ONE, rdiv_internal, rmul_internal, Wad, WAD_ONE, wdiv_internal, wmul_internal};
+use wadray::wadray::{DIFF, Ray, RAY_ONE, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul, Wad, WAD_ONE};
 
 const HALF_PRIME: felt252 = 1809251394333065606848661391547535052811553607665798349986546028067936010240;
 
@@ -120,7 +120,7 @@ impl SignedRaySubEq of SubEq<SignedRay> {
 impl SignedWadMul of Mul<SignedWad> {
     fn mul(lhs: SignedWad, rhs: SignedWad) -> SignedWad {
         let sign = sign_from_mul(lhs.sign, rhs.sign);
-        let val = wmul_internal(lhs.val, rhs.val);
+        let val = u128_wmul(lhs.val, rhs.val);
         SignedWad { val: val, sign: sign }
     }
 }
@@ -128,7 +128,7 @@ impl SignedWadMul of Mul<SignedWad> {
 impl SignedRayMul of Mul<SignedRay> {
     fn mul(lhs: SignedRay, rhs: SignedRay) -> SignedRay {
         let sign = sign_from_mul(lhs.sign, rhs.sign);
-        let val = rmul_internal(lhs.val, rhs.val);
+        let val = u128_rmul(lhs.val, rhs.val);
         SignedRay { val: val, sign: sign }
     }
 }
@@ -152,7 +152,7 @@ impl SignedRayMulEq of MulEq<SignedRay> {
 impl SignedWadDiv of Div<SignedWad> {
     fn div(lhs: SignedWad, rhs: SignedWad) -> SignedWad {
         let sign = sign_from_mul(lhs.sign, rhs.sign);
-        let val = wdiv_internal(lhs.val, rhs.val);
+        let val = u128_wdiv(lhs.val, rhs.val);
         SignedWad { val: val, sign: sign }
     }
 }
@@ -160,7 +160,7 @@ impl SignedWadDiv of Div<SignedWad> {
 impl SignedRayDiv of Div<SignedRay> {
     fn div(lhs: SignedRay, rhs: SignedRay) -> SignedRay {
         let sign = sign_from_mul(lhs.sign, rhs.sign);
-        let val = rdiv_internal(lhs.val, rhs.val);
+        let val = u128_rdiv(lhs.val, rhs.val);
         SignedRay { val: val, sign: sign }
     }
 }
