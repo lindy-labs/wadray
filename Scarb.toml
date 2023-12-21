@@ -5,7 +5,7 @@ cairo-version = "2.3.1"
 authors = ["Lindy Labs"]
 description = "Fixed-point decimal numbers for Cairo"
 readme = "README.md"
-repository = "https://github.com/lindy-labs/cairo-wadray"
+repository = "https://github.com/lindy-labs/wadray"
 license-file = "LICENSE"
 keywords = ["fixed-point", "wad", "ray", "cairo", "starknet"]
 
