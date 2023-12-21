@@ -35,13 +35,13 @@ fn cast_to_u256(a: u128, b: u128) -> (u256, u256) {
 
 #[inline(always)]
 fn wmul(lhs: Wad, rhs: Wad) -> Wad {
-    Wad { val: wmul_internal(lhs.val, rhs.val) }
+    Wad { val: u128_wmul(lhs.val, rhs.val) }
 }
 
 // wmul of Wad and Ray -> Ray
 #[inline(always)]
 fn wmul_wr(lhs: Wad, rhs: Ray) -> Ray {
-    Ray { val: wmul_internal(lhs.val, rhs.val) }
+    Ray { val: u128_wmul(lhs.val, rhs.val) }
 }
 
 #[inline(always)]
@@ -51,13 +51,13 @@ fn wmul_rw(lhs: Ray, rhs: Wad) -> Ray {
 
 #[inline(always)]
 fn rmul(lhs: Ray, rhs: Ray) -> Ray {
-    Ray { val: rmul_internal(lhs.val, rhs.val) }
+    Ray { val: u128_rmul(lhs.val, rhs.val) }
 }
 
 // rmul of Wad and Ray -> Wad
 #[inline(always)]
 fn rmul_rw(lhs: Ray, rhs: Wad) -> Wad {
-    Wad { val: rmul_internal(lhs.val, rhs.val) }
+    Wad { val: u128_rmul(lhs.val, rhs.val) }
 }
 
 #[inline(always)]
@@ -67,68 +67,68 @@ fn rmul_wr(lhs: Wad, rhs: Ray) -> Wad {
 
 #[inline(always)]
 fn wdiv(lhs: Wad, rhs: Wad) -> Wad {
-    Wad { val: wdiv_internal(lhs.val, rhs.val) }
+    Wad { val: u128_wdiv(lhs.val, rhs.val) }
 }
 
 // wdiv of Ray by Wad -> Ray
 #[inline(always)]
 fn wdiv_rw(lhs: Ray, rhs: Wad) -> Ray {
-    Ray { val: wdiv_internal(lhs.val, rhs.val) }
+    Ray { val: u128_wdiv(lhs.val, rhs.val) }
 }
 
 #[inline(always)]
 fn rdiv(lhs: Ray, rhs: Ray) -> Ray {
-    Ray { val: rdiv_internal(lhs.val, rhs.val) }
+    Ray { val: u128_rdiv(lhs.val, rhs.val) }
 }
 
 // rdiv of Wad by Ray -> Wad
 #[inline(always)]
 fn rdiv_wr(lhs: Wad, rhs: Ray) -> Wad {
-    Wad { val: rdiv_internal(lhs.val, rhs.val) }
+    Wad { val: u128_rdiv(lhs.val, rhs.val) }
 }
 
 // rdiv of Wad by Wad -> Ray
 #[inline(always)]
 fn rdiv_ww(lhs: Wad, rhs: Wad) -> Ray {
-    Ray { val: rdiv_internal(lhs.val, rhs.val) }
+    Ray { val: u128_rdiv(lhs.val, rhs.val) }
 }
 
 #[inline(always)]
 fn scale_u128_by_ray(lhs: u128, rhs: Ray) -> u128 {
-    rmul_internal(lhs, rhs.val)
+    u128_rmul(lhs, rhs.val)
 }
 
 #[inline(always)]
 fn div_u128_by_ray(lhs: u128, rhs: Ray) -> u128 {
-    rdiv_internal(lhs, rhs.val)
+    u128_rdiv(lhs, rhs.val)
 }
 
 //
-// Internal helpers
+// Helpers
 //
 
 #[inline(always)]
-fn wmul_internal(lhs: u128, rhs: u128) -> u128 {
+fn u128_wmul(lhs: u128, rhs: u128) -> u128 {
     let (lhs_u256, rhs_u256) = cast_to_u256(lhs, rhs);
-    (lhs_u256 * rhs_u256 / WAD_ONE.into()).try_into().expect('wmul_internal')
+    (lhs_u256 * rhs_u256 / WAD_ONE.into()).try_into().expect('u128_wmul')
 }
 
 #[inline(always)]
-fn rmul_internal(lhs: u128, rhs: u128) -> u128 {
+fn u128_rmul(lhs: u128, rhs: u128) -> u128 {
     let (lhs_u256, rhs_u256) = cast_to_u256(lhs, rhs);
-    (lhs_u256 * rhs_u256 / RAY_ONE.into()).try_into().expect('rmul_internal')
+    (lhs_u256 * rhs_u256 / RAY_ONE.into()).try_into().expect('u128_rmul')
 }
 
 #[inline(always)]
-fn wdiv_internal(lhs: u128, rhs: u128) -> u128 {
+fn u128_wdiv(lhs: u128, rhs: u128) -> u128 {
     let (lhs_u256, rhs_u256) = cast_to_u256(lhs, rhs);
-    ((lhs_u256 * WAD_ONE.into()) / rhs_u256).try_into().expect('wdiv_internal')
+    ((lhs_u256 * WAD_ONE.into()) / rhs_u256).try_into().expect('u128_wdiv')
 }
 
 #[inline(always)]
-fn rdiv_internal(lhs: u128, rhs: u128) -> u128 {
+fn u128_rdiv(lhs: u128, rhs: u128) -> u128 {
     let (lhs_u256, rhs_u256) = cast_to_u256(lhs, rhs);
-    ((lhs_u256 * RAY_ONE.into()) / rhs_u256).try_into().expect('rdiv_internal')
+    ((lhs_u256 * RAY_ONE.into()) / rhs_u256).try_into().expect('u128_rdiv')
 }
 
 
