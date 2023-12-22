@@ -6,27 +6,29 @@ use wadray::{
 #[test]
 fn test_add() {
     // 0 + 0 = 0
-    assert(Wad { val: 0 } + Wad { val: 0 } == Wad { val: 0 }, 'Incorrect addition #1');
+    assert_eq!(Wad { val: 0 } + Wad { val: 0 }, Wad { val: 0 }, "Incorrect addition #1");
 
     // 1 + 1 = 2
-    assert(Wad { val: 1 } + Wad { val: 1 } == Wad { val: 2 }, 'Incorrect addition #2');
+    assert_eq!(Wad { val: 1 } + Wad { val: 1 }, Wad { val: 2 }, "Incorrect addition #2");
 
     // 123456789101112 + 121110987654321 = 244567776755433
-    assert(
-        Wad { val: 123456789101112 } + Wad { val: 121110987654321 } == Wad { val: 244567776755433 },
-        'Incorrect addition #3'
+    assert_eq!(
+        Wad { val: 123456789101112 } + Wad { val: 121110987654321 },
+        Wad { val: 244567776755433 },
+        "Incorrect addition #3"
     );
 
     // 0 + 0 = 0
-    assert(Ray { val: 0 } + Ray { val: 0 } == Ray { val: 0 }, 'Incorrect addition #4');
+    assert_eq!(Ray { val: 0 } + Ray { val: 0 }, Ray { val: 0 }, "Incorrect addition #4");
 
     // 1 + 1 = 2
-    assert(Ray { val: 1 } + Ray { val: 1 } == Ray { val: 2 }, 'Incorrect addition #5');
+    assert_eq!(Ray { val: 1 } + Ray { val: 1 }, Ray { val: 2 }, "Incorrect addition #5");
 
     // 123456789101112 + 121110987654321 = 244567776755433
-    assert(
-        Ray { val: 123456789101112 } + Ray { val: 121110987654321 } == Ray { val: 244567776755433 },
-        'Incorrect addition #6'
+    assert_eq!(
+        Ray { val: 123456789101112 } + Ray { val: 121110987654321 },
+        Ray { val: 244567776755433 },
+        "Incorrect addition #6"
     );
 }
 
@@ -37,34 +39,36 @@ fn test_add_eq() {
     let b = Wad { val: 3 };
 
     a1 += b;
-    assert(a1 == a2 + b, 'Incorrect AddEq #1');
+    assert_eq!(a1, a2 + b, "Incorrect AddEq #1");
 }
 
 
 #[test]
 fn test_sub() {
     // 0 - 0 = 0
-    assert(Wad { val: 0 } - Wad { val: 0 } == Wad { val: 0 }, 'Incorrect subtraction #1');
+    assert_eq!(Wad { val: 0 } - Wad { val: 0 }, Wad { val: 0 }, "Incorrect subtraction #1");
 
     // 2 - 1 = 1
-    assert(Wad { val: 2 } - Wad { val: 1 } == Wad { val: 1 }, 'Incorrect subtraction #2');
+    assert_eq!(Wad { val: 2 } - Wad { val: 1 }, Wad { val: 1 }, "Incorrect subtraction #2");
 
     // 244567776755433 - 121110987654321 = 123456789101112
-    assert(
-        Wad { val: 244567776755433 } - Wad { val: 121110987654321 } == Wad { val: 123456789101112 },
-        'Incorrect subtraction #3'
+    assert_eq!(
+        Wad { val: 244567776755433 } - Wad { val: 121110987654321 },
+        Wad { val: 123456789101112 },
+        "Incorrect subtraction #3"
     );
 
     // 0 - 0 = 0
-    assert(Ray { val: 0 } - Ray { val: 0 } == Ray { val: 0 }, 'Incorrect subtraction #4');
+    assert_eq!(Ray { val: 0 } - Ray { val: 0 }, Ray { val: 0 }, "Incorrect subtraction #4");
 
     // 2 - 1 = 1
-    assert(Ray { val: 2 } - Ray { val: 1 } == Ray { val: 1 }, 'Incorrect subtraction #5');
+    assert_eq!(Ray { val: 2 } - Ray { val: 1 }, Ray { val: 1 }, "Incorrect subtraction #5");
 
     // 244567776755433 - 121110987654321 = 123456789101112
-    assert(
-        Ray { val: 244567776755433 } - Ray { val: 121110987654321 } == Ray { val: 123456789101112 },
-        'Incorrect subtraction #6'
+    assert_eq!(
+        Ray { val: 244567776755433 } - Ray { val: 121110987654321 },
+        Ray { val: 123456789101112 },
+        "Incorrect subtraction #6"
     );
 }
 
@@ -75,58 +79,67 @@ fn test_sub_eq() {
     let b = Wad { val: 3 };
 
     a1 -= b;
-    assert(a1 == a2 - b, 'Incorrect SubEq #1');
+    assert_eq!(a1, a2 - b, "Incorrect SubEq #1");
 }
 
 
 #[test]
 fn test_mul() {
     // 0 * 69 = 0
-    assert(Wad { val: 0 } * Wad { val: 69 } == Wad { val: 0 }, 'Incorrect Multiplication # 1');
+    assert_eq!(Wad { val: 0 } * Wad { val: 69 }, Wad { val: 0 }, "Incorrect Multiplication # 1");
 
     // 1 * 1 = 0 (truncated)
-    assert(
-        Wad { val: 1 } * Wad { val: 1 } == Wad { val: 0 }, 'Incorrect multiplication #2'
+    assert_eq!(
+        Wad { val: 1 } * Wad { val: 1 }, Wad { val: 0 }, "Incorrect multiplication #2"
     ); // Result should be truncated
 
     // 1 (wad) * 1 (wad) = 1 (wad)
-    assert(Wad { val: WAD_ONE } * Wad { val: WAD_ONE } == Wad { val: WAD_ONE }, 'Incorrect multiplication #3');
+    assert_eq!(Wad { val: WAD_ONE } * Wad { val: WAD_ONE }, Wad { val: WAD_ONE }, "Incorrect multiplication #3");
 
     // 121110987654321531059 * 1234567891011125475893 = 149519736606670187008926
-    assert(
-        Wad { val: 121110987654321531059 }
-            * Wad { val: 1234567891011125475893 } == Wad { val: 149519736606670187008926 },
-        'Incorrect multiplication #4'
+    assert_eq!(
+        Wad { val: 121110987654321531059 } * Wad { val: 1234567891011125475893 },
+        Wad { val: 149519736606670187008926 },
+        "Incorrect multiplication #4"
     );
 
     // 0 * 69 = 0
-    assert(Ray { val: 0 } * Ray { val: 69 } == Ray { val: 0 }, 'Incorrect Multiplication #5');
+    assert_eq!(Ray { val: 0 } * Ray { val: 69 }, Ray { val: 0 }, "Incorrect Multiplication #5");
 
     // 1 * 1 = 0 (truncated)
-    assert(
-        Ray { val: 1 } * Ray { val: 1 } == Ray { val: 0 }, 'Incorrect multiplication #6'
+    assert_eq!(
+        Ray { val: 1 } * Ray { val: 1 }, Ray { val: 0 }, "Incorrect multiplication #6"
     ); // Result should be truncated
 
     // 1 (ray) * 1 (ray) = 1 (ray)
-    assert(Ray { val: RAY_ONE } * Ray { val: RAY_ONE } == Ray { val: RAY_ONE }, 'Incorrect multiplication #7');
+    assert_eq!(Ray { val: RAY_ONE } * Ray { val: RAY_ONE }, Ray { val: RAY_ONE }, "Incorrect multiplication #7");
 
     // 121110987654321531059 * 1234567891011125475893 = 149519736606670 (truncated)
-    assert(
-        Ray { val: 121110987654321531059 } * Ray { val: 1234567891011125475893 } == Ray { val: 149519736606670 },
-        'Incorrect multiplication #8'
+    assert_eq!(
+        Ray { val: 121110987654321531059 } * Ray { val: 1234567891011125475893 },
+        Ray { val: 149519736606670 },
+        "Incorrect multiplication #8"
     );
 
     // wmul(ray, wad) -> ray
-    assert(wmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }) == Ray { val: RAY_ONE }, 'Incorrect multiplication #9');
+    assert_eq!(
+        wmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }), Ray { val: RAY_ONE }, "Incorrect multiplication #9"
+    );
 
     // wmul(wad, ray) -> ray
-    assert(wmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }) == Ray { val: RAY_ONE }, 'Incorrect multiplication #10');
+    assert_eq!(
+        wmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }), Ray { val: RAY_ONE }, "Incorrect multiplication #10"
+    );
 
     // rmul(ray, wad) -> wad
-    assert(rmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }) == Wad { val: WAD_ONE }, 'Incorrect multiplication #11');
+    assert_eq!(
+        rmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }), Wad { val: WAD_ONE }, "Incorrect multiplication #11"
+    );
 
     // rmul(wad, ray) -> wad
-    assert(rmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }) == Wad { val: WAD_ONE }, 'Incorrect multiplication #12');
+    assert_eq!(
+        rmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }), Wad { val: WAD_ONE }, "Incorrect multiplication #12"
+    );
 }
 
 #[test]
@@ -136,23 +149,23 @@ fn test_mul_eq() {
     let b = Wad { val: 3 };
 
     a1 *= b;
-    assert(a1 == a2 * b, 'Incorrect MulEq #1');
+    assert_eq!(a1, a2 * b, "Incorrect MulEq #1");
 }
 
 
 #[test]
 fn test_div() {
     // 2 / (1 / 2) = 4 (wad)
-    assert(Wad { val: 2 * WAD_ONE } / Wad { val: WAD_ONE / 2 } == Wad { val: 4 * WAD_ONE }, 'Incorrect division #1');
+    assert_eq!(Wad { val: 2 * WAD_ONE } / Wad { val: WAD_ONE / 2 }, Wad { val: 4 * WAD_ONE }, "Incorrect division #1");
 
     // 2 / (1 / 2) = 4 (ray)
-    assert(Ray { val: 2 * RAY_ONE } / Ray { val: RAY_ONE / 2 } == Ray { val: 4 * RAY_ONE }, 'Incorrect division #2');
+    assert_eq!(Ray { val: 2 * RAY_ONE } / Ray { val: RAY_ONE / 2 }, Ray { val: 4 * RAY_ONE }, "Incorrect division #2");
 
     // wdiv(ray, wad) -> ray
-    assert(wdiv_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }) == Ray { val: RAY_ONE }, 'Incorrect division #3');
+    assert_eq!(wdiv_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }), Ray { val: RAY_ONE }, "Incorrect division #3");
 
     // rdiv(wad, ray) -> wad
-    assert(rdiv_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }) == Wad { val: WAD_ONE }, 'Incorrect division #4');
+    assert_eq!(rdiv_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }), Wad { val: WAD_ONE }, "Incorrect division #4");
 }
 
 #[test]
@@ -162,7 +175,7 @@ fn test_div_eq() {
     let b = Wad { val: 3 };
 
     a1 /= b;
-    assert(a1 == a2 / b, 'Incorrect DivEq #1');
+    assert_eq!(a1, a2 / b, "Incorrect DivEq #1");
 }
 
 #[test]
@@ -172,11 +185,11 @@ fn test_div_of_0() {
     let w0 = Wad { val: 0 };
     let r0 = Ray { val: 0 };
 
-    assert(w0 / w == w0, 'w0 / w');
-    assert(r0 / r == r0, 'r0 / r');
-    assert(wdiv_rw(r0, w) == r0, 'wdiv_rw');
-    assert(rdiv_wr(w0, r) == w0, 'rdiv_wr');
-    assert(rdiv_ww(w0, w) == r0, 'rdiv_ww');
+    assert_eq!(w0 / w, w0, "w0 / w");
+    assert_eq!(r0 / r, r0, "r0 / r");
+    assert_eq!(wdiv_rw(r0, w), r0, "wdiv_rw");
+    assert_eq!(rdiv_wr(w0, r), w0, "rdiv_wr");
+    assert_eq!(rdiv_ww(w0, w), r0, "rdiv_ww");
 }
 
 #[test]
@@ -195,55 +208,55 @@ fn test_div_ray_fail() {
 fn test_conversions() {
     // Test conversion from Wad to Ray
     let a: Ray = Wad { val: WAD_ONE }.try_into().unwrap();
-    assert(a.val == RAY_ONE, 'Incorrect wad->ray conversion');
+    assert_eq!(a.val, RAY_ONE, "Incorrect wad->ray conversion");
 
     let a: Ray = Wad { val: MAX_CONVERTIBLE_WAD }.try_into().unwrap();
-    assert(a.val == MAX_CONVERTIBLE_WAD * DIFF, 'Incorrect wad->ray conversion');
+    assert_eq!(a.val, MAX_CONVERTIBLE_WAD * DIFF, "Incorrect wad->ray conversion");
 
     let a: Option::<Ray> = Wad { val: MAX_CONVERTIBLE_WAD + 1 }.try_into();
     assert(a.is_none(), 'Incorrect wad->ray conversion');
 
     // Test conversion from Ray to Wad
     let a: Wad = Ray { val: RAY_ONE }.into();
-    assert(a.val == WAD_ONE, 'Incorrect ray->wad conversion');
+    assert_eq!(a.val, WAD_ONE, "Incorrect ray->wad conversion");
 }
 
 #[test]
 fn test_conversions_from_primitive_types() {
-    assert(Wad { val: 1 } == 1_u8.into(), 'Wad u8');
-    assert(Wad { val: 1 } == 1_u16.into(), 'Wad u16');
-    assert(Wad { val: 1 } == 1_u32.into(), 'Wad u32');
-    assert(Wad { val: 1 } == 1_u64.into(), 'Wad u64');
-    assert(Wad { val: 1 } == 1_u128.into(), 'Wad u128');
+    assert_eq!(Wad { val: 1 }, 1_u8.into(), "Wad u8");
+    assert_eq!(Wad { val: 1 }, 1_u16.into(), "Wad u16");
+    assert_eq!(Wad { val: 1 }, 1_u32.into(), "Wad u32");
+    assert_eq!(Wad { val: 1 }, 1_u64.into(), "Wad u64");
+    assert_eq!(Wad { val: 1 }, 1_u128.into(), "Wad u128");
 
-    assert(Ray { val: 1 } == 1_u8.into(), 'Ray u8');
-    assert(Ray { val: 1 } == 1_u16.into(), 'Ray u16');
-    assert(Ray { val: 1 } == 1_u32.into(), 'Ray u32');
-    assert(Ray { val: 1 } == 1_u64.into(), 'Ray u64');
-    assert(Ray { val: 1 } == 1_u128.into(), 'Ray u128');
+    assert_eq!(Ray { val: 1 }, 1_u8.into(), "Ray u8");
+    assert_eq!(Ray { val: 1 }, 1_u16.into(), "Ray u16");
+    assert_eq!(Ray { val: 1 }, 1_u32.into(), "Ray u32");
+    assert_eq!(Ray { val: 1 }, 1_u64.into(), "Ray u64");
+    assert_eq!(Ray { val: 1 }, 1_u128.into(), "Ray u128");
 }
 
 #[test]
 fn test_bounded() {
     let max_u128 = 0xffffffffffffffffffffffffffffffff;
 
-    assert(BoundedWad::min() == Wad { val: 0 }, 'Wad min');
-    assert(BoundedWad::max() == Wad { val: max_u128 }, 'Wad max');
+    assert_eq!(BoundedWad::min(), Wad { val: 0 }, "Wad min");
+    assert_eq!(BoundedWad::max(), Wad { val: max_u128 }, "Wad max");
 
-    assert(BoundedRay::min() == Ray { val: 0 }, 'Ray min');
-    assert(BoundedRay::max() == Ray { val: max_u128 }, 'Ray max');
+    assert_eq!(BoundedRay::min(), Ray { val: 0 }, "Ray min");
+    assert_eq!(BoundedRay::max(), Ray { val: max_u128 }, "Ray max");
 }
 
 #[test]
 fn test_wadray_into_u256() {
     // Test WadIntoU256
-    assert(Wad { val: 5 }.into() == 5_u256, 'Incorrect Wad->u256 conversion')
+    assert_eq!(Wad { val: 5 }.into(), 5_u256, "Incorrect Wad->u256 conversion")
 }
 
 #[test]
 fn test_u256_try_into_wadray() {
     // Test U256TryIntoWad
-    assert(Wad { val: 5 } == 5_u256.try_into().unwrap(), 'Incorrect u256->Wad conversion');
+    assert_eq!(Wad { val: 5 }, 5_u256.try_into().unwrap(), "Incorrect u256->Wad conversion");
 }
 
 #[test]
@@ -295,7 +308,7 @@ fn test_comparisons2() {
 fn test_zeroable() {
     // Test zero
     let wad_zero = Wad { val: 0 };
-    assert(wad_zero.val == 0, 'Value should be 0 #1');
+    assert_eq!(wad_zero.val, 0, "Value should be 0 #1");
 
     // Test is_zero
     let wad_one = Wad { val: 1 };
@@ -307,7 +320,7 @@ fn test_zeroable() {
     assert(wad_one.is_non_zero(), 'Value should not be 0 #5');
 
     let ray_zero = Ray { val: 0 };
-    assert(ray_zero.val == 0, 'Value should be 0 #6');
+    assert_eq!(ray_zero.val, 0, "Value should be 0 #6");
 
     // Test is_zero
     let ray_one = Ray { val: 1 };
@@ -323,10 +336,10 @@ fn test_zeroable() {
 #[test]
 fn test_display_and_debug() {
     let w = Wad { val: 123 };
-    assert(format!("{}", w) == "123", 'Wad display');
-    assert(format!("{:?}", w) == "123", 'Wad debug');
+    assert_eq!(format!("{}", w), "123", "Wad display");
+    assert_eq!(format!("{:?}", w), "123", "Wad debug");
 
     let r = Ray { val: 456 };
-    assert(format!("{}", r) == "456", 'Ray display');
-    assert(format!("{:?}", r) == "456", 'Ray debug');
+    assert_eq!(format!("{}", r), "456", "Ray display");
+    assert_eq!(format!("{:?}", r), "456", "Ray debug");
 }

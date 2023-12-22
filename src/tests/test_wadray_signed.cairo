@@ -12,21 +12,21 @@ mod test_wadray_signed {
         let b = SignedWad { val: 100, sign: true };
         let c = SignedWad { val: 40, sign: true };
 
-        assert(a + b == SignedWadZeroable::zero(), 'a + b != 0');
-        assert(a - b == SignedWad { val: 200, sign: false }, 'a - b != 200');
-        assert(b - a == SignedWad { val: 200, sign: true }, 'b - a != -200');
-        assert(a + c == SignedWad { val: 60, sign: false }, 'a + c != 60');
-        assert(a - c == SignedWad { val: 140, sign: false }, 'a - c != 140');
+        assert_eq!(a + b, SignedWadZeroable::zero(), "a + b != 0");
+        assert_eq!(a - b, SignedWad { val: 200, sign: false }, "a - b != 200");
+        assert_eq!(b - a, SignedWad { val: 200, sign: true }, "b - a != -200");
+        assert_eq!(a + c, SignedWad { val: 60, sign: false }, "a + c != 60");
+        assert_eq!(a - c, SignedWad { val: 140, sign: false }, "a - c != 140");
 
         let a = SignedRay { val: 100, sign: false };
         let b = SignedRay { val: 100, sign: true };
         let c = SignedRay { val: 40, sign: true };
 
-        assert(a + b == SignedRayZeroable::zero(), 'a + b != 0');
-        assert(a - b == SignedRay { val: 200, sign: false }, 'a - b != 200');
-        assert(b - a == SignedRay { val: 200, sign: true }, 'b - a != -200');
-        assert(a + c == SignedRay { val: 60, sign: false }, 'a + c != 60');
-        assert(a - c == SignedRay { val: 140, sign: false }, 'a - c != 140');
+        assert_eq!(a + b, SignedRayZeroable::zero(), "a + b != 0");
+        assert_eq!(a - b, SignedRay { val: 200, sign: false }, "a - b != 200");
+        assert_eq!(b - a, SignedRay { val: 200, sign: true }, "b - a != -200");
+        assert_eq!(a + c, SignedRay { val: 60, sign: false }, "a + c != 60");
+        assert_eq!(a - c, SignedRay { val: 140, sign: false }, "a - c != 140");
     }
 
     #[test]
@@ -36,7 +36,7 @@ mod test_wadray_signed {
         let b = SignedWad { val: 3, sign: false };
 
         a1 += b;
-        assert(a1 == a2 + b, 'Incorrect AddEq #1');
+        assert_eq!(a1, a2 + b, "Incorrect AddEq #1");
     }
 
     #[test]
@@ -46,7 +46,7 @@ mod test_wadray_signed {
         let b = SignedWad { val: 3, sign: false };
 
         a1 -= b;
-        assert(a1 == a2 - b, 'Incorrect SubEq #1');
+        assert_eq!(a1, a2 - b, "Incorrect SubEq #1");
     }
 
     #[test]
@@ -57,14 +57,14 @@ mod test_wadray_signed {
         let d = SignedWad { val: WAD_ONE, sign: true }; // -1.0 ray
 
         // Test multiplication
-        assert((a * b) == SignedWad { val: 2 * WAD_ONE, sign: true }, 'a * b != -2.0');
-        assert((a * c) == SignedWad { val: 5 * WAD_ONE, sign: false }, 'a * c != 5.0');
-        assert((b * c) == SignedWad { val: 10 * WAD_ONE, sign: true }, 'b * c != -10.0');
+        assert_eq!((a * b), SignedWad { val: 2 * WAD_ONE, sign: true }, "a * b != -2.0");
+        assert_eq!((a * c), SignedWad { val: 5 * WAD_ONE, sign: false }, "a * c != 5.0");
+        assert_eq!((b * c), SignedWad { val: 10 * WAD_ONE, sign: true }, "b * c != -10.0");
 
         // Test division
-        assert((c / a) == SignedWad { val: 5 * WAD_ONE, sign: false }, 'c / a != 5.0');
-        assert((a / d) == SignedWad { val: 1 * WAD_ONE, sign: true }, 'a / d != -1.0');
-        assert((b / d) == SignedWad { val: 2 * WAD_ONE, sign: false }, 'b / d != 2.0');
+        assert_eq!((c / a), SignedWad { val: 5 * WAD_ONE, sign: false }, "c / a != 5.0");
+        assert_eq!((a / d), SignedWad { val: 1 * WAD_ONE, sign: true }, "a / d != -1.0");
+        assert_eq!((b / d), SignedWad { val: 2 * WAD_ONE, sign: false }, "b / d != 2.0");
 
         let a = SignedRay { val: RAY_ONE, sign: false }; // 1.0 ray
         let b = SignedRay { val: 2 * RAY_ONE, sign: true }; // -2.0 ray
@@ -72,14 +72,14 @@ mod test_wadray_signed {
         let d = SignedRay { val: RAY_ONE, sign: true }; // -1.0 ray
 
         // Test multiplication
-        assert((a * b) == SignedRay { val: 2 * RAY_ONE, sign: true }, 'a * b != -2.0');
-        assert((a * c) == SignedRay { val: 5 * RAY_ONE, sign: false }, 'a * c != 5.0');
-        assert((b * c) == SignedRay { val: 10 * RAY_ONE, sign: true }, 'b * c != -10.0');
+        assert_eq!((a * b), SignedRay { val: 2 * RAY_ONE, sign: true }, "a * b != -2.0");
+        assert_eq!((a * c), SignedRay { val: 5 * RAY_ONE, sign: false }, "a * c != 5.0");
+        assert_eq!((b * c), SignedRay { val: 10 * RAY_ONE, sign: true }, "b * c != -10.0");
 
         // Test division
-        assert((c / a) == SignedRay { val: 5 * RAY_ONE, sign: false }, 'c / a != 5.0');
-        assert((a / d) == SignedRay { val: 1 * RAY_ONE, sign: true }, 'a / d != -1.0');
-        assert((b / d) == SignedRay { val: 2 * RAY_ONE, sign: false }, 'b / d != 2.0');
+        assert_eq!((c / a), SignedRay { val: 5 * RAY_ONE, sign: false }, "c / a != 5.0");
+        assert_eq!((a / d), SignedRay { val: 1 * RAY_ONE, sign: true }, "a / d != -1.0");
+        assert_eq!((b / d), SignedRay { val: 2 * RAY_ONE, sign: false }, "b / d != 2.0");
     }
 
     #[test]
@@ -89,7 +89,7 @@ mod test_wadray_signed {
         let b = SignedWad { val: 3, sign: false };
 
         a1 *= b;
-        assert(a1 == a2 * b, 'Incorrect MulEq #1');
+        assert_eq!(a1, a2 * b, "Incorrect MulEq #1");
     }
 
     #[test]
@@ -99,7 +99,7 @@ mod test_wadray_signed {
         let b = SignedWad { val: 3, sign: false };
 
         a1 /= b;
-        assert(a1 == a2 / b, 'Incorrect DivEq #1');
+        assert_eq!(a1, a2 / b, "Incorrect DivEq #1");
     }
 
     #[test]
@@ -189,11 +189,11 @@ mod test_wadray_signed {
     fn test_bounded() {
         let max_u128 = 0xffffffffffffffffffffffffffffffff;
 
-        assert(BoundedSignedWad::min() == SignedWad { val: max_u128, sign: true }, 'SignedWad min');
-        assert(BoundedSignedWad::max() == SignedWad { val: max_u128, sign: false }, 'SignedWad max');
+        assert_eq!(BoundedSignedWad::min(), SignedWad { val: max_u128, sign: true }, "SignedWad min");
+        assert_eq!(BoundedSignedWad::max(), SignedWad { val: max_u128, sign: false }, "SignedWad max");
 
-        assert(BoundedSignedRay::min() == SignedRay { val: max_u128, sign: true }, 'SignedRay min');
-        assert(BoundedSignedRay::max() == SignedRay { val: max_u128, sign: false }, 'SignedRay max');
+        assert_eq!(BoundedSignedRay::min(), SignedRay { val: max_u128, sign: true }, "SignedRay min");
+        assert_eq!(BoundedSignedRay::max(), SignedRay { val: max_u128, sign: false }, "SignedRay max");
     }
 
     #[test]
@@ -201,20 +201,20 @@ mod test_wadray_signed {
         // Test U128IntoSignedWad
         let a: u128 = 100;
         let a_signed: SignedWad = a.into();
-        assert(a_signed.val == a, 'U128IntoSignedWad val fail');
+        assert_eq!(a_signed.val, a, "U128IntoSignedWad val fail");
         assert(!a_signed.sign, 'U128IntoSignedWad sign fail');
 
         // Test WadIntoSignedWad
         let b = Wad { val: 200 };
         let b_signed: SignedWad = b.into();
-        assert(b_signed.val == b.val, 'WadIntoSignedWad val fail');
+        assert_eq!(b_signed.val, b.val, "WadIntoSignedWad val fail");
         assert(!b_signed.sign, 'WadIntoSignedWad sign fail');
 
         // Test SignedWadTryIntoWad
         let d = SignedWad { val: 400, sign: false };
         let d_wad: Option<Wad> = d.try_into();
         assert(d_wad.is_some(), 'SignedWadTryIntoWad pos fail');
-        assert(d_wad.unwrap().val == d.val, 'SignedWadTryIntoWad val fail');
+        assert_eq!(d_wad.unwrap().val, d.val, "SignedWadTryIntoWad val fail");
 
         let e = SignedWad { val: 500, sign: true };
         let e_wad: Option<Wad> = e.try_into();
@@ -223,26 +223,26 @@ mod test_wadray_signed {
         // Test U128IntoSignedRay
         let a: u128 = 100;
         let a_signed: SignedRay = a.into();
-        assert(a_signed.val == a, 'U128IntoSignedRay val fail');
+        assert_eq!(a_signed.val, a, "U128IntoSignedRay val fail");
         assert(!a_signed.sign, 'U128IntoSignedRay sign fail');
 
         // Test RayIntoSignedRay
         let b = Ray { val: 200 };
         let b_signed: SignedRay = b.into();
-        assert(b_signed.val == b.val, 'RayIntoSignedRay val fail');
+        assert_eq!(b_signed.val, b.val, "RayIntoSignedRay val fail");
         assert(!b_signed.sign, 'RayIntoSignedRay sign fail');
 
         // Test WadIntoSignedRay
         let c = Wad { val: 300 * WAD_ONE };
         let c_signed: SignedRay = c.into();
-        assert(c_signed.val == c.val * DIFF, 'WadIntoSignedRay val fail');
+        assert_eq!(c_signed.val, c.val * DIFF, "WadIntoSignedRay val fail");
         assert(!c_signed.sign, 'WadIntoSignedRay sign fail');
 
         // Test SignedRayTryIntoRay
         let d = SignedRay { val: 400, sign: false };
         let d_ray: Option<Ray> = d.try_into();
         assert(d_ray.is_some(), 'SignedRayTryIntoRay pos fail');
-        assert(d_ray.unwrap().val == d.val, 'SignedRayTryIntoRay val fail');
+        assert_eq!(d_ray.unwrap().val, d.val, "SignedRayTryIntoRay val fail");
 
         let e = SignedRay { val: 500, sign: true };
         let e_ray: Option<Ray> = e.try_into();
@@ -253,7 +253,7 @@ mod test_wadray_signed {
     fn test_zeroable_oneable() {
         // Test SignedWadZeroable
         let zero = SignedWadZeroable::zero();
-        assert(zero.val == 0, 'Zeroable zero fail');
+        assert_eq!(zero.val, 0, "Zeroable zero fail");
         assert(!zero.sign, 'Zeroable zero sign fail');
         assert(zero.is_zero(), 'Zeroable is_zero fail');
         assert(!zero.is_non_zero(), 'Zeroable is_non_zero fail');
@@ -264,7 +264,7 @@ mod test_wadray_signed {
 
         // Test SignedWadOneable
         let one = SignedWadOneable::one();
-        assert(one.val == WAD_ONE, 'Oneable one fail');
+        assert_eq!(one.val, WAD_ONE, "Oneable one fail");
         assert(!one.sign, 'Oneable one sign fail');
         assert(one.is_one(), 'Oneable is_one fail');
         assert(!one.is_non_one(), 'Oneable is_non_one fail');
@@ -279,7 +279,7 @@ mod test_wadray_signed {
 
         // Test SignedRayZeroable
         let zero = SignedRayZeroable::zero();
-        assert(zero.val == 0, 'Zeroable zero fail');
+        assert_eq!(zero.val, 0, "Zeroable zero fail");
         assert(!zero.sign, 'Zeroable zero sign fail');
         assert(zero.is_zero(), 'Zeroable is_zero fail');
         assert(!zero.is_non_zero(), 'Zeroable is_non_zero fail');
@@ -290,7 +290,7 @@ mod test_wadray_signed {
 
         // Test SignedRayOneable
         let one = SignedRayOneable::one();
-        assert(one.val == RAY_ONE, 'Oneable one fail');
+        assert_eq!(one.val, RAY_ONE, "Oneable one fail");
         assert(!one.sign, 'Oneable one sign fail');
         assert(one.is_one(), 'Oneable is_one fail');
         assert(!one.is_non_one(), 'Oneable is_non_one fail');
@@ -330,7 +330,7 @@ mod test_wadray_signed {
         let pos_zero = SignedWad { val: 0, sign: false };
         let neg_zero = SignedWad { val: 0, sign: true };
 
-        assert(pos_zero == neg_zero, 'Zero eq');
+        assert_eq!(pos_zero, neg_zero, "Zero eq");
         assert(!(pos_zero != neg_zero), 'Zero neq');
         assert(pos_zero >= neg_zero, 'Zero ge');
         assert(pos_zero <= neg_zero, 'Zero le');
@@ -340,7 +340,7 @@ mod test_wadray_signed {
         let pos_zero = SignedRay { val: 0, sign: false };
         let neg_zero = SignedRay { val: 0, sign: true };
 
-        assert(pos_zero == neg_zero, 'Zero eq');
+        assert_eq!(pos_zero, neg_zero, "Zero eq");
         assert(!(pos_zero != neg_zero), 'Zero neq');
         assert(pos_zero >= neg_zero, 'Zero ge');
         assert(pos_zero <= neg_zero, 'Zero le');
@@ -351,11 +351,11 @@ mod test_wadray_signed {
     #[test]
     fn test_display_and_debug() {
         let w = SignedWad { val: 123, sign: true };
-        assert(format!("{}", w) == "-123", 'SignedWad display');
-        assert(format!("{:?}", w) == "-123", 'SignedWad debug');
+        assert_eq!(format!("{}", w), "-123", "SignedWad display");
+        assert_eq!(format!("{:?}", w), "-123", "SignedWad debug");
 
         let r = SignedRay { val: 456, sign: false };
-        assert(format!("{}", r) == "456", 'SignedRay display');
-        assert(format!("{:?}", r) == "456", 'SignedRay debug');
+        assert_eq!(format!("{}", r), "456", "SignedRay display");
+        assert_eq!(format!("{:?}", r), "456", "SignedRay debug");
     }
 }
