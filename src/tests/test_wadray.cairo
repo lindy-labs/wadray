@@ -318,3 +318,15 @@ fn test_zeroable() {
     assert(!ray_zero.is_non_zero(), 'Value should be 0 #9');
     assert(ray_one.is_non_zero(), 'Value should not be 0 #10');
 }
+
+
+#[test]
+fn test_display_and_debug() {
+    let w = Wad { val: 123 };
+    assert(format!("{}", w) == "123", 'Wad display');
+    assert(format!("{:?}", w) == "123", 'Wad debug');
+
+    let r = Ray { val: 456 };
+    assert(format!("{}", r) == "456", 'Ray display');
+    assert(format!("{:?}", r) == "456", 'Ray debug');
+}

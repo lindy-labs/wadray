@@ -347,4 +347,15 @@ mod test_wadray_signed {
         assert(!(pos_zero > neg_zero), 'Zero gt');
         assert(!(pos_zero < neg_zero), 'Zero lt');
     }
+
+    #[test]
+    fn test_display_and_debug() {
+        let w = SignedWad { val: 123, sign: true };
+        assert(format!("{}", w) == "-123", 'SignedWad display');
+        assert(format!("{:?}", w) == "-123", 'SignedWad debug');
+
+        let r = SignedRay { val: 456, sign: false };
+        assert(format!("{}", r) == "456", 'SignedRay display');
+        assert(format!("{:?}", r) == "456", 'SignedRay debug');
+    }
 }
