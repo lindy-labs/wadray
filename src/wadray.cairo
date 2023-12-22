@@ -1,3 +1,4 @@
+use core::fmt::{Debug, Display, DisplayInteger, Error, Formatter};
 use integer::BoundedInt;
 use math::Oneable;
 
@@ -487,5 +488,30 @@ impl WadPrintImpl of debug::PrintTrait<Wad> {
 impl RayPrintImpl of debug::PrintTrait<Ray> {
     fn print(self: Ray) {
         self.val.print();
+    }
+}
+
+// Display and Debug
+impl DisplayWad of Display<Wad> {
+    fn fmt(self: @Wad, ref f: Formatter) -> Result<(), Error> {
+        Display::fmt(self.val, ref f)
+    }
+}
+
+impl DisplayRay of Display<Ray> {
+    fn fmt(self: @Ray, ref f: Formatter) -> Result<(), Error> {
+        Display::fmt(self.val, ref f)
+    }
+}
+
+impl DebugWad of Debug<Wad> {
+    fn fmt(self: @Wad, ref f: Formatter) -> Result<(), Error> {
+        Display::fmt(self, ref f)
+    }
+}
+
+impl DebugRay of Debug<Ray> {
+    fn fmt(self: @Ray, ref f: Formatter) -> Result<(), Error> {
+        Display::fmt(self, ref f)
     }
 }
