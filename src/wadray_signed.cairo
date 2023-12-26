@@ -1,4 +1,4 @@
-use debug::PrintTrait;
+use core::fmt::{Debug, Display, DisplayInteger, Error, Formatter};
 use integer::BoundedInt;
 use math::Oneable;
 use wadray::wadray::{DIFF, Ray, RAY_ONE, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul, Wad, WAD_ONE};
@@ -485,5 +485,39 @@ impl SignedRaySigned of Signed<SignedRay> {
 
     fn is_positive(self: SignedRay) -> bool {
         self.val > 0 && !self.sign
+    }
+}
+
+
+// Display and Debug
+impl DisplaySignedWad of Display<SignedWad> {
+    fn fmt(self: @SignedWad, ref f: Formatter) -> Result<(), Error> {
+        if *self.sign {
+            write!(f, "-");
+        }
+
+        Display::fmt(self.val, ref f)
+    }
+}
+
+impl DisplaySignedRay of Display<SignedRay> {
+    fn fmt(self: @SignedRay, ref f: Formatter) -> Result<(), Error> {
+        if *self.sign {
+            write!(f, "-");
+        }
+
+        Display::fmt(self.val, ref f)
+    }
+}
+
+impl DebugSignedWad of Debug<SignedWad> {
+    fn fmt(self: @SignedWad, ref f: Formatter) -> Result<(), Error> {
+        Display::fmt(self, ref f)
+    }
+}
+
+impl DebugSignedRay of Debug<SignedRay> {
+    fn fmt(self: @SignedRay, ref f: Formatter) -> Result<(), Error> {
+        Display::fmt(self, ref f)
     }
 }
