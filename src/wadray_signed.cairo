@@ -1,5 +1,4 @@
 use core::fmt::{Debug, Display, DisplayInteger, Error, Formatter};
-use debug::PrintTrait;
 use integer::BoundedInt;
 use math::Oneable;
 use wadray::wadray::{DIFF, Ray, RAY_ONE, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul, Wad, WAD_ONE};
