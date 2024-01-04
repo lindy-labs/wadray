@@ -30,11 +30,6 @@ struct Ray {
 // Core functions
 
 #[inline(always)]
-fn cast_to_u256(a: u128, b: u128) -> (u256, u256) {
-    (a.into(), b.into())
-}
-
-#[inline(always)]
 fn wmul(lhs: Wad, rhs: Wad) -> Wad {
     Wad { val: u128_wmul(lhs.val, rhs.val) }
 }
@@ -110,26 +105,26 @@ fn div_u128_by_ray(lhs: u128, rhs: Ray) -> u128 {
 
 #[inline(always)]
 fn u128_wmul(lhs: u128, rhs: u128) -> u128 {
-    let (lhs_u256, rhs_u256) = cast_to_u256(lhs, rhs);
-    (lhs_u256 * rhs_u256 / WAD_ONE.into()).try_into().expect('u128_wmul')
+    let res: u256 = lhs.into() * rhs.into() / WAD_ONE.into();
+    res.try_into().expect('u128_wmul')
 }
 
 #[inline(always)]
 fn u128_rmul(lhs: u128, rhs: u128) -> u128 {
-    let (lhs_u256, rhs_u256) = cast_to_u256(lhs, rhs);
-    (lhs_u256 * rhs_u256 / RAY_ONE.into()).try_into().expect('u128_rmul')
+    let res: u256 = lhs.into() * rhs.into() / RAY_ONE.into();
+    res.try_into().expect('u128_rmul')
 }
 
 #[inline(always)]
 fn u128_wdiv(lhs: u128, rhs: u128) -> u128 {
-    let (lhs_u256, rhs_u256) = cast_to_u256(lhs, rhs);
-    ((lhs_u256 * WAD_ONE.into()) / rhs_u256).try_into().expect('u128_wdiv')
+    let res: u256 = lhs.into() * WAD_ONE.into() / rhs.into();
+    res.try_into().expect('u128_wdiv')
 }
 
 #[inline(always)]
 fn u128_rdiv(lhs: u128, rhs: u128) -> u128 {
-    let (lhs_u256, rhs_u256) = cast_to_u256(lhs, rhs);
-    ((lhs_u256 * RAY_ONE.into()) / rhs_u256).try_into().expect('u128_rdiv')
+    let res: u256 = lhs.into() * RAY_ONE.into() / rhs.into();
+    res.try_into().expect('u128_rdiv')
 }
 
 
