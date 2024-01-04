@@ -51,20 +51,22 @@ mod test_wadray_signed {
 
     #[test]
     fn test_mul_div() {
-        let a = SignedWad { val: WAD_ONE, sign: false }; // 1.0 ray
-        let b = SignedWad { val: 2 * WAD_ONE, sign: true }; // -2.0 ray
-        let c = SignedWad { val: 5 * WAD_ONE, sign: false }; // 5.0 ray
-        let d = SignedWad { val: WAD_ONE, sign: true }; // -1.0 ray
+        let a = SignedWad { val: WAD_ONE, sign: false }; // 1.0 wad
+        let b = SignedWad { val: 2 * WAD_ONE, sign: true }; // -2.0 wad
+        let c = SignedWad { val: 5 * WAD_ONE, sign: false }; // 5.0 wad
+        let d = SignedWad { val: WAD_ONE, sign: true }; // -1.0 wad
 
         // Test multiplication
         assert_eq!((a * b), SignedWad { val: 2 * WAD_ONE, sign: true }, "a * b != -2.0");
         assert_eq!((a * c), SignedWad { val: 5 * WAD_ONE, sign: false }, "a * c != 5.0");
         assert_eq!((b * c), SignedWad { val: 10 * WAD_ONE, sign: true }, "b * c != -10.0");
+        assert_eq!((a * d), d, "a * d != -1.0");
 
         // Test division
         assert_eq!((c / a), SignedWad { val: 5 * WAD_ONE, sign: false }, "c / a != 5.0");
         assert_eq!((a / d), SignedWad { val: 1 * WAD_ONE, sign: true }, "a / d != -1.0");
         assert_eq!((b / d), SignedWad { val: 2 * WAD_ONE, sign: false }, "b / d != 2.0");
+        assert_eq!((a / d), d, "a / d != -1.0");
 
         let a = SignedRay { val: RAY_ONE, sign: false }; // 1.0 ray
         let b = SignedRay { val: 2 * RAY_ONE, sign: true }; // -2.0 ray
@@ -75,11 +77,68 @@ mod test_wadray_signed {
         assert_eq!((a * b), SignedRay { val: 2 * RAY_ONE, sign: true }, "a * b != -2.0");
         assert_eq!((a * c), SignedRay { val: 5 * RAY_ONE, sign: false }, "a * c != 5.0");
         assert_eq!((b * c), SignedRay { val: 10 * RAY_ONE, sign: true }, "b * c != -10.0");
+        assert_eq!((a * d), d, "a * d != -1.0");
 
         // Test division
         assert_eq!((c / a), SignedRay { val: 5 * RAY_ONE, sign: false }, "c / a != 5.0");
         assert_eq!((a / d), SignedRay { val: 1 * RAY_ONE, sign: true }, "a / d != -1.0");
         assert_eq!((b / d), SignedRay { val: 2 * RAY_ONE, sign: false }, "b / d != 2.0");
+        assert_eq!((a / d), d, "a / d != -1.0");
+    }
+
+    #[test]
+    fn test_zero_mul() {
+        let zero = SignedWad { val: 0, sign: false };
+        let neg_zero = SignedWad { val: 0, sign: true };
+        let one = SignedWad { val: WAD_ONE, sign: false }; // 1.0 wad
+        let neg_one = SignedWad { val: WAD_ONE, sign: true }; // -1.0 wad
+
+        assert_eq!((one * zero), SignedWadZeroable::zero(), "SignedWad zero mul #1");
+        assert_eq!((neg_one * zero), SignedWadZeroable::zero(), "SignedWad zero mul #2");
+        assert_eq!((one * neg_zero), SignedWadZeroable::zero(), "SignedWad zero mul #3");
+        assert_eq!((neg_one * neg_zero), SignedWadZeroable::zero(), "SignedWad zero mul #4");
+
+        let zero = SignedRay { val: 0, sign: false };
+        let neg_zero = SignedRay { val: 0, sign: true };
+        let one = SignedRay { val: RAY_ONE, sign: false }; // 1.0 ray
+        let neg_one = SignedRay { val: RAY_ONE, sign: true }; // -1.0 ray
+
+        assert_eq!((one * zero), SignedRayZeroable::zero(), "SignedRay zero mul #1");
+        assert_eq!((neg_one * zero), SignedRayZeroable::zero(), "SignedRay zero mul #2");
+        assert_eq!((one * neg_zero), SignedRayZeroable::zero(), "SignedRay zero mul #3");
+        assert_eq!((neg_one * neg_zero), SignedRayZeroable::zero(), "SignedRay zero mul #4");
+    }
+
+    #[test]
+    #[should_panic(expected: 'u256 is 0')]
+    fn test_signed_wad_zero_div() {
+        let zero = SignedWad { val: 0, sign: false };
+        let one = SignedWad { val: WAD_ONE, sign: false };
+        let res: SignedWad = one / zero;
+    }
+
+    #[test]
+    #[should_panic(expected: 'u256 is 0')]
+    fn test_signed_wad_neg_zero_div() {
+        let neg_zero = SignedWad { val: 0, sign: true };
+        let one = SignedWad { val: WAD_ONE, sign: false };
+        let res: SignedWad = one / neg_zero;
+    }
+
+    #[test]
+    #[should_panic(expected: 'u256 is 0')]
+    fn test_signed_ray_zero_div() {
+        let zero = SignedRay { val: 0, sign: false };
+        let one = SignedRay { val: RAY_ONE, sign: false };
+        let res: SignedRay = one / zero;
+    }
+
+    #[test]
+    #[should_panic(expected: 'u256 is 0')]
+    fn test_signed_ray_neg_zero_div() {
+        let neg_zero = SignedRay { val: 0, sign: true };
+        let one = SignedRay { val: RAY_ONE, sign: false };
+        let res: SignedRay = one / neg_zero;
     }
 
     #[test]
@@ -188,12 +247,23 @@ mod test_wadray_signed {
     #[test]
     fn test_bounded() {
         let max_u128 = 0xffffffffffffffffffffffffffffffff;
+        let one = SignedWad { val: WAD_ONE, sign: false };
+        let neg_one = SignedWad { val: WAD_ONE, sign: true };
 
         assert_eq!(BoundedSignedWad::min(), SignedWad { val: max_u128, sign: true }, "SignedWad min");
         assert_eq!(BoundedSignedWad::max(), SignedWad { val: max_u128, sign: false }, "SignedWad max");
 
+        assert_eq!((BoundedSignedWad::min() * neg_one), BoundedSignedWad::max(), "SignedWad min mul");
+        assert_eq!((BoundedSignedWad::max() * neg_one), BoundedSignedWad::min(), "SignedWad max mul");
+
+        let one = SignedRay { val: RAY_ONE, sign: false };
+        let neg_one = SignedRay { val: RAY_ONE, sign: true };
+
         assert_eq!(BoundedSignedRay::min(), SignedRay { val: max_u128, sign: true }, "SignedRay min");
         assert_eq!(BoundedSignedRay::max(), SignedRay { val: max_u128, sign: false }, "SignedRay max");
+
+        assert_eq!((BoundedSignedRay::min() * neg_one), BoundedSignedRay::max(), "SignedRay min mul");
+        assert_eq!((BoundedSignedRay::max() * neg_one), BoundedSignedRay::min(), "SignedRay max mul");
     }
 
     #[test]
