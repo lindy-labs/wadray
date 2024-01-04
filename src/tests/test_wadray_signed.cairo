@@ -110,6 +110,38 @@ mod test_wadray_signed {
     }
 
     #[test]
+    #[should_panic(expected: 'u256 is 0')]
+    fn test_signed_wad_zero_div() {
+        let zero = SignedWad { val: 0, sign: false };
+        let one = SignedWad { val: WAD_ONE, sign: false };
+        let res: SignedWad = one / zero;
+    }
+
+    #[test]
+    #[should_panic(expected: 'u256 is 0')]
+    fn test_signed_wad_neg_zero_div() {
+        let neg_zero = SignedWad { val: 0, sign: true };
+        let one = SignedWad { val: WAD_ONE, sign: false };
+        let res: SignedWad = one / neg_zero;
+    }
+
+    #[test]
+    #[should_panic(expected: 'u256 is 0')]
+    fn test_signed_ray_zero_div() {
+        let zero = SignedRay { val: 0, sign: false };
+        let one = SignedRay { val: RAY_ONE, sign: false };
+        let res: SignedRay = one / zero;
+    }
+
+    #[test]
+    #[should_panic(expected: 'u256 is 0')]
+    fn test_signed_ray_neg_zero_div() {
+        let neg_zero = SignedRay { val: 0, sign: true };
+        let one = SignedRay { val: RAY_ONE, sign: false };
+        let res: SignedRay = one / neg_zero;
+    }
+
+    #[test]
     fn test_mul_eq() {
         let mut a1 = SignedWad { val: 5, sign: true };
         let a2 = SignedWad { val: 5, sign: true };
