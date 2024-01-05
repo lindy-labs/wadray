@@ -369,7 +369,7 @@ fn test_oneable() {
     assert_eq!(wad_one.val, 1, "Value should be 1 #1");
 
     // Test is_one
-    let wad_one = Wad { val: 1 };
+    let wad_zero: Wad = Zeroable::zero();
     assert(wad_one.is_one(), 'Value should be 1 #2');
     assert(!wad_zero.is_one(), 'Value should not be 1 #3');
 
@@ -382,7 +382,7 @@ fn test_oneable() {
     assert_eq!(ray_one.val, 1, "Value should be 1 #6");
 
     // Test is_one
-    let ray_one = Ray { val: 1 };
+    let ray_zero: Ray = Zeroable::zero();
     assert(ray_one.is_one(), 'Value should be 1 #7');
     assert(!ray_zero.is_one(), 'Value should not be 1 #8');
 
