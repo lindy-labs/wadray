@@ -390,3 +390,14 @@ fn test_oneable() {
     assert(!ray_one.is_non_one(), 'Value should be 1 #9');
     assert(ray_zero.is_non_one(), 'Value should not be 1 #10');
 }
+
+#[test]
+fn test_display_and_debug() {
+    let w = Wad { val: 123 };
+    assert_eq!(format!("{}", w), "123", "Wad display");
+    assert_eq!(format!("{:?}", w), "123", "Wad debug");
+
+    let r = Ray { val: 456 };
+    assert_eq!(format!("{}", r), "456", "Ray display");
+    assert_eq!(format!("{:?}", r), "456", "Ray debug");
+}
