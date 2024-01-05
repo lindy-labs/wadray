@@ -1,3 +1,4 @@
+use math::Oneable;
 use wadray::{
     BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr, Wad, WAD_ONE,
     WAD_DECIMALS, WAD_SCALE, wdiv_rw, wmul_rw, wmul_wr,
@@ -39,14 +40,14 @@ fn test_add_eq() {
     let b = Wad { val: 3 };
 
     a1 += b;
-    assert_eq!(a1, a2 + b, 'Incorrect AddEq #1');
+    assert_eq!(a1, a2 + b, "Incorrect AddEq #1");
 
     let mut a1 = Ray { val: 5 };
     let a2 = Ray { val: 5 };
     let b = Ray { val: 3 };
 
     a1 += b;
-    assert_eq!(a1, a2 + b, 'Incorrect AddEq #2');
+    assert_eq!(a1, a2 + b, "Incorrect AddEq #2");
 }
 
 
@@ -163,14 +164,14 @@ fn test_mul_eq() {
     let b = Wad { val: 3 };
 
     a1 *= b;
-    assert_eq!(a1, a2 * b, 'Incorrect MulEq #1');
+    assert_eq!(a1, a2 * b, "Incorrect MulEq #1");
 
     let mut a1 = Ray { val: 5 };
     let a2 = Ray { val: 5 };
     let b = Ray { val: 3 };
 
     a1 *= b;
-    assert_eq!(a1, a2 * b, 'Incorrect MulEq #2');
+    assert_eq!(a1, a2 * b, "Incorrect MulEq #2");
 }
 
 
@@ -196,14 +197,14 @@ fn test_div_eq() {
     let b = Wad { val: 3 };
 
     a1 /= b;
-    assert_eq!(a1, a2 / b, 'Incorrect DivEq #1');
+    assert_eq!(a1, a2 / b, "Incorrect DivEq #1");
 
     let mut a1 = Ray { val: 15 };
     let a2 = Ray { val: 15 };
     let b = Ray { val: 3 };
 
     a1 /= b;
-    assert_eq!(a1, a2 / b, 'Incorrect DivEq #2');
+    assert_eq!(a1, a2 / b, "Incorrect DivEq #2");
 }
 
 #[test]
@@ -336,7 +337,7 @@ fn test_comparisons2() {
 fn test_zeroable() {
     // Test zero
     let wad_zero: Wad = Zeroable::zero();
-    assert_eq!(wad_zero.val, 0, 'Value should be 0 #1');
+    assert_eq!(wad_zero.val, 0, "Value should be 0 #1");
 
     // Test is_zero
     let wad_one = Wad { val: 1 };
@@ -349,7 +350,7 @@ fn test_zeroable() {
 
     // Test zero
     let ray_zero: Ray = Zeroable::zero();
-    assert_eq!(ray_zero.val, 0, 'Value should be 0 #6');
+    assert_eq!(ray_zero.val, 0, "Value should be 0 #6");
 
     // Test is_zero
     let ray_one = Ray { val: 1 };
@@ -365,7 +366,7 @@ fn test_zeroable() {
 fn test_oneable() {
     // Test one
     let wad_one: Wad = Oneable::one();
-    assert_eq!(wad_one.val, 1, 'Value should be 1 #1');
+    assert_eq!(wad_one.val, 1, "Value should be 1 #1");
 
     // Test is_one
     let wad_one = Wad { val: 1 };
@@ -378,7 +379,7 @@ fn test_oneable() {
 
     // Test one
     let ray_one: Ray = Oneable::one();
-    assert_eq!(ray_one.val, 1, 'Value should be 1 #6');
+    assert_eq!(ray_one.val, 1, "Value should be 1 #6");
 
     // Test is_one
     let ray_one = Ray { val: 1 };
