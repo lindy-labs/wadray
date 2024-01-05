@@ -87,14 +87,14 @@ fn test_sub_eq() {
     let b = Wad { val: 3 };
 
     a1 -= b;
-    assert_eq!(a1, a2 - b, 'Incorrect SubEq #1');
+    assert_eq!(a1, a2 - b, "Incorrect SubEq #1");
 
     let mut a1 = Ray { val: 5 };
     let a2 = Ray { val: 5 };
     let b = Ray { val: 3 };
 
     a1 -= b;
-    assert_eq!(a1, a2 - b, 'Incorrect SubEq #2');
+    assert_eq!(a1, a2 - b, "Incorrect SubEq #2");
 }
 
 
