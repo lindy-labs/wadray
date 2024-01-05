@@ -2,6 +2,7 @@ use wadray::{
     BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr, Wad, WAD_ONE,
     WAD_DECIMALS, WAD_SCALE, wdiv_rw, wmul_rw, wmul_wr,
 };
+use math::Oneable;
 
 #[test]
 fn test_add() {
@@ -38,6 +39,13 @@ fn test_add_eq() {
 
     a1 += b;
     assert(a1 == a2 + b, 'Incorrect AddEq #1');
+
+    let mut a1 = Ray { val: 5 };
+    let a2 = Ray { val: 5 };
+    let b = Ray { val: 3 };
+
+    a1 += b;
+    assert(a1 == a2 + b, 'Incorrect AddEq #2');
 }
 
 
@@ -76,13 +84,21 @@ fn test_sub_eq() {
 
     a1 -= b;
     assert(a1 == a2 - b, 'Incorrect SubEq #1');
+
+    let mut a1 = Ray { val: 5 };
+    let a2 = Ray { val: 5 };
+    let b = Ray { val: 3 };
+
+    a1 -= b;
+    assert(a1 == a2 - b, 'Incorrect SubEq #2');
 }
 
 
 #[test]
 fn test_mul() {
     // 0 * 69 = 0
-    assert(Wad { val: 0 } * Wad { val: 69 } == Wad { val: 0 }, 'Incorrect Multiplication # 1');
+    let lhs = Wad { val: 0 } * Wad { val: 69 };
+    assert(lhs == Wad { val: 0 }, 'Incorrect Multiplication # 1');
 
     // 1 * 1 = 0 (truncated)
     assert(
@@ -100,7 +116,8 @@ fn test_mul() {
     );
 
     // 0 * 69 = 0
-    assert(Ray { val: 0 } * Ray { val: 69 } == Ray { val: 0 }, 'Incorrect Multiplication #5');
+    let lhs = Ray { val: 0 } * Ray { val: 69 };
+    assert(lhs == Ray { val: 0 }, 'Incorrect Multiplication #5');
 
     // 1 * 1 = 0 (truncated)
     assert(
@@ -137,16 +154,25 @@ fn test_mul_eq() {
 
     a1 *= b;
     assert(a1 == a2 * b, 'Incorrect MulEq #1');
+
+    let mut a1 = Ray { val: 5 };
+    let a2 = Ray { val: 5 };
+    let b = Ray { val: 3 };
+
+    a1 *= b;
+    assert(a1 == a2 * b, 'Incorrect MulEq #2');
 }
 
 
 #[test]
 fn test_div() {
     // 2 / (1 / 2) = 4 (wad)
-    assert(Wad { val: 2 * WAD_ONE } / Wad { val: WAD_ONE / 2 } == Wad { val: 4 * WAD_ONE }, 'Incorrect division #1');
+    let lhs = Wad { val: 2 * WAD_ONE } / Wad { val: WAD_ONE / 2 };
+    assert(lhs == Wad { val: 4 * WAD_ONE }, 'Incorrect division #1');
 
     // 2 / (1 / 2) = 4 (ray)
-    assert(Ray { val: 2 * RAY_ONE } / Ray { val: RAY_ONE / 2 } == Ray { val: 4 * RAY_ONE }, 'Incorrect division #2');
+    let lhs = Ray { val: 2 * RAY_ONE } / Ray { val: RAY_ONE / 2 };
+    assert(lhs == Ray { val: 4 * RAY_ONE }, 'Incorrect division #2');
 
     // wdiv(ray, wad) -> ray
     assert(wdiv_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }) == Ray { val: RAY_ONE }, 'Incorrect division #3');
@@ -163,6 +189,13 @@ fn test_div_eq() {
 
     a1 /= b;
     assert(a1 == a2 / b, 'Incorrect DivEq #1');
+
+    let mut a1 = Ray { val: 15 };
+    let a2 = Ray { val: 15 };
+    let b = Ray { val: 3 };
+
+    a1 /= b;
+    assert(a1 == a2 / b, 'Incorrect DivEq #2');
 }
 
 #[test]
@@ -237,7 +270,10 @@ fn test_bounded() {
 #[test]
 fn test_wadray_into_u256() {
     // Test WadIntoU256
-    assert(Wad { val: 5 }.into() == 5_u256, 'Incorrect Wad->u256 conversion')
+    assert(Wad { val: 5 }.into() == 5_u256, 'Incorrect Wad->u256 conversion');
+
+    // Test RayIntoU256
+    assert(Ray { val: 5 }.into() == 5_u256, 'Incorrect Ray->u256 conversion');
 }
 
 #[test]
@@ -294,7 +330,7 @@ fn test_comparisons2() {
 #[test]
 fn test_zeroable() {
     // Test zero
-    let wad_zero = Wad { val: 0 };
+    let wad_zero: Wad = Zeroable::zero();
     assert(wad_zero.val == 0, 'Value should be 0 #1');
 
     // Test is_zero
@@ -306,7 +342,8 @@ fn test_zeroable() {
     assert(!wad_zero.is_non_zero(), 'Value should be 0 #4');
     assert(wad_one.is_non_zero(), 'Value should not be 0 #5');
 
-    let ray_zero = Ray { val: 0 };
+    // Test zero
+    let ray_zero: Ray = Zeroable::zero();
     assert(ray_zero.val == 0, 'Value should be 0 #6');
 
     // Test is_zero
@@ -317,4 +354,33 @@ fn test_zeroable() {
     // Test is_non_zero
     assert(!ray_zero.is_non_zero(), 'Value should be 0 #9');
     assert(ray_one.is_non_zero(), 'Value should not be 0 #10');
+}
+
+#[test]
+fn test_oneable() {
+    // Test one
+    let wad_one: Wad = Oneable::one();
+    assert(wad_one.val == 1, 'Value should be 1 #1');
+
+    // Test is_one
+    let wad_one = Wad { val: 1 };
+    assert(wad_one.is_one(), 'Value should be 1 #2');
+    assert(!wad_one.is_one(), 'Value should not be 1 #3');
+
+    // Test is_non_one
+    assert(!wad_one.is_non_one(), 'Value should be 1 #4');
+    assert(wad_one.is_non_one(), 'Value should not be 1 #5');
+
+    // Test one
+    let ray_one: Ray = Oneable::one();
+    assert(ray_one.val == 1, 'Value should be 1 #6');
+
+    // Test is_one
+    let ray_one = Ray { val: 1 };
+    assert(ray_one.is_one(), 'Value should be 1 #7');
+    assert(!ray_one.is_one(), 'Value should not be 1 #8');
+
+    // Test is_non_one
+    assert(!ray_one.is_non_one(), 'Value should be 1 #9');
+    assert(ray_one.is_non_one(), 'Value should not be 1 #10');
 }
