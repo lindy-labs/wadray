@@ -97,8 +97,7 @@ fn test_sub_eq() {
 #[test]
 fn test_mul() {
     // 0 * 69 = 0
-    let lhs = Wad { val: 0 } * Wad { val: 69 };
-    assert(lhs == Wad { val: 0 }, 'Incorrect Multiplication # 1');
+    assert(Wad { val: 0 } * Wad { val: 69 } == Wad { val: 0 }, 'Incorrect Multiplication # 1');
 
     // 1 * 1 = 0 (truncated)
     assert(
@@ -116,8 +115,7 @@ fn test_mul() {
     );
 
     // 0 * 69 = 0
-    let lhs = Ray { val: 0 } * Ray { val: 69 };
-    assert(lhs == Ray { val: 0 }, 'Incorrect Multiplication #5');
+    assert(Ray { val: 0 } * Ray { val: 69 } == Ray { val: 0 }, 'Incorrect Multiplication #5');
 
     // 1 * 1 = 0 (truncated)
     assert(
@@ -167,12 +165,10 @@ fn test_mul_eq() {
 #[test]
 fn test_div() {
     // 2 / (1 / 2) = 4 (wad)
-    let lhs = Wad { val: 2 * WAD_ONE } / Wad { val: WAD_ONE / 2 };
-    assert(lhs == Wad { val: 4 * WAD_ONE }, 'Incorrect division #1');
+    assert(Wad { val: 2 * WAD_ONE } / Wad { val: WAD_ONE / 2 } == Wad { val: 4 * WAD_ONE }, 'Incorrect division #1');
 
     // 2 / (1 / 2) = 4 (ray)
-    let lhs = Ray { val: 2 * RAY_ONE } / Ray { val: RAY_ONE / 2 };
-    assert(lhs == Ray { val: 4 * RAY_ONE }, 'Incorrect division #2');
+    assert(Ray { val: 2 * RAY_ONE } / Ray { val: RAY_ONE / 2 } == Ray { val: 4 * RAY_ONE }, 'Incorrect division #2');
 
     // wdiv(ray, wad) -> ray
     assert(wdiv_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }) == Ray { val: RAY_ONE }, 'Incorrect division #3');
