@@ -37,6 +37,13 @@ mod test_wadray_signed {
 
         a1 += b;
         assert_eq!(a1, a2 + b, "Incorrect AddEq #1");
+
+        let mut a1 = SignedRay { val: 5, sign: true };
+        let a2 = SignedRay { val: 5, sign: true };
+        let b = SignedRay { val: 3, sign: false };
+
+        a1 += b;
+        assert_eq!(a1, a2 + b, "Incorrect AddEq #2");
     }
 
     #[test]
@@ -47,6 +54,13 @@ mod test_wadray_signed {
 
         a1 -= b;
         assert_eq!(a1, a2 - b, "Incorrect SubEq #1");
+
+        let mut a1 = SignedRay { val: 5, sign: true };
+        let a2 = SignedRay { val: 5, sign: true };
+        let b = SignedRay { val: 3, sign: false };
+
+        a1 -= b;
+        assert_eq!(a1, a2 - b, "Incorrect SubEq #2");
     }
 
     #[test]
@@ -149,6 +163,13 @@ mod test_wadray_signed {
 
         a1 *= b;
         assert_eq!(a1, a2 * b, "Incorrect MulEq #1");
+
+        let mut a1 = SignedRay { val: 5, sign: true };
+        let a2 = SignedRay { val: 5, sign: true };
+        let b = SignedRay { val: 3, sign: false };
+
+        a1 *= b;
+        assert_eq!(a1, a2 * b, "Incorrect MulEq #2");
     }
 
     #[test]
@@ -159,6 +180,13 @@ mod test_wadray_signed {
 
         a1 /= b;
         assert_eq!(a1, a2 / b, "Incorrect DivEq #1");
+
+        let mut a1 = SignedRay { val: 15, sign: true };
+        let a2 = SignedRay { val: 15, sign: true };
+        let b = SignedRay { val: 3, sign: false };
+
+        a1 /= b;
+        assert_eq!(a1, a2 / b, "Incorrect DivEq #2");
     }
 
     #[test]
