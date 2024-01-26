@@ -58,7 +58,7 @@ fn _felt_abs(a: felt252) -> felt252 {
 
 // Returns the sign of the product in signed multiplication (or quotient in division)
 fn sign_from_mul(lhs_sign: bool, rhs_sign: bool) -> bool {
-    lhs_sign ^ rhs_sign
+    (!lhs_sign && rhs_sign) || (lhs_sign && !rhs_sign)
 }
 
 //
