@@ -18,6 +18,11 @@ struct SignedRay {
     sign: bool
 }
 
+// External helpers
+fn wad_to_signed_ray(a: Wad) -> SignedRay {
+    SignedRay { val: a.val * DIFF, sign: false }
+}
+
 //
 // Internal helpers
 //
@@ -220,12 +225,6 @@ impl SignedRayIntoFelt252 of Into<SignedRay, felt252> {
 impl WadIntoSignedWad of Into<Wad, SignedWad> {
     fn into(self: Wad) -> SignedWad {
         SignedWad { val: self.val, sign: false }
-    }
-}
-
-impl WadIntoSignedRay of Into<Wad, SignedRay> {
-    fn into(self: Wad) -> SignedRay {
-        SignedRay { val: self.val * DIFF, sign: false }
     }
 }
 

@@ -8,7 +8,7 @@ use wadray::{
 };
 use wadray_signed::{
     BoundedSignedRay, BoundedSignedWad, Signed, SignedRay, SignedRayOneable, SignedRayZeroable, SignedWad,
-    SignedWadOneable, SignedWadZeroable,
+    SignedWadOneable, SignedWadZeroable, wad_to_signed_ray
 };
 #[cfg(test)]
 mod tests {
