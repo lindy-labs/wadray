@@ -3,7 +3,7 @@ mod test_wadray_signed {
     use math::Oneable;
     use wadray::{
         BoundedSignedWad, BoundedSignedRay, DIFF, Ray, RAY_ONE, Signed, SignedRay, SignedRayOneable, SignedRayZeroable,
-        SignedWad, SignedWadOneable, SignedWadZeroable, Wad, WAD_ONE
+        SignedWad, SignedWadOneable, SignedWadZeroable, Wad, WAD_ONE, wad_to_signed_ray
     };
 
     #[test]
@@ -330,12 +330,6 @@ mod test_wadray_signed {
         assert_eq!(b_signed.val, b.val, "RayIntoSignedRay val fail");
         assert(!b_signed.sign, 'RayIntoSignedRay sign fail');
 
-        // Test WadIntoSignedRay
-        let c = Wad { val: 300 * WAD_ONE };
-        let c_signed: SignedRay = c.into();
-        assert_eq!(c_signed.val, c.val * DIFF, "WadIntoSignedRay val fail");
-        assert(!c_signed.sign, 'WadIntoSignedRay sign fail');
-
         // Test SignedRayTryIntoRay
         let d = SignedRay { val: 400, sign: false };
         let d_ray: Option<Ray> = d.try_into();
@@ -444,6 +438,14 @@ mod test_wadray_signed {
         assert(pos_zero <= neg_zero, 'Zero le');
         assert(!(pos_zero > neg_zero), 'Zero gt');
         assert(!(pos_zero < neg_zero), 'Zero lt');
+    }
+
+    #[test]
+    fn test_conversions() {
+        let c = Wad { val: 300 * WAD_ONE };
+        let c_signed: SignedRay = wad_to_signed_ray(c);
+        assert_eq!(c_signed.val, c.val * DIFF, "WadIntoSignedRay val fail");
+        assert(!c_signed.sign, 'WadIntoSignedRay sign fail');
     }
 
     #[test]
