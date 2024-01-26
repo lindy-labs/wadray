@@ -444,8 +444,8 @@ mod test_wadray_signed {
     fn test_conversions() {
         let c = Wad { val: 300 * WAD_ONE };
         let c_signed: SignedRay = wad_to_signed_ray(c);
-        assert_eq!(c_signed.val, c.val * DIFF, "WadIntoSignedRay val fail");
-        assert(!c_signed.sign, 'WadIntoSignedRay sign fail');
+        assert_eq!(c_signed.val, c.val * DIFF, "wad_to_signed_ray val fail");
+        assert(!c_signed.sign, 'wad_to_signed_ray sign fail');
     }
 
     #[test]
