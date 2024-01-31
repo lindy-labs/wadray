@@ -148,7 +148,10 @@ scarb test
 ```
 
 ## Formal Verification
-This library is in the process of being formally verified by the Lindy Labs FV unit.
+This library has been formally verified using our tool [Aegis](https://github.com/lindy-labs/aegis).
+Specifications and their correctness proof can be found [in this repository](https://github.com/lindy-labs/wadray_verification),
+the verification currently refers to revision [30f7664](https://github.com/lindy-labs/wadray/tree/30f766472e349521f0e94aede9e95592e07079de)
+of this repo.
 
 ## Contribute
 
