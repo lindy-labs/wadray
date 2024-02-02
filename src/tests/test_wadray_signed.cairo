@@ -314,6 +314,11 @@ mod test_wadray_signed {
         assert(d_wad.is_some(), 'SignedWadTryIntoWad pos fail');
         assert_eq!(d_wad.unwrap().val, d.val, "SignedWadTryIntoWad val fail");
 
+        let neg_zero = SignedWad { val: 0, sign: true };
+        let neg_zero_wad: Option<Wad> = neg_zero.try_into();
+        assert(neg_zero_wad.is_some(), 'SignedWadTryIntoWad zero fail');
+        assert_eq!(neg_zero_wad.unwrap().val, neg_zero.val, "SignedWadTryIntoWad zero fail");
+
         let e = SignedWad { val: 500, sign: true };
         let e_wad: Option<Wad> = e.try_into();
         assert(e_wad.is_none(), 'SignedWadTryIntoWad neg fail');
@@ -335,6 +340,11 @@ mod test_wadray_signed {
         let d_ray: Option<Ray> = d.try_into();
         assert(d_ray.is_some(), 'SignedRayTryIntoRay pos fail');
         assert_eq!(d_ray.unwrap().val, d.val, "SignedRayTryIntoRay val fail");
+
+        let neg_zero = SignedRay { val: 0, sign: true };
+        let neg_zero_ray: Option<Ray> = neg_zero.try_into();
+        assert(neg_zero_ray.is_some(), 'SignedRayTryIntoRay zero fail');
+        assert_eq!(neg_zero_ray.unwrap().val, neg_zero.val, "SignedRayTryIntoRay zero fail");
 
         let e = SignedRay { val: 500, sign: true };
         let e_ray: Option<Ray> = e.try_into();

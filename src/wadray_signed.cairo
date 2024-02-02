@@ -236,7 +236,7 @@ impl RayIntoSignedRay of Into<Ray, SignedRay> {
 
 impl SignedWadTryIntoWad of TryInto<SignedWad, Wad> {
     fn try_into(self: SignedWad) -> Option<Wad> {
-        if !self.sign {
+        if !self.sign || self.val.is_zero() {
             return Option::Some(Wad { val: self.val });
         } else {
             return Option::None;
@@ -246,7 +246,7 @@ impl SignedWadTryIntoWad of TryInto<SignedWad, Wad> {
 
 impl SignedRayTryIntoRay of TryInto<SignedRay, Ray> {
     fn try_into(self: SignedRay) -> Option<Ray> {
-        if !self.sign {
+        if !self.sign || self.val.is_zero() {
             return Option::Some(Ray { val: self.val });
         } else {
             return Option::None;
