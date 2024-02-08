@@ -9,6 +9,9 @@ repository = "https://github.com/lindy-labs/wadray"
 license-file = "LICENSE"
 keywords = ["fixed-point", "wad", "ray", "cairo", "starknet"]
 
+[dependencies]
+starknet = ">= 2.4"
+
 [dev-dependencies]
 snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry.git", tag = "v0.14.0" }
 
