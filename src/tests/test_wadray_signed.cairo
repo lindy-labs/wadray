@@ -500,7 +500,7 @@ mod test_wadray_signed {
         let rr: SignedRay = StorePacking::unpack(StorePacking::pack(r));
         assert_eq!(r, rr, "SignedRay packing 3");
 
-        let r = SignedRay { val: BoundedInt::max(), sign: false};
+        let r = SignedRay { val: BoundedInt::max(), sign: false };
         let rr: SignedRay = StorePacking::unpack(StorePacking::pack(r));
         assert_eq!(r, rr, "SignedRay packing 4");
     }

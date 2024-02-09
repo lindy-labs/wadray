@@ -63,12 +63,13 @@ fn sign_from_mul(lhs_sign: bool, rhs_sign: bool) -> bool {
 
 fn _pack(val: u128, sign: bool) -> felt252 {
     // shift by 2**128
-    val.into() + sign.into() * 0x100000000000000000000000000000000
+    let two_pow_128: felt252 = BoundedInt::<u128>::max().into() + 1;
+    val.into() + sign.into() * two_pow_128
 }
 
 fn _unpack(packed: felt252) -> (u128, bool) {
-    // 2**128
-    let shift: NonZero<u256> = u256_try_as_non_zero(0x100000000000000000000000000000000).unwrap();
+    let two_pow_128: u256 = BoundedInt::<u128>::max().into() + 1; // 2**128
+    let shift: NonZero<u256> = u256_try_as_non_zero(two_pow_128).unwrap();
     let (sign, val) = u256_safe_div_rem(packed.into(), shift);
     let val: u128 = val.try_into().expect('WadRay Signed val unpacking');
     let sign: u128 = sign.try_into().expect('WadRay Signed sign unpacking');
