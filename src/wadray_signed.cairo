@@ -1,18 +1,18 @@
 use core::fmt::{Debug, Display, DisplayInteger, Error, Formatter};
-use integer::BoundedInt;
+use integer::{BoundedInt, u256_safe_div_rem, u256_try_as_non_zero};
 use math::Oneable;
+use starknet::StorePacking;
 use wadray::wadray::{DIFF, Ray, RAY_ONE, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul, Wad, WAD_ONE};
 
 const HALF_PRIME: felt252 = 1809251394333065606848661391547535052811553607665798349986546028067936010240;
 
-
-#[derive(Copy, Drop, Serde, starknet::Store)]
+#[derive(Copy, Drop, Serde)]
 struct SignedWad {
     val: u128,
     sign: bool
 }
 
-#[derive(Copy, Drop, Serde, starknet::Store)]
+#[derive(Copy, Drop, Serde)]
 struct SignedRay {
     val: u128,
     sign: bool
@@ -61,9 +61,47 @@ fn sign_from_mul(lhs_sign: bool, rhs_sign: bool) -> bool {
     lhs_sign ^ rhs_sign
 }
 
+fn _pack(val: u128, sign: bool) -> felt252 {
+    // shift by 2**128
+    let two_pow_128: felt252 = BoundedInt::<u128>::max().into() + 1;
+    val.into() + sign.into() * two_pow_128
+}
+
+fn _unpack(packed: felt252) -> (u128, bool) {
+    let two_pow_128: u256 = BoundedInt::<u128>::max().into() + 1; // 2**128
+    let shift: NonZero<u256> = u256_try_as_non_zero(two_pow_128).unwrap();
+    let (sign, val) = u256_safe_div_rem(packed.into(), shift);
+    let val: u128 = val.try_into().expect('WadRay Signed val unpacking');
+    let sign: u128 = sign.try_into().expect('WadRay Signed sign unpacking');
+    (val, sign == 1)
+}
+
 //
 // Trait Implementations
 //
+
+// StorePacking
+impl SignedWadStorePacking of StorePacking<SignedWad, felt252> {
+    fn pack(value: SignedWad) -> felt252 {
+        _pack(value.val, value.sign)
+    }
+
+    fn unpack(value: felt252) -> SignedWad {
+        let (val, sign) = _unpack(value);
+        SignedWad { val, sign }
+    }
+}
+
+impl SignedRayStorePacking of StorePacking<SignedRay, felt252> {
+    fn pack(value: SignedRay) -> felt252 {
+        _pack(value.val, value.sign)
+    }
+
+    fn unpack(value: felt252) -> SignedRay {
+        let (val, sign) = _unpack(value);
+        SignedRay { val, sign }
+    }
+}
 
 // Addition
 impl SignedWadAdd of Add<SignedWad> {

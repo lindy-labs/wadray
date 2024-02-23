@@ -1,6 +1,7 @@
 mod test_wadray_signed {
-    use debug::PrintTrait;
+    use integer::BoundedInt;
     use math::Oneable;
+    use starknet::StorePacking;
     use wadray::{
         BoundedSignedWad, BoundedSignedRay, DIFF, Ray, RAY_ONE, Signed, SignedRay, SignedRayOneable, SignedRayZeroable,
         SignedWad, SignedWadOneable, SignedWadZeroable, Wad, WAD_ONE, wad_to_signed_ray
@@ -467,5 +468,40 @@ mod test_wadray_signed {
         let r = SignedRay { val: 456, sign: false };
         assert_eq!(format!("{}", r), "456", "SignedRay display");
         assert_eq!(format!("{:?}", r), "456", "SignedRay debug");
+    }
+
+    #[test]
+    fn test_store_packing() {
+        let w = SignedWad { val: 123, sign: true };
+        let ww: SignedWad = StorePacking::unpack(StorePacking::pack(w));
+        assert_eq!(w, ww, "SignedWad packing 1");
+
+        let w = SignedWad { val: 123, sign: false };
+        let ww: SignedWad = StorePacking::unpack(StorePacking::pack(w));
+        assert_eq!(w, ww, "SignedWad packing 2");
+
+        let w = SignedWad { val: BoundedInt::max(), sign: true };
+        let ww: SignedWad = StorePacking::unpack(StorePacking::pack(w));
+        assert_eq!(w, ww, "SignedWad packing 3");
+
+        let w = SignedWad { val: BoundedInt::max(), sign: false };
+        let ww: SignedWad = StorePacking::unpack(StorePacking::pack(w));
+        assert_eq!(w, ww, "SignedWad packing 4");
+
+        let r = SignedRay { val: 123, sign: true };
+        let rr: SignedRay = StorePacking::unpack(StorePacking::pack(r));
+        assert_eq!(r, rr, "SignedRay packing 1");
+
+        let r = SignedRay { val: 123, sign: false };
+        let rr: SignedRay = StorePacking::unpack(StorePacking::pack(r));
+        assert_eq!(r, rr, "SignedRay packing 2");
+
+        let r = SignedRay { val: BoundedInt::max(), sign: true };
+        let rr: SignedRay = StorePacking::unpack(StorePacking::pack(r));
+        assert_eq!(r, rr, "SignedRay packing 3");
+
+        let r = SignedRay { val: BoundedInt::max(), sign: false };
+        let rr: SignedRay = StorePacking::unpack(StorePacking::pack(r));
+        assert_eq!(r, rr, "SignedRay packing 4");
     }
 }
