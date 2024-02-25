@@ -1,10 +1,9 @@
 mod test_wadray_signed {
     use integer::BoundedInt;
-    use math::Oneable;
     use starknet::StorePacking;
     use wadray::{
-        BoundedSignedWad, BoundedSignedRay, DIFF, Ray, RAY_ONE, Signed, SignedRay, SignedRayOneable, SignedRayZeroable,
-        SignedWad, SignedWadOneable, SignedWadZeroable, Wad, WAD_ONE, wad_to_signed_ray
+        BoundedSignedWad, BoundedSignedRay, DIFF, Ray, RAY_ONE, Signed, SignedRay, SignedRayOne, SignedRayZero,
+        SignedWad, SignedWadOne, SignedWadZero, Wad, WAD_ONE, wad_to_signed_ray
     };
 
     #[test]
@@ -13,7 +12,7 @@ mod test_wadray_signed {
         let b = SignedWad { val: 100, sign: true };
         let c = SignedWad { val: 40, sign: true };
 
-        assert_eq!(a + b, SignedWadZeroable::zero(), "a + b != 0");
+        assert_eq!(a + b, SignedWadZero::zero(), "a + b != 0");
         assert_eq!(a - b, SignedWad { val: 200, sign: false }, "a - b != 200");
         assert_eq!(b - a, SignedWad { val: 200, sign: true }, "b - a != -200");
         assert_eq!(a + c, SignedWad { val: 60, sign: false }, "a + c != 60");
@@ -23,7 +22,7 @@ mod test_wadray_signed {
         let b = SignedRay { val: 100, sign: true };
         let c = SignedRay { val: 40, sign: true };
 
-        assert_eq!(a + b, SignedRayZeroable::zero(), "a + b != 0");
+        assert_eq!(a + b, SignedRayZero::zero(), "a + b != 0");
         assert_eq!(a - b, SignedRay { val: 200, sign: false }, "a - b != 200");
         assert_eq!(b - a, SignedRay { val: 200, sign: true }, "b - a != -200");
         assert_eq!(a + c, SignedRay { val: 60, sign: false }, "a + c != 60");
@@ -108,20 +107,20 @@ mod test_wadray_signed {
         let one = SignedWad { val: WAD_ONE, sign: false }; // 1.0 wad
         let neg_one = SignedWad { val: WAD_ONE, sign: true }; // -1.0 wad
 
-        assert_eq!((one * zero), SignedWadZeroable::zero(), "SignedWad zero mul #1");
-        assert_eq!((neg_one * zero), SignedWadZeroable::zero(), "SignedWad zero mul #2");
-        assert_eq!((one * neg_zero), SignedWadZeroable::zero(), "SignedWad zero mul #3");
-        assert_eq!((neg_one * neg_zero), SignedWadZeroable::zero(), "SignedWad zero mul #4");
+        assert_eq!((one * zero), SignedWadZero::zero(), "SignedWad zero mul #1");
+        assert_eq!((neg_one * zero), SignedWadZero::zero(), "SignedWad zero mul #2");
+        assert_eq!((one * neg_zero), SignedWadZero::zero(), "SignedWad zero mul #3");
+        assert_eq!((neg_one * neg_zero), SignedWadZero::zero(), "SignedWad zero mul #4");
 
         let zero = SignedRay { val: 0, sign: false };
         let neg_zero = SignedRay { val: 0, sign: true };
         let one = SignedRay { val: RAY_ONE, sign: false }; // 1.0 ray
         let neg_one = SignedRay { val: RAY_ONE, sign: true }; // -1.0 ray
 
-        assert_eq!((one * zero), SignedRayZeroable::zero(), "SignedRay zero mul #1");
-        assert_eq!((neg_one * zero), SignedRayZeroable::zero(), "SignedRay zero mul #2");
-        assert_eq!((one * neg_zero), SignedRayZeroable::zero(), "SignedRay zero mul #3");
-        assert_eq!((neg_one * neg_zero), SignedRayZeroable::zero(), "SignedRay zero mul #4");
+        assert_eq!((one * zero), SignedRayZero::zero(), "SignedRay zero mul #1");
+        assert_eq!((neg_one * zero), SignedRayZero::zero(), "SignedRay zero mul #2");
+        assert_eq!((one * neg_zero), SignedRayZero::zero(), "SignedRay zero mul #3");
+        assert_eq!((neg_one * neg_zero), SignedRayZero::zero(), "SignedRay zero mul #4");
     }
 
     #[test]
@@ -353,64 +352,64 @@ mod test_wadray_signed {
     }
 
     #[test]
-    fn test_zeroable_oneable() {
-        // Test SignedWadZeroable
-        let zero = SignedWadZeroable::zero();
-        assert_eq!(zero.val, 0, "Zeroable zero fail");
-        assert(!zero.sign, 'Zeroable zero sign fail');
-        assert(zero.is_zero(), 'Zeroable is_zero fail');
-        assert(!zero.is_non_zero(), 'Zeroable is_non_zero fail');
+    fn test_zero_one() {
+        // Test SignedWadZero
+        let zero = SignedWadZero::zero();
+        assert_eq!(zero.val, 0, "Zero zero fail");
+        assert(!zero.sign, 'Zero zero sign fail');
+        assert(zero.is_zero(), 'Zero is_zero fail');
+        assert(!zero.is_non_zero(), 'Zero is_non_zero fail');
 
         let non_zero = SignedWad { val: 100, sign: false };
-        assert(!non_zero.is_zero(), 'Zeroable non_zero fail');
-        assert(non_zero.is_non_zero(), 'Zeroable non_zero fail');
+        assert(!non_zero.is_zero(), 'Zero non_zero fail');
+        assert(non_zero.is_non_zero(), 'Zero non_zero fail');
 
-        // Test SignedWadOneable
-        let one = SignedWadOneable::one();
-        assert_eq!(one.val, WAD_ONE, "Oneable one fail");
-        assert(!one.sign, 'Oneable one sign fail');
-        assert(one.is_one(), 'Oneable is_one fail');
-        assert(!one.is_non_one(), 'Oneable is_non_one fail');
+        // Test SignedWadOne
+        let one = SignedWadOne::one();
+        assert_eq!(one.val, WAD_ONE, "One one fail");
+        assert(!one.sign, 'One one sign fail');
+        assert(one.is_one(), 'One is_one fail');
+        assert(!one.is_non_one(), 'One is_non_one fail');
 
         let minus_one = SignedWad { val: WAD_ONE, sign: true };
-        assert(!minus_one.is_one(), 'Oneable minus_one is_one fail');
-        assert(minus_one.is_non_one(), 'Oneable minus_one is_non_one f');
+        assert(!minus_one.is_one(), 'One minus_one is_one fail');
+        assert(minus_one.is_non_one(), 'One minus_one is_non_one f');
 
         let non_one = SignedWad { val: 200, sign: false };
-        assert(!non_one.is_one(), 'Oneable non_one fail');
-        assert(non_one.is_non_one(), 'Oneable non_one fail');
+        assert(!non_one.is_one(), 'One non_one fail');
+        assert(non_one.is_non_one(), 'One non_one fail');
 
-        // Test SignedRayZeroable
-        let zero = SignedRayZeroable::zero();
-        assert_eq!(zero.val, 0, "Zeroable zero fail");
-        assert(!zero.sign, 'Zeroable zero sign fail');
-        assert(zero.is_zero(), 'Zeroable is_zero fail');
-        assert(!zero.is_non_zero(), 'Zeroable is_non_zero fail');
+        // Test SignedRayZero
+        let zero = SignedRayZero::zero();
+        assert_eq!(zero.val, 0, "Zero zero fail");
+        assert(!zero.sign, 'Zero zero sign fail');
+        assert(zero.is_zero(), 'Zero is_zero fail');
+        assert(!zero.is_non_zero(), 'Zero is_non_zero fail');
 
         let non_zero = SignedRay { val: 100, sign: false };
-        assert(!non_zero.is_zero(), 'Zeroable non_zero fail');
-        assert(non_zero.is_non_zero(), 'Zeroable non_zero fail');
+        assert(!non_zero.is_zero(), 'Zero non_zero fail');
+        assert(non_zero.is_non_zero(), 'Zero non_zero fail');
 
-        // Test SignedRayOneable
-        let one = SignedRayOneable::one();
-        assert_eq!(one.val, RAY_ONE, "Oneable one fail");
-        assert(!one.sign, 'Oneable one sign fail');
-        assert(one.is_one(), 'Oneable is_one fail');
-        assert(!one.is_non_one(), 'Oneable is_non_one fail');
+        // Test SignedRayOne
+        let one = SignedRayOne::one();
+        assert_eq!(one.val, RAY_ONE, "One one fail");
+        assert(!one.sign, 'One one sign fail');
+        assert(one.is_one(), 'One is_one fail');
+        assert(!one.is_non_one(), 'One is_non_one fail');
 
         let minus_one = SignedRay { val: RAY_ONE, sign: true };
-        assert(!minus_one.is_one(), 'Oneable minus_one is_one fail');
-        assert(minus_one.is_non_one(), 'Oneable minus_one is_non_one f');
+        assert(!minus_one.is_one(), 'One minus_one is_one fail');
+        assert(minus_one.is_non_one(), 'One minus_one is_non_one f');
 
         let non_one = SignedRay { val: 200, sign: false };
-        assert(!non_one.is_one(), 'Oneable non_one fail');
-        assert(non_one.is_non_one(), 'Oneable non_one fail');
+        assert(!non_one.is_one(), 'One non_one fail');
+        assert(non_one.is_non_one(), 'One non_one fail');
     }
 
     #[test]
     fn test_signed() {
         // Test SignedWadSigned
-        let zero = SignedWadZeroable::zero();
+        let zero = SignedWadZero::zero();
         let one = SignedWad { val: 1, sign: false };
         let neg_one = SignedWad { val: 1, sign: true };
 
@@ -419,7 +418,7 @@ mod test_wadray_signed {
         assert(!neg_one.is_positive() && neg_one.is_negative(), 'Signed neg one fail');
 
         // Test SignedRaySigned
-        let zero = SignedRayZeroable::zero();
+        let zero = SignedRayZero::zero();
         let one = SignedRay { val: 1, sign: false };
         let neg_one = SignedRay { val: 1, sign: true };
 
