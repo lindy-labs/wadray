@@ -1,4 +1,4 @@
-use math::Oneable;
+use core::num::traits::{One, Zero};
 use wadray::{
     BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr, Wad, WAD_ONE,
     WAD_DECIMALS, WAD_SCALE, wdiv_rw, wmul_rw, wmul_wr,
@@ -334,9 +334,9 @@ fn test_comparisons2() {
 }
 
 #[test]
-fn test_zeroable() {
+fn test_zero() {
     // Test zero
-    let wad_zero: Wad = Zeroable::zero();
+    let wad_zero: Wad = Zero::zero();
     assert_eq!(wad_zero.val, 0, "Value should be 0 #1");
 
     // Test is_zero
@@ -349,7 +349,7 @@ fn test_zeroable() {
     assert(wad_one.is_non_zero(), 'Value should not be 0 #5');
 
     // Test zero
-    let ray_zero: Ray = Zeroable::zero();
+    let ray_zero: Ray = Zero::zero();
     assert_eq!(ray_zero.val, 0, "Value should be 0 #6");
 
     // Test is_zero
@@ -363,13 +363,13 @@ fn test_zeroable() {
 }
 
 #[test]
-fn test_oneable() {
+fn test_one() {
     // Test one
-    let wad_one: Wad = Oneable::one();
+    let wad_one: Wad = One::one();
     assert_eq!(wad_one.val, 1000000000000000000, "Value should be WAD_ONE #1");
 
     // Test is_one
-    let wad_zero: Wad = Zeroable::zero();
+    let wad_zero: Wad = Zero::zero();
     assert(wad_one.is_one(), 'Value should be 1 #2');
     assert(!wad_zero.is_one(), 'Value should not be 1 #3');
 
@@ -378,11 +378,11 @@ fn test_oneable() {
     assert(wad_zero.is_non_one(), 'Value should not be 1 #5');
 
     // Test one
-    let ray_one: Ray = Oneable::one();
+    let ray_one: Ray = One::one();
     assert_eq!(ray_one.val, 1000000000000000000000000000, "Value should be RAY_ONE #6");
 
     // Test is_one
-    let ray_zero: Ray = Zeroable::zero();
+    let ray_zero: Ray = Zero::zero();
     assert(ray_one.is_one(), 'Value should be 1 #7');
     assert(!ray_zero.is_one(), 'Value should not be 1 #8');
 

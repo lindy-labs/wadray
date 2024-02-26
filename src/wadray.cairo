@@ -1,6 +1,6 @@
 use core::fmt::{Debug, Display, DisplayInteger, Error, Formatter};
+use core::num::traits::{One, Zero};
 use integer::BoundedInt;
-use math::Oneable;
 
 const WAD_DECIMALS: u8 = 18;
 const WAD_SCALE: u128 = 1000000000000000000;
@@ -402,74 +402,73 @@ impl BoundedRay of BoundedInt<Ray> {
     }
 }
 
-// Zeroable
-impl WadZeroable of Zeroable<Wad> {
+// Zero
+impl WadZero of Zero<Wad> {
     #[inline(always)]
     fn zero() -> Wad {
         Wad { val: 0 }
     }
 
     #[inline(always)]
-    fn is_zero(self: Wad) -> bool {
-        self.val == 0
+    fn is_zero(self: @Wad) -> bool {
+        *self.val == 0
     }
 
     #[inline(always)]
-    fn is_non_zero(self: Wad) -> bool {
-        self.val != 0
+    fn is_non_zero(self: @Wad) -> bool {
+        *self.val != 0
     }
 }
 
-impl RayZeroable of Zeroable<Ray> {
+impl RayZero of Zero<Ray> {
     #[inline(always)]
     fn zero() -> Ray {
         Ray { val: 0 }
     }
 
     #[inline(always)]
-    fn is_zero(self: Ray) -> bool {
-        self.val == 0
+    fn is_zero(self: @Ray) -> bool {
+        *self.val == 0
     }
 
     #[inline(always)]
-    fn is_non_zero(self: Ray) -> bool {
-        self.val != 0
+    fn is_non_zero(self: @Ray) -> bool {
+        *self.val != 0
     }
 }
 
-// Oneable
-
-impl WadOneable of Oneable<Wad> {
+// One
+impl WadOne of One<Wad> {
     #[inline(always)]
     fn one() -> Wad {
         Wad { val: WAD_ONE }
     }
 
     #[inline(always)]
-    fn is_one(self: Wad) -> bool {
-        self.val == WAD_ONE
+    fn is_one(self: @Wad) -> bool {
+        *self.val == WAD_ONE
     }
 
     #[inline(always)]
-    fn is_non_one(self: Wad) -> bool {
-        self.val != WAD_ONE
+    fn is_non_one(self: @Wad) -> bool {
+        *self.val != WAD_ONE
     }
 }
 
-impl RayOneable of Oneable<Ray> {
+impl RayOne of One<Ray> {
     #[inline(always)]
     fn one() -> Ray {
         Ray { val: RAY_ONE }
     }
 
     #[inline(always)]
-    fn is_one(self: Ray) -> bool {
-        self.val == RAY_ONE
+    fn is_one(self: @Ray) -> bool {
+        *self.val == RAY_ONE
     }
 
     #[inline(always)]
-    fn is_non_one(self: Ray) -> bool {
-        self.val != RAY_ONE
+    fn is_non_one(self: @Ray) -> bool {
+        *self.val != RAY_ONE
     }
 }
 

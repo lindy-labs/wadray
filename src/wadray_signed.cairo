@@ -1,6 +1,6 @@
 use core::fmt::{Debug, Display, DisplayInteger, Error, Formatter};
+use core::num::traits::{One, Zero};
 use integer::{BoundedInt, u256_safe_div_rem, u256_try_as_non_zero};
-use math::Oneable;
 use starknet::StorePacking;
 use wadray::wadray::{DIFF, Ray, RAY_ONE, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul, Wad, WAD_ONE};
 
@@ -274,7 +274,7 @@ impl RayIntoSignedRay of Into<Ray, SignedRay> {
 
 impl SignedWadTryIntoWad of TryInto<SignedWad, Wad> {
     fn try_into(self: SignedWad) -> Option<Wad> {
-        if !self.sign || self.val.is_zero() {
+        if !self.sign || self.is_zero() {
             return Option::Some(Wad { val: self.val });
         } else {
             return Option::None;
@@ -284,7 +284,7 @@ impl SignedWadTryIntoWad of TryInto<SignedWad, Wad> {
 
 impl SignedRayTryIntoRay of TryInto<SignedRay, Ray> {
     fn try_into(self: SignedRay) -> Option<Ray> {
-        if !self.sign || self.val.is_zero() {
+        if !self.sign || self.is_zero() {
             return Option::Some(Ray { val: self.val });
         } else {
             return Option::None;
@@ -297,7 +297,7 @@ impl SignedRayTryIntoRay of TryInto<SignedRay, Ray> {
 impl SignedWadPartialEq of PartialEq<SignedWad> {
     fn eq(lhs: @SignedWad, rhs: @SignedWad) -> bool {
         let val_cmp: bool = *lhs.val == *rhs.val;
-        if val_cmp && (*lhs.val).is_zero() {
+        if val_cmp && lhs.is_zero() {
             true
         } else {
             val_cmp && *lhs.sign == *rhs.sign
@@ -350,7 +350,7 @@ impl SignedWadPartialOrd of PartialOrd<SignedWad> {
 impl SignedRayPartialEq of PartialEq<SignedRay> {
     fn eq(lhs: @SignedRay, rhs: @SignedRay) -> bool {
         let val_cmp: bool = *lhs.val == *rhs.val;
-        if val_cmp && (*lhs.val).is_zero() {
+        if val_cmp && lhs.is_zero() {
             true
         } else {
             val_cmp && *lhs.sign == *rhs.sign
@@ -427,74 +427,74 @@ impl BoundedSignedRay of BoundedInt<SignedRay> {
 }
 
 
-// Zeroable
-impl SignedWadZeroable of Zeroable<SignedWad> {
+// Zero
+impl SignedWadZero of Zero<SignedWad> {
     #[inline(always)]
     fn zero() -> SignedWad {
         SignedWad { val: 0, sign: false }
     }
 
     #[inline(always)]
-    fn is_zero(self: SignedWad) -> bool {
-        self.val == 0
+    fn is_zero(self: @SignedWad) -> bool {
+        *self.val == 0
     }
 
     #[inline(always)]
-    fn is_non_zero(self: SignedWad) -> bool {
-        self.val != 0
+    fn is_non_zero(self: @SignedWad) -> bool {
+        *self.val != 0
     }
 }
 
-impl SignedRayZeroable of Zeroable<SignedRay> {
+impl SignedRayZero of Zero<SignedRay> {
     #[inline(always)]
     fn zero() -> SignedRay {
         SignedRay { val: 0, sign: false }
     }
 
     #[inline(always)]
-    fn is_zero(self: SignedRay) -> bool {
-        self.val == 0
+    fn is_zero(self: @SignedRay) -> bool {
+        *self.val == 0
     }
 
     #[inline(always)]
-    fn is_non_zero(self: SignedRay) -> bool {
-        self.val != 0
+    fn is_non_zero(self: @SignedRay) -> bool {
+        *self.val != 0
     }
 }
 
 
-// Oneable
-impl SignedWadOneable of Oneable<SignedWad> {
+// One
+impl SignedWadOne of One<SignedWad> {
     #[inline(always)]
     fn one() -> SignedWad {
         SignedWad { val: WAD_ONE, sign: false }
     }
 
     #[inline(always)]
-    fn is_one(self: SignedWad) -> bool {
-        self.val == WAD_ONE && !self.sign
+    fn is_one(self: @SignedWad) -> bool {
+        *self.val == WAD_ONE && !*self.sign
     }
 
     #[inline(always)]
-    fn is_non_one(self: SignedWad) -> bool {
-        self.val != WAD_ONE || self.sign
+    fn is_non_one(self: @SignedWad) -> bool {
+        *self.val != WAD_ONE || *self.sign
     }
 }
 
-impl SignedRayOneable of Oneable<SignedRay> {
+impl SignedRayOne of One<SignedRay> {
     #[inline(always)]
     fn one() -> SignedRay {
         SignedRay { val: RAY_ONE, sign: false }
     }
 
     #[inline(always)]
-    fn is_one(self: SignedRay) -> bool {
-        self.val == RAY_ONE && !self.sign
+    fn is_one(self: @SignedRay) -> bool {
+        *self.val == RAY_ONE && !*self.sign
     }
 
     #[inline(always)]
-    fn is_non_one(self: SignedRay) -> bool {
-        self.val != RAY_ONE || self.sign
+    fn is_non_one(self: @SignedRay) -> bool {
+        *self.val != RAY_ONE || *self.sign
     }
 }
 
