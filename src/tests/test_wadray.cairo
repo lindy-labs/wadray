@@ -1,7 +1,7 @@
 use core::num::traits::{One, Zero};
 use wadray::{
-    BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, ray_to_wad, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr, Wad, WAD_ONE,
-    WAD_DECIMALS, WAD_SCALE, wdiv_rw, wmul_rw, wmul_wr,
+    BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, ray_to_wad, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr,
+    Wad, WAD_ONE, WAD_DECIMALS, WAD_SCALE, wdiv_rw, wmul_rw, wmul_wr,
 };
 
 #[test]
