@@ -263,12 +263,9 @@ impl WadTryIntoRay of TryInto<Wad, Ray> {
     }
 }
 
-impl RayIntoWad of Into<Ray, Wad> {
-    #[inline(always)]
-    fn into(self: Ray) -> Wad {
-        // The value will get truncated if it has more than 18 decimals.
-        Wad { val: self.val / DIFF }
-    }
+// Truncates a ray if it has more than 18 decimals.
+fn ray_to_wad(x: Ray) -> Wad {
+    Wad { val: x.val / DIFF }
 }
 
 impl TIntoWad<T, impl TIntoU128: Into<T, u128>> of Into<T, Wad> {
