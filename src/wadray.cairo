@@ -263,7 +263,7 @@ impl WadTryIntoRay of TryInto<Wad, Ray> {
     }
 }
 
-// Truncates a ray if it has more than 18 decimals.
+// Truncates a ray into a wad.
 fn ray_to_wad(x: Ray) -> Wad {
     Wad { val: x.val / DIFF }
 }
