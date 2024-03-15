@@ -3,12 +3,12 @@ version = 1
 
 [[package]]
 name = "snforge_std"
-version = "0.14.0"
-source = "git+https://github.com/foundry-rs/starknet-foundry.git?tag=v0.14.0#e8cbecee4e31ed428c76d5173eaa90c8df796fe3"
+version = "0.19.0"
+source = "git+https://github.com/foundry-rs/starknet-foundry.git?tag=v0.19.0#a3391dce5bdda51c63237032e6cfc64fb7a346d4"
 
 [[package]]
 name = "wadray"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "snforge_std",
 ]
