@@ -530,7 +530,7 @@ impl SignedRaySigned of Signed<SignedRay> {
 impl DisplaySignedWad of Display<SignedWad> {
     fn fmt(self: @SignedWad, ref f: Formatter) -> Result<(), Error> {
         if *self.sign {
-            write!(f, "-");
+            write!(f, "-")?;
         }
 
         Display::fmt(self.val, ref f)
@@ -540,7 +540,7 @@ impl DisplaySignedWad of Display<SignedWad> {
 impl DisplaySignedRay of Display<SignedRay> {
     fn fmt(self: @SignedRay, ref f: Formatter) -> Result<(), Error> {
         if *self.sign {
-            write!(f, "-");
+            write!(f, "-")?;
         }
 
         Display::fmt(self.val, ref f)
