@@ -20,7 +20,7 @@ jobs:
       - name: Install Universal-Sierra-Compiler
         run: curl -L https://raw.githubusercontent.com/software-mansion/universal-sierra-compiler/master/scripts/install.sh | sh -s -- v2.0.0
 
-      - uses: foundry-rs/setup-snfoundry@v2
+      - uses: foundry-rs/setup-snfoundry@v3
         with:
           starknet-foundry-version: "0.19.0"
       - run: snforge test
