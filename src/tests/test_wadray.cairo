@@ -1,7 +1,7 @@
 use core::num::traits::{One, Zero};
 use wadray::{
-    BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr, Wad, WAD_ONE,
-    WAD_DECIMALS, WAD_SCALE, wdiv_rw, wmul_rw, wmul_wr,
+    BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, ray_to_wad, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr,
+    Wad, WAD_ONE, WAD_DECIMALS, WAD_SCALE, wdiv_rw, wmul_rw, wmul_wr,
 };
 
 #[test]
@@ -246,8 +246,8 @@ fn test_conversions() {
     assert(a.is_none(), 'Incorrect wad->ray conversion');
 
     // Test conversion from Ray to Wad
-    let a: Wad = Ray { val: RAY_ONE }.into();
-    assert_eq!(a.val, WAD_ONE, "Incorrect ray->wad conversion");
+    let a: Ray = Ray { val: RAY_ONE };
+    assert_eq!(ray_to_wad(a).val, WAD_ONE, "Incorrect ray->wad conversion");
 }
 
 #[test]
