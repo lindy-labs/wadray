@@ -124,35 +124,35 @@ mod test_wadray_signed {
     }
 
     #[test]
-    #[should_panic(expected: 'u256 is 0')]
+    #[should_panic(expected: 'Division by 0')]
     fn test_signed_wad_zero_div() {
         let zero = SignedWad { val: 0, sign: false };
         let one = SignedWad { val: WAD_ONE, sign: false };
-        let res: SignedWad = one / zero;
+        let _: SignedWad = one / zero;
     }
 
     #[test]
-    #[should_panic(expected: 'u256 is 0')]
+    #[should_panic(expected: 'Division by 0')]
     fn test_signed_wad_neg_zero_div() {
         let neg_zero = SignedWad { val: 0, sign: true };
         let one = SignedWad { val: WAD_ONE, sign: false };
-        let res: SignedWad = one / neg_zero;
+        let _: SignedWad = one / neg_zero;
     }
 
     #[test]
-    #[should_panic(expected: 'u256 is 0')]
+    #[should_panic(expected: 'Division by 0')]
     fn test_signed_ray_zero_div() {
         let zero = SignedRay { val: 0, sign: false };
         let one = SignedRay { val: RAY_ONE, sign: false };
-        let res: SignedRay = one / zero;
+        let _: SignedRay = one / zero;
     }
 
     #[test]
-    #[should_panic(expected: 'u256 is 0')]
+    #[should_panic(expected: 'Division by 0')]
     fn test_signed_ray_neg_zero_div() {
         let neg_zero = SignedRay { val: 0, sign: true };
         let one = SignedRay { val: RAY_ONE, sign: false };
-        let res: SignedRay = one / neg_zero;
+        let _: SignedRay = one / neg_zero;
     }
 
     #[test]
@@ -275,7 +275,6 @@ mod test_wadray_signed {
     #[test]
     fn test_bounded() {
         let max_u128 = 0xffffffffffffffffffffffffffffffff;
-        let one = SignedWad { val: WAD_ONE, sign: false };
         let neg_one = SignedWad { val: WAD_ONE, sign: true };
 
         assert_eq!(BoundedSignedWad::min(), SignedWad { val: max_u128, sign: true }, "SignedWad min");
@@ -284,7 +283,6 @@ mod test_wadray_signed {
         assert_eq!((BoundedSignedWad::min() * neg_one), BoundedSignedWad::max(), "SignedWad min mul");
         assert_eq!((BoundedSignedWad::max() * neg_one), BoundedSignedWad::min(), "SignedWad max mul");
 
-        let one = SignedRay { val: RAY_ONE, sign: false };
         let neg_one = SignedRay { val: RAY_ONE, sign: true };
 
         assert_eq!(BoundedSignedRay::min(), SignedRay { val: max_u128, sign: true }, "SignedRay min");

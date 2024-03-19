@@ -222,13 +222,13 @@ fn test_div_of_0() {
 }
 
 #[test]
-#[should_panic(expected: ('u256 is 0',))]
+#[should_panic(expected: ('Division by 0',))]
 fn test_div_wad_fail() {
     let _: Wad = Wad { val: WAD_ONE } / Wad { val: 0 };
 }
 
 #[test]
-#[should_panic(expected: ('u256 is 0',))]
+#[should_panic(expected: ('Division by 0',))]
 fn test_div_ray_fail() {
     let _: Ray = Ray { val: RAY_ONE } / Ray { val: 0 };
 }
