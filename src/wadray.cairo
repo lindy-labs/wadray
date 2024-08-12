@@ -1,5 +1,6 @@
 use core::fmt::{Debug, Display, DisplayInteger, Error, Formatter};
 use core::num::traits::{One, Zero};
+use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
 use integer::BoundedInt;
 
 const WAD_DECIMALS: u8 = 18;
@@ -29,72 +30,72 @@ struct Ray {
 
 // Core functions
 
-#[inline(always)]
+#[inline]
 fn wmul(lhs: Wad, rhs: Wad) -> Wad {
     Wad { val: u128_wmul(lhs.val, rhs.val) }
 }
 
 // wmul of Wad and Ray -> Ray
-#[inline(always)]
+#[inline]
 fn wmul_wr(lhs: Wad, rhs: Ray) -> Ray {
     Ray { val: u128_wmul(lhs.val, rhs.val) }
 }
 
-#[inline(always)]
+#[inline]
 fn wmul_rw(lhs: Ray, rhs: Wad) -> Ray {
     wmul_wr(rhs, lhs)
 }
 
-#[inline(always)]
+#[inline]
 fn rmul(lhs: Ray, rhs: Ray) -> Ray {
     Ray { val: u128_rmul(lhs.val, rhs.val) }
 }
 
 // rmul of Wad and Ray -> Wad
-#[inline(always)]
+#[inline]
 fn rmul_rw(lhs: Ray, rhs: Wad) -> Wad {
     Wad { val: u128_rmul(lhs.val, rhs.val) }
 }
 
-#[inline(always)]
+#[inline]
 fn rmul_wr(lhs: Wad, rhs: Ray) -> Wad {
     rmul_rw(rhs, lhs)
 }
 
-#[inline(always)]
+#[inline]
 fn wdiv(lhs: Wad, rhs: Wad) -> Wad {
     Wad { val: u128_wdiv(lhs.val, rhs.val) }
 }
 
 // wdiv of Ray by Wad -> Ray
-#[inline(always)]
+#[inline]
 fn wdiv_rw(lhs: Ray, rhs: Wad) -> Ray {
     Ray { val: u128_wdiv(lhs.val, rhs.val) }
 }
 
-#[inline(always)]
+#[inline]
 fn rdiv(lhs: Ray, rhs: Ray) -> Ray {
     Ray { val: u128_rdiv(lhs.val, rhs.val) }
 }
 
 // rdiv of Wad by Ray -> Wad
-#[inline(always)]
+#[inline]
 fn rdiv_wr(lhs: Wad, rhs: Ray) -> Wad {
     Wad { val: u128_rdiv(lhs.val, rhs.val) }
 }
 
 // rdiv of Wad by Wad -> Ray
-#[inline(always)]
+#[inline]
 fn rdiv_ww(lhs: Wad, rhs: Wad) -> Ray {
     Ray { val: u128_rdiv(lhs.val, rhs.val) }
 }
 
-#[inline(always)]
+#[inline]
 fn scale_u128_by_ray(lhs: u128, rhs: Ray) -> u128 {
     u128_rmul(lhs, rhs.val)
 }
 
-#[inline(always)]
+#[inline]
 fn div_u128_by_ray(lhs: u128, rhs: Ray) -> u128 {
     u128_rdiv(lhs, rhs.val)
 }
@@ -103,25 +104,25 @@ fn div_u128_by_ray(lhs: u128, rhs: Ray) -> u128 {
 // Helpers
 //
 
-#[inline(always)]
+#[inline]
 fn u128_wmul(lhs: u128, rhs: u128) -> u128 {
     let res: u256 = lhs.into() * rhs.into() / WAD_ONE.into();
     res.try_into().expect('u128_wmul')
 }
 
-#[inline(always)]
+#[inline]
 fn u128_rmul(lhs: u128, rhs: u128) -> u128 {
     let res: u256 = lhs.into() * rhs.into() / RAY_ONE.into();
     res.try_into().expect('u128_rmul')
 }
 
-#[inline(always)]
+#[inline]
 fn u128_wdiv(lhs: u128, rhs: u128) -> u128 {
     let res: u256 = lhs.into() * WAD_ONE.into() / rhs.into();
     res.try_into().expect('u128_wdiv')
 }
 
-#[inline(always)]
+#[inline]
 fn u128_rdiv(lhs: u128, rhs: u128) -> u128 {
     let res: u256 = lhs.into() * RAY_ONE.into() / rhs.into();
     res.try_into().expect('u128_rdiv')
@@ -134,120 +135,120 @@ fn u128_rdiv(lhs: u128, rhs: u128) -> u128 {
 
 // Addition
 impl WadAdd of Add<Wad> {
-    #[inline(always)]
+    #[inline]
     fn add(lhs: Wad, rhs: Wad) -> Wad {
         Wad { val: lhs.val + rhs.val }
     }
 }
 
 impl RayAdd of Add<Ray> {
-    #[inline(always)]
+    #[inline]
     fn add(lhs: Ray, rhs: Ray) -> Ray {
         Ray { val: lhs.val + rhs.val }
     }
 }
 
-impl WadAddEq of AddEq<Wad> {
-    #[inline(always)]
-    fn add_eq(ref self: Wad, other: Wad) {
-        self = self + other;
+impl WadAddAssign of AddAssign<Wad, Wad> {
+    #[inline]
+    fn add_assign(ref self: Wad, rhs: Wad) {
+        self = self + rhs;
     }
 }
 
-impl RayAddEq of AddEq<Ray> {
-    #[inline(always)]
-    fn add_eq(ref self: Ray, other: Ray) {
-        self = self + other;
+impl RayAddAssign of AddAssign<Ray, Ray> {
+    #[inline]
+    fn add_assign(ref self: Ray, rhs: Ray) {
+        self = self + rhs;
     }
 }
 
 
 // Subtraction
 impl WadSub of Sub<Wad> {
-    #[inline(always)]
+    #[inline]
     fn sub(lhs: Wad, rhs: Wad) -> Wad {
         Wad { val: lhs.val - rhs.val }
     }
 }
 
 impl RaySub of Sub<Ray> {
-    #[inline(always)]
+    #[inline]
     fn sub(lhs: Ray, rhs: Ray) -> Ray {
         Ray { val: lhs.val - rhs.val }
     }
 }
 
-impl WadSubEq of SubEq<Wad> {
-    #[inline(always)]
-    fn sub_eq(ref self: Wad, other: Wad) {
-        self = self - other;
+impl WadSubAssign of SubAssign<Wad, Wad> {
+    #[inline]
+    fn sub_assign(ref self: Wad, rhs: Wad) {
+        self = self - rhs;
     }
 }
 
-impl RaySubEq of SubEq<Ray> {
-    #[inline(always)]
-    fn sub_eq(ref self: Ray, other: Ray) {
-        self = self - other;
+impl RaySubAssign of SubAssign<Ray, Ray> {
+    #[inline]
+    fn sub_assign(ref self: Ray, rhs: Ray) {
+        self = self - rhs;
     }
 }
 
 
 // Multiplication
 impl WadMul of Mul<Wad> {
-    #[inline(always)]
+    #[inline]
     fn mul(lhs: Wad, rhs: Wad) -> Wad {
         wmul(lhs, rhs)
     }
 }
 
 impl RayMul of Mul<Ray> {
-    #[inline(always)]
+    #[inline]
     fn mul(lhs: Ray, rhs: Ray) -> Ray {
         rmul(lhs, rhs)
     }
 }
 
-impl WadMulEq of MulEq<Wad> {
-    #[inline(always)]
-    fn mul_eq(ref self: Wad, other: Wad) {
-        self = self * other;
+impl WadMulAssign of MulAssign<Wad, Wad> {
+    #[inline]
+    fn mul_assign(ref self: Wad, rhs: Wad) {
+        self = self * rhs;
     }
 }
 
-impl RayMulEq of MulEq<Ray> {
-    #[inline(always)]
-    fn mul_eq(ref self: Ray, other: Ray) {
-        self = self * other;
+impl RayMulAssign of MulAssign<Ray, Ray> {
+    #[inline]
+    fn mul_assign(ref self: Ray, rhs: Ray) {
+        self = self * rhs;
     }
 }
 
 
 // Division
 impl WadDiv of Div<Wad> {
-    #[inline(always)]
+    #[inline]
     fn div(lhs: Wad, rhs: Wad) -> Wad {
         wdiv(lhs, rhs)
     }
 }
 
 impl RayDiv of Div<Ray> {
-    #[inline(always)]
+    #[inline]
     fn div(lhs: Ray, rhs: Ray) -> Ray {
         rdiv(lhs, rhs)
     }
 }
 
-impl WadDivEq of DivEq<Wad> {
-    #[inline(always)]
-    fn div_eq(ref self: Wad, other: Wad) {
-        self = self / other;
+impl WadDivAssign of DivAssign<Wad, Wad> {
+    #[inline]
+    fn div_assign(ref self: Wad, rhs: Wad) {
+        self = self / rhs;
     }
 }
 
-impl RayDivEq of DivEq<Ray> {
-    #[inline(always)]
-    fn div_eq(ref self: Ray, other: Ray) {
-        self = self / other;
+impl RayDivAssign of DivAssign<Ray, Ray> {
+    #[inline]
+    fn div_assign(ref self: Ray, rhs: Ray) {
+        self = self / rhs;
     }
 }
 
@@ -269,42 +270,42 @@ fn ray_to_wad(x: Ray) -> Wad {
 }
 
 impl TIntoWad<T, impl TIntoU128: Into<T, u128>> of Into<T, Wad> {
-    #[inline(always)]
+    #[inline]
     fn into(self: T) -> Wad {
         Wad { val: self.into() }
     }
 }
 
 impl TIntoRay<T, impl TIntoU128: Into<T, u128>> of Into<T, Ray> {
-    #[inline(always)]
+    #[inline]
     fn into(self: T) -> Ray {
         Ray { val: self.into() }
     }
 }
 
 impl WadIntoFelt252 of Into<Wad, felt252> {
-    #[inline(always)]
+    #[inline]
     fn into(self: Wad) -> felt252 {
         self.val.into()
     }
 }
 
 impl WadIntoU256 of Into<Wad, u256> {
-    #[inline(always)]
+    #[inline]
     fn into(self: Wad) -> u256 {
         self.val.into()
     }
 }
 
 impl RayIntoU256 of Into<Ray, u256> {
-    #[inline(always)]
+    #[inline]
     fn into(self: Ray) -> u256 {
         self.val.into()
     }
 }
 
 impl U256TryIntoWad of TryInto<u256, Wad> {
-    #[inline(always)]
+    #[inline]
     fn try_into(self: u256) -> Option<Wad> {
         match self.try_into() {
             Option::Some(val) => Option::Some(Wad { val }),
@@ -315,24 +316,24 @@ impl U256TryIntoWad of TryInto<u256, Wad> {
 
 // Comparisons
 impl WadPartialEq of PartialEq<Wad> {
-    #[inline(always)]
+    #[inline]
     fn eq(lhs: @Wad, rhs: @Wad) -> bool {
         *lhs.val == *rhs.val
     }
 
-    #[inline(always)]
+    #[inline]
     fn ne(lhs: @Wad, rhs: @Wad) -> bool {
         *lhs.val != *rhs.val
     }
 }
 
 impl RayPartialEq of PartialEq<Ray> {
-    #[inline(always)]
+    #[inline]
     fn eq(lhs: @Ray, rhs: @Ray) -> bool {
         *lhs.val == *rhs.val
     }
 
-    #[inline(always)]
+    #[inline]
     fn ne(lhs: @Ray, rhs: @Ray) -> bool {
         *lhs.val != *rhs.val
     }
@@ -376,24 +377,24 @@ impl RayPartialOrd of PartialOrd<Ray> {
 
 // Bounded
 impl BoundedWad of BoundedInt<Wad> {
-    #[inline(always)]
+    #[inline]
     fn min() -> Wad nopanic {
         Wad { val: 0 }
     }
 
-    #[inline(always)]
+    #[inline]
     fn max() -> Wad nopanic {
         Wad { val: integer::BoundedU128::max() }
     }
 }
 
 impl BoundedRay of BoundedInt<Ray> {
-    #[inline(always)]
+    #[inline]
     fn min() -> Ray nopanic {
         Ray { val: 0 }
     }
 
-    #[inline(always)]
+    #[inline]
     fn max() -> Ray nopanic {
         Ray { val: integer::BoundedU128::max() }
     }
@@ -401,34 +402,34 @@ impl BoundedRay of BoundedInt<Ray> {
 
 // Zero
 impl WadZero of Zero<Wad> {
-    #[inline(always)]
+    #[inline]
     fn zero() -> Wad {
         Wad { val: 0 }
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_zero(self: @Wad) -> bool {
         *self.val == 0
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_non_zero(self: @Wad) -> bool {
         *self.val != 0
     }
 }
 
 impl RayZero of Zero<Ray> {
-    #[inline(always)]
+    #[inline]
     fn zero() -> Ray {
         Ray { val: 0 }
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_zero(self: @Ray) -> bool {
         *self.val == 0
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_non_zero(self: @Ray) -> bool {
         *self.val != 0
     }
@@ -436,34 +437,34 @@ impl RayZero of Zero<Ray> {
 
 // One
 impl WadOne of One<Wad> {
-    #[inline(always)]
+    #[inline]
     fn one() -> Wad {
         Wad { val: WAD_ONE }
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_one(self: @Wad) -> bool {
         *self.val == WAD_ONE
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_non_one(self: @Wad) -> bool {
         *self.val != WAD_ONE
     }
 }
 
 impl RayOne of One<Ray> {
-    #[inline(always)]
+    #[inline]
     fn one() -> Ray {
         Ray { val: RAY_ONE }
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_one(self: @Ray) -> bool {
         *self.val == RAY_ONE
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_non_one(self: @Ray) -> bool {
         *self.val != RAY_ONE
     }

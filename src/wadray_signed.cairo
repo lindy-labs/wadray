@@ -1,5 +1,6 @@
 use core::fmt::{Debug, Display, DisplayInteger, Error, Formatter};
 use core::num::traits::{One, Zero};
+use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
 use integer::{BoundedInt, u256_safe_div_rem, u256_try_as_non_zero};
 use starknet::StorePacking;
 use wadray::wadray::{DIFF, Ray, RAY_ONE, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul, Wad, WAD_ONE};
@@ -40,7 +41,7 @@ fn signed_ray_from_felt(val: felt252) -> SignedRay {
 // Returns the sign of a signed `felt252` as with signed magnitude representation
 // true = positive
 // false = negative
-#[inline(always)]
+#[inline]
 fn _felt_sign(a: felt252) -> bool {
     integer::u256_from_felt252(a) > integer::u256_from_felt252(HALF_PRIME)
 }
@@ -110,10 +111,10 @@ impl SignedWadAdd of Add<SignedWad> {
     }
 }
 
-impl SignedWadAddEq of AddEq<SignedWad> {
-    #[inline(always)]
-    fn add_eq(ref self: SignedWad, other: SignedWad) {
-        self = self + other;
+impl SignedWadAddAsign of AddAssign<SignedWad, SignedWad> {
+    #[inline]
+    fn add_assign(ref self: SignedWad, rhs: SignedWad) {
+        self = self + rhs;
     }
 }
 
@@ -123,10 +124,10 @@ impl SignedRayAdd of Add<SignedRay> {
     }
 }
 
-impl SignedRayAddEq of AddEq<SignedRay> {
-    #[inline(always)]
-    fn add_eq(ref self: SignedRay, other: SignedRay) {
-        self = self + other;
+impl SignedRayAddAssign of AddAssign<SignedRay, SignedRay> {
+    #[inline]
+    fn add_assign(ref self: SignedRay, rhs: SignedRay) {
+        self = self + rhs;
     }
 }
 
@@ -144,17 +145,17 @@ impl SignedRaySub of Sub<SignedRay> {
     }
 }
 
-impl SignedWadSubEq of SubEq<SignedWad> {
-    #[inline(always)]
-    fn sub_eq(ref self: SignedWad, other: SignedWad) {
-        self = self - other;
+impl SignedWadSubAssign of SubAssign<SignedWad, SignedWad> {
+    #[inline]
+    fn sub_assign(ref self: SignedWad, rhs: SignedWad) {
+        self = self - rhs;
     }
 }
 
-impl SignedRaySubEq of SubEq<SignedRay> {
-    #[inline(always)]
-    fn sub_eq(ref self: SignedRay, other: SignedRay) {
-        self = self - other;
+impl SignedRaySubAssign of SubAssign<SignedRay, SignedRay> {
+    #[inline]
+    fn sub_assign(ref self: SignedRay, rhs: SignedRay) {
+        self = self - rhs;
     }
 }
 
@@ -176,17 +177,17 @@ impl SignedRayMul of Mul<SignedRay> {
     }
 }
 
-impl SignedWadMulEq of MulEq<SignedWad> {
-    #[inline(always)]
-    fn mul_eq(ref self: SignedWad, other: SignedWad) {
-        self = self * other;
+impl SignedWadMulAssign of MulAssign<SignedWad, SignedWad> {
+    #[inline]
+    fn mul_assign(ref self: SignedWad, rhs: SignedWad) {
+        self = self * rhs;
     }
 }
 
-impl SignedRayMulEq of MulEq<SignedRay> {
-    #[inline(always)]
-    fn mul_eq(ref self: SignedRay, other: SignedRay) {
-        self = self * other;
+impl SignedRayMulAssign of MulAssign<SignedRay, SignedRay> {
+    #[inline]
+    fn mul_assign(ref self: SignedRay, rhs: SignedRay) {
+        self = self * rhs;
     }
 }
 
@@ -208,17 +209,17 @@ impl SignedRayDiv of Div<SignedRay> {
     }
 }
 
-impl SignedWadDivEq of DivEq<SignedWad> {
-    #[inline(always)]
-    fn div_eq(ref self: SignedWad, other: SignedWad) {
-        self = self / other;
+impl SignedWadDivAssign of DivAssign<SignedWad, SignedWad> {
+    #[inline]
+    fn div_assign(ref self: SignedWad, rhs: SignedWad) {
+        self = self / rhs;
     }
 }
 
-impl SignedRayDivEq of DivEq<SignedRay> {
-    #[inline(always)]
-    fn div_eq(ref self: SignedRay, other: SignedRay) {
-        self = self / other;
+impl SignedRayDivAssign of DivAssign<SignedRay, SignedRay> {
+    #[inline]
+    fn div_assign(ref self: SignedRay, rhs: SignedRay) {
+        self = self / rhs;
     }
 }
 
@@ -310,17 +311,17 @@ impl SignedWadPartialEq of PartialEq<SignedWad> {
 }
 
 impl SignedWadPartialOrd of PartialOrd<SignedWad> {
-    #[inline(always)]
+    #[inline]
     fn le(lhs: SignedWad, rhs: SignedWad) -> bool {
         !(lhs > rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn ge(lhs: SignedWad, rhs: SignedWad) -> bool {
         !(lhs < rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn lt(lhs: SignedWad, rhs: SignedWad) -> bool {
         if lhs.sign != rhs.sign {
             if lhs.val == rhs.val && lhs.is_zero() {
@@ -333,7 +334,7 @@ impl SignedWadPartialOrd of PartialOrd<SignedWad> {
         }
     }
 
-    #[inline(always)]
+    #[inline]
     fn gt(lhs: SignedWad, rhs: SignedWad) -> bool {
         if lhs.sign != rhs.sign {
             if lhs.val == rhs.val && lhs.is_zero() {
@@ -363,17 +364,17 @@ impl SignedRayPartialEq of PartialEq<SignedRay> {
 }
 
 impl SignedRayPartialOrd of PartialOrd<SignedRay> {
-    #[inline(always)]
+    #[inline]
     fn le(lhs: SignedRay, rhs: SignedRay) -> bool {
         !(lhs > rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn ge(lhs: SignedRay, rhs: SignedRay) -> bool {
         !(lhs < rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn lt(lhs: SignedRay, rhs: SignedRay) -> bool {
         if lhs.sign != rhs.sign {
             if lhs.val == rhs.val && lhs.is_zero() {
@@ -386,7 +387,7 @@ impl SignedRayPartialOrd of PartialOrd<SignedRay> {
         }
     }
 
-    #[inline(always)]
+    #[inline]
     fn gt(lhs: SignedRay, rhs: SignedRay) -> bool {
         if lhs.sign != rhs.sign {
             if lhs.val == rhs.val && lhs.is_zero() {
@@ -403,24 +404,24 @@ impl SignedRayPartialOrd of PartialOrd<SignedRay> {
 
 // Bounded
 impl BoundedSignedWad of BoundedInt<SignedWad> {
-    #[inline(always)]
+    #[inline]
     fn min() -> SignedWad nopanic {
         SignedWad { val: integer::BoundedU128::max(), sign: true }
     }
 
-    #[inline(always)]
+    #[inline]
     fn max() -> SignedWad nopanic {
         SignedWad { val: integer::BoundedU128::max(), sign: false }
     }
 }
 
 impl BoundedSignedRay of BoundedInt<SignedRay> {
-    #[inline(always)]
+    #[inline]
     fn min() -> SignedRay nopanic {
         SignedRay { val: integer::BoundedU128::max(), sign: true }
     }
 
-    #[inline(always)]
+    #[inline]
     fn max() -> SignedRay nopanic {
         SignedRay { val: integer::BoundedU128::max(), sign: false }
     }
@@ -429,34 +430,34 @@ impl BoundedSignedRay of BoundedInt<SignedRay> {
 
 // Zero
 impl SignedWadZero of Zero<SignedWad> {
-    #[inline(always)]
+    #[inline]
     fn zero() -> SignedWad {
         SignedWad { val: 0, sign: false }
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_zero(self: @SignedWad) -> bool {
         *self.val == 0
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_non_zero(self: @SignedWad) -> bool {
         *self.val != 0
     }
 }
 
 impl SignedRayZero of Zero<SignedRay> {
-    #[inline(always)]
+    #[inline]
     fn zero() -> SignedRay {
         SignedRay { val: 0, sign: false }
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_zero(self: @SignedRay) -> bool {
         *self.val == 0
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_non_zero(self: @SignedRay) -> bool {
         *self.val != 0
     }
@@ -465,34 +466,34 @@ impl SignedRayZero of Zero<SignedRay> {
 
 // One
 impl SignedWadOne of One<SignedWad> {
-    #[inline(always)]
+    #[inline]
     fn one() -> SignedWad {
         SignedWad { val: WAD_ONE, sign: false }
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_one(self: @SignedWad) -> bool {
         *self.val == WAD_ONE && !*self.sign
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_non_one(self: @SignedWad) -> bool {
         *self.val != WAD_ONE || *self.sign
     }
 }
 
 impl SignedRayOne of One<SignedRay> {
-    #[inline(always)]
+    #[inline]
     fn one() -> SignedRay {
         SignedRay { val: RAY_ONE, sign: false }
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_one(self: @SignedRay) -> bool {
         *self.val == RAY_ONE && !*self.sign
     }
 
-    #[inline(always)]
+    #[inline]
     fn is_non_one(self: @SignedRay) -> bool {
         *self.val != RAY_ONE || *self.sign
     }
