@@ -1,5 +1,5 @@
 mod test_wadray_signed {
-    use integer::BoundedInt;
+    use core::num::traits::Bounded;
     use starknet::StorePacking;
     use wadray::{
         BoundedSignedWad, BoundedSignedRay, DIFF, Ray, RAY_ONE, Signed, SignedRay, SignedRayOne, SignedRayZero,
@@ -277,19 +277,19 @@ mod test_wadray_signed {
         let max_u128 = 0xffffffffffffffffffffffffffffffff;
         let neg_one = SignedWad { val: WAD_ONE, sign: true };
 
-        assert_eq!(BoundedSignedWad::min(), SignedWad { val: max_u128, sign: true }, "SignedWad min");
-        assert_eq!(BoundedSignedWad::max(), SignedWad { val: max_u128, sign: false }, "SignedWad max");
+        assert_eq!(BoundedSignedWad::MIN, SignedWad { val: max_u128, sign: true }, "SignedWad min");
+        assert_eq!(BoundedSignedWad::MAX, SignedWad { val: max_u128, sign: false }, "SignedWad max");
 
-        assert_eq!((BoundedSignedWad::min() * neg_one), BoundedSignedWad::max(), "SignedWad min mul");
-        assert_eq!((BoundedSignedWad::max() * neg_one), BoundedSignedWad::min(), "SignedWad max mul");
+        assert_eq!((BoundedSignedWad::MIN * neg_one), BoundedSignedWad::MAX, "SignedWad min mul");
+        assert_eq!((BoundedSignedWad::MAX * neg_one), BoundedSignedWad::MIN, "SignedWad max mul");
 
         let neg_one = SignedRay { val: RAY_ONE, sign: true };
 
-        assert_eq!(BoundedSignedRay::min(), SignedRay { val: max_u128, sign: true }, "SignedRay min");
-        assert_eq!(BoundedSignedRay::max(), SignedRay { val: max_u128, sign: false }, "SignedRay max");
+        assert_eq!(BoundedSignedRay::MIN, SignedRay { val: max_u128, sign: true }, "SignedRay min");
+        assert_eq!(BoundedSignedRay::MAX, SignedRay { val: max_u128, sign: false }, "SignedRay max");
 
-        assert_eq!((BoundedSignedRay::min() * neg_one), BoundedSignedRay::max(), "SignedRay min mul");
-        assert_eq!((BoundedSignedRay::max() * neg_one), BoundedSignedRay::min(), "SignedRay max mul");
+        assert_eq!((BoundedSignedRay::MIN * neg_one), BoundedSignedRay::MAX, "SignedRay min mul");
+        assert_eq!((BoundedSignedRay::MAX * neg_one), BoundedSignedRay::MIN, "SignedRay max mul");
     }
 
     #[test]
@@ -477,11 +477,11 @@ mod test_wadray_signed {
         let ww: SignedWad = StorePacking::unpack(StorePacking::pack(w));
         assert_eq!(w, ww, "SignedWad packing 2");
 
-        let w = SignedWad { val: BoundedInt::max(), sign: true };
+        let w = SignedWad { val: Bounded::MAX, sign: true };
         let ww: SignedWad = StorePacking::unpack(StorePacking::pack(w));
         assert_eq!(w, ww, "SignedWad packing 3");
 
-        let w = SignedWad { val: BoundedInt::max(), sign: false };
+        let w = SignedWad { val: Bounded::MAX, sign: false };
         let ww: SignedWad = StorePacking::unpack(StorePacking::pack(w));
         assert_eq!(w, ww, "SignedWad packing 4");
 
@@ -493,11 +493,11 @@ mod test_wadray_signed {
         let rr: SignedRay = StorePacking::unpack(StorePacking::pack(r));
         assert_eq!(r, rr, "SignedRay packing 2");
 
-        let r = SignedRay { val: BoundedInt::max(), sign: true };
+        let r = SignedRay { val: Bounded::MAX, sign: true };
         let rr: SignedRay = StorePacking::unpack(StorePacking::pack(r));
         assert_eq!(r, rr, "SignedRay packing 3");
 
-        let r = SignedRay { val: BoundedInt::max(), sign: false };
+        let r = SignedRay { val: Bounded::MAX, sign: false };
         let rr: SignedRay = StorePacking::unpack(StorePacking::pack(r));
         assert_eq!(r, rr, "SignedRay packing 4");
     }
