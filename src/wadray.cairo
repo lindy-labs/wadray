@@ -1,7 +1,7 @@
 use core::fmt::{Debug, Display, DisplayInteger, Error, Formatter};
-use core::num::traits::{One, Zero};
+use core::num::traits::{One, Zero, Bounded};
 use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
-use integer::BoundedInt;
+use core::num::traits::bounded;
 
 const WAD_DECIMALS: u8 = 18;
 const WAD_SCALE: u128 = 1000000000000000000;
@@ -376,28 +376,16 @@ impl RayPartialOrd of PartialOrd<Ray> {
 }
 
 // Bounded
-impl BoundedWad of BoundedInt<Wad> {
-    #[inline]
-    fn min() -> Wad nopanic {
-        Wad { val: 0 }
-    }
-
-    #[inline]
-    fn max() -> Wad nopanic {
-        Wad { val: integer::BoundedU128::max() }
-    }
+impl BoundedWad of Bounded<Wad> {
+    const MIN: Wad = Wad { val: 0 };
+    
+    const MAX: Wad =  Wad { val: Bounded::MAX };
 }
 
-impl BoundedRay of BoundedInt<Ray> {
-    #[inline]
-    fn min() -> Ray nopanic {
-        Ray { val: 0 }
-    }
-
-    #[inline]
-    fn max() -> Ray nopanic {
-        Ray { val: integer::BoundedU128::max() }
-    }
+impl BoundedRay of Bounded<Ray> {
+    const MIN: Ray = Ray { val: 0 };
+    
+    const MAX: Ray =  Ray { val: Bounded::MAX };
 }
 
 // Zero

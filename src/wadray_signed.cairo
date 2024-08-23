@@ -1,7 +1,7 @@
 use core::fmt::{Debug, Display, DisplayInteger, Error, Formatter};
-use core::num::traits::{One, Zero};
+use core::num::traits::{One, Zero, Bounded};
 use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
-use integer::{BoundedInt, u256_safe_div_rem, u256_try_as_non_zero};
+use integer::{u256_safe_div_rem, u256_try_as_non_zero};
 use starknet::StorePacking;
 use wadray::wadray::{DIFF, Ray, RAY_ONE, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul, Wad, WAD_ONE};
 
@@ -64,12 +64,12 @@ fn sign_from_mul(lhs_sign: bool, rhs_sign: bool) -> bool {
 
 fn _pack(val: u128, sign: bool) -> felt252 {
     // shift by 2**128
-    let two_pow_128: felt252 = BoundedInt::<u128>::max().into() + 1;
+    let two_pow_128: felt252 = (Bounded::<u128>::MAX).into() + 1;
     val.into() + sign.into() * two_pow_128
 }
 
 fn _unpack(packed: felt252) -> (u128, bool) {
-    let two_pow_128: u256 = BoundedInt::<u128>::max().into() + 1; // 2**128
+    let two_pow_128: u256 = (Bounded::<u128>::MAX).into() + 1; // 2**128
     let shift: NonZero<u256> = u256_try_as_non_zero(two_pow_128).unwrap();
     let (sign, val) = u256_safe_div_rem(packed.into(), shift);
     let val: u128 = val.try_into().expect('WadRay Signed val unpacking');
@@ -403,28 +403,16 @@ impl SignedRayPartialOrd of PartialOrd<SignedRay> {
 
 
 // Bounded
-impl BoundedSignedWad of BoundedInt<SignedWad> {
-    #[inline]
-    fn min() -> SignedWad nopanic {
-        SignedWad { val: integer::BoundedU128::max(), sign: true }
-    }
+impl BoundedSignedWad of Bounded<SignedWad> {
+    const MAX: SignedWad = SignedWad { val: Bounded::MAX, sign: true };
 
-    #[inline]
-    fn max() -> SignedWad nopanic {
-        SignedWad { val: integer::BoundedU128::max(), sign: false }
-    }
+    const MIN: SignedWad = SignedWad { val: Bounded::MAX, sign: false };
 }
 
-impl BoundedSignedRay of BoundedInt<SignedRay> {
-    #[inline]
-    fn min() -> SignedRay nopanic {
-        SignedRay { val: integer::BoundedU128::max(), sign: true }
-    }
+impl BoundedSignedRay of Bounded<SignedRay> {
+    const MAX: SignedRay = SignedRay { val: Bounded::MAX, sign: true };
 
-    #[inline]
-    fn max() -> SignedRay nopanic {
-        SignedRay { val: integer::BoundedU128::max(), sign: false }
-    }
+    const MIN: SignedRay = SignedRay { val: Bounded::MAX, sign: false };
 }
 
 
