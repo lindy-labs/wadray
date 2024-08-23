@@ -378,13 +378,13 @@ impl RayPartialOrd of PartialOrd<Ray> {
 // Bounded
 impl BoundedWad of Bounded<Wad> {
     const MIN: Wad = Wad { val: 0 };
-    
+
     const MAX: Wad = Wad { val: Bounded::MAX };
 }
 
 impl BoundedRay of Bounded<Ray> {
     const MIN: Ray = Ray { val: 0 };
-    
+
     const MAX: Ray = Ray { val: Bounded::MAX };
 }
 
