@@ -25,3 +25,9 @@ max-line-length = 120
 
 [scripts]
 test = "snforge test"
+
+# for formal verification workflow
+[profile.fv]
+sierra-replace-ids = true
+sierra-text = true
+inlining-strategy = "avoid"
