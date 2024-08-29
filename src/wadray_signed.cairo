@@ -404,15 +404,15 @@ impl SignedRayPartialOrd of PartialOrd<SignedRay> {
 
 // Bounded
 impl BoundedSignedWad of Bounded<SignedWad> {
-    const MAX: SignedWad = SignedWad { val: Bounded::MAX, sign: true };
+    const MAX: SignedWad = SignedWad { val: Bounded::MAX, sign: false };
 
-    const MIN: SignedWad = SignedWad { val: Bounded::MAX, sign: false };
+    const MIN: SignedWad = SignedWad { val: Bounded::MAX, sign: true };
 }
 
 impl BoundedSignedRay of Bounded<SignedRay> {
-    const MAX: SignedRay = SignedRay { val: Bounded::MAX, sign: true };
+    const MAX: SignedRay = SignedRay { val: Bounded::MAX, sign: false };
 
-    const MIN: SignedRay = SignedRay { val: Bounded::MAX, sign: false };
+    const MIN: SignedRay = SignedRay { val: Bounded::MAX, sign: true };
 }
 
 
