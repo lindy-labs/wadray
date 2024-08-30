@@ -1,6 +1,6 @@
 mod test_wadray_signed {
     use core::num::traits::Bounded;
-    use starknet::StorePacking;
+    use starknet::storage_access::StorePacking;
     use wadray::{
         BoundedSignedWad, BoundedSignedRay, DIFF, Ray, RAY_ONE, Signed, SignedRay, SignedRayOne, SignedRayZero,
         SignedWad, SignedWadOne, SignedWadZero, Wad, WAD_ONE, wad_to_signed_ray

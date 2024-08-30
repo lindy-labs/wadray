@@ -1,26 +1,25 @@
-use core::fmt::{Debug, Display, DisplayInteger, Error, Formatter};
+use core::fmt::{Debug, Display, Error, Formatter};
 use core::num::traits::{One, Zero, Bounded};
 use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
-use integer::{u256_safe_div_rem, u256_try_as_non_zero};
-use starknet::StorePacking;
+use starknet::storage_access::StorePacking;
 use wadray::wadray::{DIFF, Ray, RAY_ONE, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul, Wad, WAD_ONE};
 
-const HALF_PRIME: felt252 = 1809251394333065606848661391547535052811553607665798349986546028067936010240;
+const HALF_PRIME: u256 = 1809251394333065606848661391547535052811553607665798349986546028067936010240;
 
 #[derive(Copy, Drop, Serde)]
-struct SignedWad {
-    val: u128,
-    sign: bool
+pub struct SignedWad {
+    pub(crate) val: u128,
+    pub(crate) sign: bool
 }
 
 #[derive(Copy, Drop, Serde)]
-struct SignedRay {
-    val: u128,
-    sign: bool
+pub struct SignedRay {
+    pub(crate) val: u128,
+    pub(crate) sign: bool
 }
 
 // External helpers
-fn wad_to_signed_ray(a: Wad) -> SignedRay {
+pub fn wad_to_signed_ray(a: Wad) -> SignedRay {
     SignedRay { val: a.val * DIFF, sign: false }
 }
 
@@ -29,26 +28,26 @@ fn wad_to_signed_ray(a: Wad) -> SignedRay {
 //
 
 fn signed_wad_from_felt(val: felt252) -> SignedWad {
-    let wad_val = integer::u128_try_from_felt252(_felt_abs(val)).unwrap();
-    SignedWad { val: wad_val, sign: _felt_sign(val) }
+    let wad_val = felt_abs(val).try_into().unwrap();
+    SignedWad { val: wad_val, sign: felt_sign(val) }
 }
 
 fn signed_ray_from_felt(val: felt252) -> SignedRay {
-    let ray_val = integer::u128_try_from_felt252(_felt_abs(val)).unwrap();
-    SignedRay { val: ray_val, sign: _felt_sign(val) }
+    let ray_val = felt_abs(val).try_into().unwrap();
+    SignedRay { val: ray_val, sign: felt_sign(val) }
 }
 
 // Returns the sign of a signed `felt252` as with signed magnitude representation
 // true = positive
 // false = negative
 #[inline]
-fn _felt_sign(a: felt252) -> bool {
-    integer::u256_from_felt252(a) > integer::u256_from_felt252(HALF_PRIME)
+fn felt_sign(a: felt252) -> bool {
+    a.into() > HALF_PRIME
 }
 
 // Returns the absolute value of a signed `felt252`
-fn _felt_abs(a: felt252) -> felt252 {
-    let a_sign = _felt_sign(a);
+fn felt_abs(a: felt252) -> felt252 {
+    let a_sign = felt_sign(a);
 
     if !a_sign {
         a
@@ -62,16 +61,15 @@ fn sign_from_mul(lhs_sign: bool, rhs_sign: bool) -> bool {
     lhs_sign ^ rhs_sign
 }
 
-fn _pack(val: u128, sign: bool) -> felt252 {
+fn pack(val: u128, sign: bool) -> felt252 {
     // shift by 2**128
-    let two_pow_128: felt252 = (Bounded::<u128>::MAX).into() + 1;
+    let two_pow_128: felt252 = 340282366920938463463374607431768211456;
     val.into() + sign.into() * two_pow_128
 }
 
-fn _unpack(packed: felt252) -> (u128, bool) {
-    let two_pow_128: u256 = (Bounded::<u128>::MAX).into() + 1; // 2**128
-    let shift: NonZero<u256> = u256_try_as_non_zero(two_pow_128).unwrap();
-    let (sign, val) = u256_safe_div_rem(packed.into(), shift);
+fn unpack(packed: felt252) -> (u128, bool) {
+    let shift: NonZero<u256> = 340282366920938463463374607431768211456; // 2**128
+    let (sign, val) = DivRem::<u256>::div_rem(packed.into(), shift);
     let val: u128 = val.try_into().expect('WadRay Signed val unpacking');
     let sign: u128 = sign.try_into().expect('WadRay Signed sign unpacking');
     (val, sign == 1)
@@ -82,49 +80,49 @@ fn _unpack(packed: felt252) -> (u128, bool) {
 //
 
 // StorePacking
-impl SignedWadStorePacking of StorePacking<SignedWad, felt252> {
+pub impl SignedWadStorePacking of StorePacking<SignedWad, felt252> {
     fn pack(value: SignedWad) -> felt252 {
-        _pack(value.val, value.sign)
+        pack(value.val, value.sign)
     }
 
     fn unpack(value: felt252) -> SignedWad {
-        let (val, sign) = _unpack(value);
+        let (val, sign) = unpack(value);
         SignedWad { val, sign }
     }
 }
 
-impl SignedRayStorePacking of StorePacking<SignedRay, felt252> {
+pub impl SignedRayStorePacking of StorePacking<SignedRay, felt252> {
     fn pack(value: SignedRay) -> felt252 {
-        _pack(value.val, value.sign)
+        pack(value.val, value.sign)
     }
 
     fn unpack(value: felt252) -> SignedRay {
-        let (val, sign) = _unpack(value);
+        let (val, sign) = unpack(value);
         SignedRay { val, sign }
     }
 }
 
 // Addition
-impl SignedWadAdd of Add<SignedWad> {
+pub impl SignedWadAdd of Add<SignedWad> {
     fn add(lhs: SignedWad, rhs: SignedWad) -> SignedWad {
         signed_wad_from_felt(lhs.into() + rhs.into())
     }
 }
 
-impl SignedWadAddAsign of AddAssign<SignedWad, SignedWad> {
+pub impl SignedWadAddAsign of AddAssign<SignedWad, SignedWad> {
     #[inline]
     fn add_assign(ref self: SignedWad, rhs: SignedWad) {
         self = self + rhs;
     }
 }
 
-impl SignedRayAdd of Add<SignedRay> {
+pub impl SignedRayAdd of Add<SignedRay> {
     fn add(lhs: SignedRay, rhs: SignedRay) -> SignedRay {
         signed_ray_from_felt(lhs.into() + rhs.into())
     }
 }
 
-impl SignedRayAddAssign of AddAssign<SignedRay, SignedRay> {
+pub impl SignedRayAddAssign of AddAssign<SignedRay, SignedRay> {
     #[inline]
     fn add_assign(ref self: SignedRay, rhs: SignedRay) {
         self = self + rhs;
@@ -133,26 +131,26 @@ impl SignedRayAddAssign of AddAssign<SignedRay, SignedRay> {
 
 
 // Subtraction
-impl SignedWadSub of Sub<SignedWad> {
+pub impl SignedWadSub of Sub<SignedWad> {
     fn sub(lhs: SignedWad, rhs: SignedWad) -> SignedWad {
         signed_wad_from_felt(lhs.into() - rhs.into())
     }
 }
 
-impl SignedRaySub of Sub<SignedRay> {
+pub impl SignedRaySub of Sub<SignedRay> {
     fn sub(lhs: SignedRay, rhs: SignedRay) -> SignedRay {
         signed_ray_from_felt(lhs.into() - rhs.into())
     }
 }
 
-impl SignedWadSubAssign of SubAssign<SignedWad, SignedWad> {
+pub impl SignedWadSubAssign of SubAssign<SignedWad, SignedWad> {
     #[inline]
     fn sub_assign(ref self: SignedWad, rhs: SignedWad) {
         self = self - rhs;
     }
 }
 
-impl SignedRaySubAssign of SubAssign<SignedRay, SignedRay> {
+pub impl SignedRaySubAssign of SubAssign<SignedRay, SignedRay> {
     #[inline]
     fn sub_assign(ref self: SignedRay, rhs: SignedRay) {
         self = self - rhs;
@@ -161,7 +159,7 @@ impl SignedRaySubAssign of SubAssign<SignedRay, SignedRay> {
 
 
 // Multiplication
-impl SignedWadMul of Mul<SignedWad> {
+pub impl SignedWadMul of Mul<SignedWad> {
     fn mul(lhs: SignedWad, rhs: SignedWad) -> SignedWad {
         let sign = sign_from_mul(lhs.sign, rhs.sign);
         let val = u128_wmul(lhs.val, rhs.val);
@@ -169,7 +167,7 @@ impl SignedWadMul of Mul<SignedWad> {
     }
 }
 
-impl SignedRayMul of Mul<SignedRay> {
+pub impl SignedRayMul of Mul<SignedRay> {
     fn mul(lhs: SignedRay, rhs: SignedRay) -> SignedRay {
         let sign = sign_from_mul(lhs.sign, rhs.sign);
         let val = u128_rmul(lhs.val, rhs.val);
@@ -177,14 +175,14 @@ impl SignedRayMul of Mul<SignedRay> {
     }
 }
 
-impl SignedWadMulAssign of MulAssign<SignedWad, SignedWad> {
+pub impl SignedWadMulAssign of MulAssign<SignedWad, SignedWad> {
     #[inline]
     fn mul_assign(ref self: SignedWad, rhs: SignedWad) {
         self = self * rhs;
     }
 }
 
-impl SignedRayMulAssign of MulAssign<SignedRay, SignedRay> {
+pub impl SignedRayMulAssign of MulAssign<SignedRay, SignedRay> {
     #[inline]
     fn mul_assign(ref self: SignedRay, rhs: SignedRay) {
         self = self * rhs;
@@ -193,7 +191,7 @@ impl SignedRayMulAssign of MulAssign<SignedRay, SignedRay> {
 
 
 // Division
-impl SignedWadDiv of Div<SignedWad> {
+pub impl SignedWadDiv of Div<SignedWad> {
     fn div(lhs: SignedWad, rhs: SignedWad) -> SignedWad {
         let sign = sign_from_mul(lhs.sign, rhs.sign);
         let val = u128_wdiv(lhs.val, rhs.val);
@@ -201,7 +199,7 @@ impl SignedWadDiv of Div<SignedWad> {
     }
 }
 
-impl SignedRayDiv of Div<SignedRay> {
+pub impl SignedRayDiv of Div<SignedRay> {
     fn div(lhs: SignedRay, rhs: SignedRay) -> SignedRay {
         let sign = sign_from_mul(lhs.sign, rhs.sign);
         let val = u128_rdiv(lhs.val, rhs.val);
@@ -209,14 +207,14 @@ impl SignedRayDiv of Div<SignedRay> {
     }
 }
 
-impl SignedWadDivAssign of DivAssign<SignedWad, SignedWad> {
+pub impl SignedWadDivAssign of DivAssign<SignedWad, SignedWad> {
     #[inline]
     fn div_assign(ref self: SignedWad, rhs: SignedWad) {
         self = self / rhs;
     }
 }
 
-impl SignedRayDivAssign of DivAssign<SignedRay, SignedRay> {
+pub impl SignedRayDivAssign of DivAssign<SignedRay, SignedRay> {
     #[inline]
     fn div_assign(ref self: SignedRay, rhs: SignedRay) {
         self = self / rhs;
@@ -225,19 +223,19 @@ impl SignedRayDivAssign of DivAssign<SignedRay, SignedRay> {
 
 
 // Conversions
-impl U128IntoSignedWad of Into<u128, SignedWad> {
+pub impl U128IntoSignedWad of Into<u128, SignedWad> {
     fn into(self: u128) -> SignedWad {
         SignedWad { val: self, sign: false }
     }
 }
 
-impl U128IntoSignedRay of Into<u128, SignedRay> {
+pub impl U128IntoSignedRay of Into<u128, SignedRay> {
     fn into(self: u128) -> SignedRay {
         SignedRay { val: self, sign: false }
     }
 }
 
-impl SignedWadIntoFelt252 of Into<SignedWad, felt252> {
+pub impl SignedWadIntoFelt252 of Into<SignedWad, felt252> {
     fn into(self: SignedWad) -> felt252 {
         let mag_felt: felt252 = self.val.into();
 
@@ -249,7 +247,7 @@ impl SignedWadIntoFelt252 of Into<SignedWad, felt252> {
     }
 }
 
-impl SignedRayIntoFelt252 of Into<SignedRay, felt252> {
+pub impl SignedRayIntoFelt252 of Into<SignedRay, felt252> {
     fn into(self: SignedRay) -> felt252 {
         let mag_felt: felt252 = self.val.into();
 
@@ -261,19 +259,19 @@ impl SignedRayIntoFelt252 of Into<SignedRay, felt252> {
     }
 }
 
-impl WadIntoSignedWad of Into<Wad, SignedWad> {
+pub impl WadIntoSignedWad of Into<Wad, SignedWad> {
     fn into(self: Wad) -> SignedWad {
         SignedWad { val: self.val, sign: false }
     }
 }
 
-impl RayIntoSignedRay of Into<Ray, SignedRay> {
+pub impl RayIntoSignedRay of Into<Ray, SignedRay> {
     fn into(self: Ray) -> SignedRay {
         SignedRay { val: self.val, sign: false }
     }
 }
 
-impl SignedWadTryIntoWad of TryInto<SignedWad, Wad> {
+pub impl SignedWadTryIntoWad of TryInto<SignedWad, Wad> {
     fn try_into(self: SignedWad) -> Option<Wad> {
         if !self.sign || self.is_zero() {
             return Option::Some(Wad { val: self.val });
@@ -283,7 +281,7 @@ impl SignedWadTryIntoWad of TryInto<SignedWad, Wad> {
     }
 }
 
-impl SignedRayTryIntoRay of TryInto<SignedRay, Ray> {
+pub impl SignedRayTryIntoRay of TryInto<SignedRay, Ray> {
     fn try_into(self: SignedRay) -> Option<Ray> {
         if !self.sign || self.is_zero() {
             return Option::Some(Ray { val: self.val });
@@ -295,7 +293,7 @@ impl SignedRayTryIntoRay of TryInto<SignedRay, Ray> {
 
 
 // Comparisons
-impl SignedWadPartialEq of PartialEq<SignedWad> {
+pub impl SignedWadPartialEq of PartialEq<SignedWad> {
     fn eq(lhs: @SignedWad, rhs: @SignedWad) -> bool {
         let val_cmp: bool = *lhs.val == *rhs.val;
         if val_cmp && lhs.is_zero() {
@@ -310,7 +308,7 @@ impl SignedWadPartialEq of PartialEq<SignedWad> {
     }
 }
 
-impl SignedWadPartialOrd of PartialOrd<SignedWad> {
+pub impl SignedWadPartialOrd of PartialOrd<SignedWad> {
     #[inline]
     fn le(lhs: SignedWad, rhs: SignedWad) -> bool {
         !(lhs > rhs)
@@ -348,7 +346,7 @@ impl SignedWadPartialOrd of PartialOrd<SignedWad> {
     }
 }
 
-impl SignedRayPartialEq of PartialEq<SignedRay> {
+pub impl SignedRayPartialEq of PartialEq<SignedRay> {
     fn eq(lhs: @SignedRay, rhs: @SignedRay) -> bool {
         let val_cmp: bool = *lhs.val == *rhs.val;
         if val_cmp && lhs.is_zero() {
@@ -363,7 +361,7 @@ impl SignedRayPartialEq of PartialEq<SignedRay> {
     }
 }
 
-impl SignedRayPartialOrd of PartialOrd<SignedRay> {
+pub impl SignedRayPartialOrd of PartialOrd<SignedRay> {
     #[inline]
     fn le(lhs: SignedRay, rhs: SignedRay) -> bool {
         !(lhs > rhs)
@@ -403,13 +401,13 @@ impl SignedRayPartialOrd of PartialOrd<SignedRay> {
 
 
 // Bounded
-impl BoundedSignedWad of Bounded<SignedWad> {
+pub impl BoundedSignedWad of Bounded<SignedWad> {
     const MAX: SignedWad = SignedWad { val: Bounded::MAX, sign: false };
 
     const MIN: SignedWad = SignedWad { val: Bounded::MAX, sign: true };
 }
 
-impl BoundedSignedRay of Bounded<SignedRay> {
+pub impl BoundedSignedRay of Bounded<SignedRay> {
     const MAX: SignedRay = SignedRay { val: Bounded::MAX, sign: false };
 
     const MIN: SignedRay = SignedRay { val: Bounded::MAX, sign: true };
@@ -417,7 +415,7 @@ impl BoundedSignedRay of Bounded<SignedRay> {
 
 
 // Zero
-impl SignedWadZero of Zero<SignedWad> {
+pub impl SignedWadZero of Zero<SignedWad> {
     #[inline]
     fn zero() -> SignedWad {
         SignedWad { val: 0, sign: false }
@@ -434,7 +432,7 @@ impl SignedWadZero of Zero<SignedWad> {
     }
 }
 
-impl SignedRayZero of Zero<SignedRay> {
+pub impl SignedRayZero of Zero<SignedRay> {
     #[inline]
     fn zero() -> SignedRay {
         SignedRay { val: 0, sign: false }
@@ -453,7 +451,7 @@ impl SignedRayZero of Zero<SignedRay> {
 
 
 // One
-impl SignedWadOne of One<SignedWad> {
+pub impl SignedWadOne of One<SignedWad> {
     #[inline]
     fn one() -> SignedWad {
         SignedWad { val: WAD_ONE, sign: false }
@@ -470,7 +468,7 @@ impl SignedWadOne of One<SignedWad> {
     }
 }
 
-impl SignedRayOne of One<SignedRay> {
+pub impl SignedRayOne of One<SignedRay> {
     #[inline]
     fn one() -> SignedRay {
         SignedRay { val: RAY_ONE, sign: false }
@@ -489,12 +487,12 @@ impl SignedRayOne of One<SignedRay> {
 
 
 // Signed
-trait Signed<T> {
+pub trait Signed<T> {
     fn is_negative(self: T) -> bool;
     fn is_positive(self: T) -> bool;
 }
 
-impl SignedWadSigned of Signed<SignedWad> {
+pub impl SignedWadSigned of Signed<SignedWad> {
     fn is_negative(self: SignedWad) -> bool {
         self.val > 0 && self.sign
     }
@@ -504,7 +502,7 @@ impl SignedWadSigned of Signed<SignedWad> {
     }
 }
 
-impl SignedRaySigned of Signed<SignedRay> {
+pub impl SignedRaySigned of Signed<SignedRay> {
     fn is_negative(self: SignedRay) -> bool {
         self.val > 0 && self.sign
     }
@@ -516,7 +514,7 @@ impl SignedRaySigned of Signed<SignedRay> {
 
 
 // Display and Debug
-impl DisplaySignedWad of Display<SignedWad> {
+pub impl DisplaySignedWad of Display<SignedWad> {
     fn fmt(self: @SignedWad, ref f: Formatter) -> Result<(), Error> {
         if *self.sign {
             write!(f, "-")?;
@@ -526,7 +524,7 @@ impl DisplaySignedWad of Display<SignedWad> {
     }
 }
 
-impl DisplaySignedRay of Display<SignedRay> {
+pub impl DisplaySignedRay of Display<SignedRay> {
     fn fmt(self: @SignedRay, ref f: Formatter) -> Result<(), Error> {
         if *self.sign {
             write!(f, "-")?;
@@ -536,13 +534,13 @@ impl DisplaySignedRay of Display<SignedRay> {
     }
 }
 
-impl DebugSignedWad of Debug<SignedWad> {
+pub impl DebugSignedWad of Debug<SignedWad> {
     fn fmt(self: @SignedWad, ref f: Formatter) -> Result<(), Error> {
         Display::fmt(self, ref f)
     }
 }
 
-impl DebugSignedRay of Debug<SignedRay> {
+pub impl DebugSignedRay of Debug<SignedRay> {
     fn fmt(self: @SignedRay, ref f: Formatter) -> Result<(), Error> {
         Display::fmt(self, ref f)
     }

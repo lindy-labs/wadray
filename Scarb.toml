@@ -2,6 +2,7 @@
 name = "wadray"
 version = "0.3.0"
 cairo-version = "2.7.0"
+edition = "2024_07"
 authors = ["Lindy Labs"]
 description = "Fixed-point decimal numbers for Cairo"
 readme = "README.md"
