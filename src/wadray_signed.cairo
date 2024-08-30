@@ -1,4 +1,4 @@
-use core::traits::Default;
+use core::traits::{Default, Neg};
 use core::fmt::{Debug, Display, Error, Formatter};
 use core::num::traits::{One, Zero, Bounded};
 use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
@@ -557,5 +557,19 @@ pub impl DefaultSignedWad of Default<SignedWad> {
 pub impl DefaultSignedRay of Default<SignedRay> {
     fn default() -> SignedRay {
         SignedRay { val: 0, sign: false }
+    }
+}
+
+// Neg
+pub impl SignedWadNeg of Neg<SignedWad> {
+    fn neg(a: SignedWad) -> SignedWad {
+        SignedWad { val: a.val, sign: !a.sign }
+    }
+}
+
+
+pub impl SignedRayNeg of Neg<SignedRay> {
+    fn neg(a: SignedRay) -> SignedRay {
+        SignedRay { val: a.val, sign: !a.sign }
     }
 }
