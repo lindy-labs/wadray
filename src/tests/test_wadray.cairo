@@ -269,11 +269,11 @@ fn test_conversions_from_primitive_types() {
 fn test_bounded() {
     let max_u128 = 0xffffffffffffffffffffffffffffffff;
 
-    assert_eq!(BoundedWad::min(), Wad { val: 0 }, "Wad min");
-    assert_eq!(BoundedWad::max(), Wad { val: max_u128 }, "Wad max");
+    assert_eq!(BoundedWad::MIN, Wad { val: 0 }, "Wad min");
+    assert_eq!(BoundedWad::MAX, Wad { val: max_u128 }, "Wad max");
 
-    assert_eq!(BoundedRay::min(), Ray { val: 0 }, "Ray min");
-    assert_eq!(BoundedRay::max(), Ray { val: max_u128 }, "Ray max");
+    assert_eq!(BoundedRay::MIN, Ray { val: 0 }, "Ray min");
+    assert_eq!(BoundedRay::MAX, Ray { val: max_u128 }, "Ray max");
 }
 
 #[test]
