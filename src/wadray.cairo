@@ -185,7 +185,7 @@ pub impl WadSubAssign of SubAssign<Wad, Wad> {
     }
 }
 
-pub  impl RaySubAssign of SubAssign<Ray, Ray> {
+pub impl RaySubAssign of SubAssign<Ray, Ray> {
     #[inline]
     fn sub_assign(ref self: Ray, rhs: Ray) {
         self = self - rhs;
