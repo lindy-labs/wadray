@@ -1,7 +1,7 @@
-use core::traits::Default;
 use core::fmt::{Debug, Display, Error, Formatter};
 use core::num::traits::{One, Zero, Bounded};
 use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
+use core::traits::Default;
 
 
 pub const WAD_DECIMALS: u8 = 18;
