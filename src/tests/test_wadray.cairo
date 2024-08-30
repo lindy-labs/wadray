@@ -1,4 +1,3 @@
-use core::traits::Default;
 use core::num::traits::{One, Zero};
 use wadray::{
     BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, ray_to_wad, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr,
