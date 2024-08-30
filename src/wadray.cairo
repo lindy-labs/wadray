@@ -1,3 +1,4 @@
+use core::traits::Default;
 use core::fmt::{Debug, Display, Error, Formatter};
 use core::num::traits::{One, Zero, Bounded};
 use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
@@ -480,5 +481,18 @@ pub impl DebugWad of Debug<Wad> {
 pub impl DebugRay of Debug<Ray> {
     fn fmt(self: @Ray, ref f: Formatter) -> Result<(), Error> {
         Display::fmt(self, ref f)
+    }
+}
+
+// Default
+pub impl DefaultWad of Default<Wad> {
+    fn default() -> Wad {
+        Wad { val: 0 }
+    }
+}
+
+pub impl DefaultRay of Default<Ray> {
+    fn default() -> Ray {
+        Ray { val: 0 }
     }
 }

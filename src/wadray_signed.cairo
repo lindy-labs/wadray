@@ -1,3 +1,4 @@
+use core::traits::Default;
 use core::fmt::{Debug, Display, Error, Formatter};
 use core::num::traits::{One, Zero, Bounded};
 use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
@@ -543,5 +544,18 @@ pub impl DebugSignedWad of Debug<SignedWad> {
 pub impl DebugSignedRay of Debug<SignedRay> {
     fn fmt(self: @SignedRay, ref f: Formatter) -> Result<(), Error> {
         Display::fmt(self, ref f)
+    }
+}
+
+// Default
+pub impl DefaultSignedWad of Default<SignedWad> {
+    fn default() -> SignedWad {
+        SignedWad { val: 0, sign: false }
+    }
+}
+
+pub impl DefaultSignedRay of Default<SignedRay> {
+    fn default() -> SignedRay {
+        SignedRay { val: 0, sign: false }
     }
 }

@@ -1,4 +1,5 @@
 mod test_wadray_signed {
+    use core::traits::Default;
     use core::num::traits::Bounded;
     use starknet::storage_access::StorePacking;
     use wadray::{
@@ -500,5 +501,16 @@ mod test_wadray_signed {
         let r = SignedRay { val: Bounded::MAX, sign: false };
         let rr: SignedRay = StorePacking::unpack(StorePacking::pack(r));
         assert_eq!(r, rr, "SignedRay packing 4");
+    }
+
+    #[test]
+    fn test_default() {
+        let w: SignedWad = Default::default();
+        assert_eq!(w.val, 0, "SignedWad default val");
+        assert!(w.sign == false, "SignedWad default sign");
+
+        let r: SignedRay = Default::default();
+        assert_eq!(r.val, 0, "SignedRay default val");
+        assert!(r.sign == false, "SignedRay default sign");
     }
 }

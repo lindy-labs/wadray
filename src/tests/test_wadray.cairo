@@ -1,3 +1,4 @@
+use core::traits::Default;
 use core::num::traits::{One, Zero};
 use wadray::{
     BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, ray_to_wad, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr,
@@ -400,4 +401,13 @@ fn test_display_and_debug() {
     let r = Ray { val: 456 };
     assert_eq!(format!("{}", r), "456", "Ray display");
     assert_eq!(format!("{:?}", r), "456", "Ray debug");
+}
+
+#[test]
+fn test_default() {
+    let w: Wad = Default::default();
+    assert_eq!(w.val, 0, "Wad default");
+
+    let r: Ray = Default::default();
+    assert_eq!(r.val, 0, "Ray default");
 }
