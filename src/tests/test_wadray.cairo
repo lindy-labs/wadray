@@ -401,3 +401,12 @@ fn test_display_and_debug() {
     assert_eq!(format!("{}", r), "456", "Ray display");
     assert_eq!(format!("{:?}", r), "456", "Ray debug");
 }
+
+#[test]
+fn test_default() {
+    let w: Wad = Default::default();
+    assert_eq!(w.val, 0, "Wad default");
+
+    let r: Ray = Default::default();
+    assert_eq!(r.val, 0, "Ray default");
+}

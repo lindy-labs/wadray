@@ -1,6 +1,7 @@
 use core::fmt::{Debug, Display, Error, Formatter};
 use core::num::traits::{One, Zero, Bounded};
 use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
+use core::traits::{Default, Neg};
 use starknet::storage_access::StorePacking;
 use wadray::wadray::{DIFF, Ray, RAY_ONE, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul, Wad, WAD_ONE};
 
@@ -543,5 +544,32 @@ pub impl DebugSignedWad of Debug<SignedWad> {
 pub impl DebugSignedRay of Debug<SignedRay> {
     fn fmt(self: @SignedRay, ref f: Formatter) -> Result<(), Error> {
         Display::fmt(self, ref f)
+    }
+}
+
+// Default
+pub impl DefaultSignedWad of Default<SignedWad> {
+    fn default() -> SignedWad {
+        SignedWad { val: 0, sign: false }
+    }
+}
+
+pub impl DefaultSignedRay of Default<SignedRay> {
+    fn default() -> SignedRay {
+        SignedRay { val: 0, sign: false }
+    }
+}
+
+// Neg
+pub impl SignedWadNeg of Neg<SignedWad> {
+    fn neg(a: SignedWad) -> SignedWad {
+        SignedWad { val: a.val, sign: !a.sign }
+    }
+}
+
+
+pub impl SignedRayNeg of Neg<SignedRay> {
+    fn neg(a: SignedRay) -> SignedRay {
+        SignedRay { val: a.val, sign: !a.sign }
     }
 }

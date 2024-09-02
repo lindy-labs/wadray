@@ -501,4 +501,42 @@ mod test_wadray_signed {
         let rr: SignedRay = StorePacking::unpack(StorePacking::pack(r));
         assert_eq!(r, rr, "SignedRay packing 4");
     }
+
+    #[test]
+    fn test_default() {
+        let w: SignedWad = Default::default();
+        assert_eq!(w.val, 0, "SignedWad default val");
+        assert!(w.sign == false, "SignedWad default sign");
+
+        let r: SignedRay = Default::default();
+        assert_eq!(r.val, 0, "SignedRay default val");
+        assert!(r.sign == false, "SignedRay default sign");
+    }
+
+    #[test]
+    fn test_neg() {
+        let wp = SignedWad { val: 123, sign: false };
+        let wpn = -wp;
+        assert_eq!(wpn.val, 123, "SignedWad neg val");
+        assert!(wpn.sign, "SignedWad neg sign");
+        assert_eq!(-wpn, wp, "SignedWad double neg");
+
+        let wp0 = SignedWad { val: 0, sign: false };
+        let wpn0 = -wp0;
+        assert_eq!(wpn0.val, 0, "SignedWad zero neg val");
+        assert!(wpn0.sign, "SignedWad zero neg sign");
+        assert_eq!(-wpn0, wp0, "SignedWad zero double neg");
+
+        let rp = SignedRay { val: 123, sign: false };
+        let rpn = -rp;
+        assert_eq!(rpn.val, 123, "SignedRay neg val");
+        assert!(rpn.sign, "SignedRay neg sign");
+        assert_eq!(-rpn, rp, "SignedRay double neg");
+
+        let rp0 = SignedRay { val: 0, sign: false };
+        let rpn0 = -rp0;
+        assert_eq!(rpn0.val, 0, "SignedRay zero neg val");
+        assert!(rpn0.sign, "SignedRay zero neg sign");
+        assert_eq!(-rpn0, rp0, "SignedRay zero double neg");
+    }
 }
