@@ -8,7 +8,7 @@ source = "git+https://github.com/foundry-rs/starknet-foundry.git?tag=v0.27.0#2d9
 
 [[package]]
 name = "wadray"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "snforge_std",
 ]
