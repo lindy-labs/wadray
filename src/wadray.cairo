@@ -21,12 +21,12 @@ pub(crate) const DIFF: u128 = 1000000000;
 
 #[derive(Copy, Drop, Serde, starknet::Store)]
 pub struct Wad {
-    pub(crate) val: u128,
+    pub val: u128,
 }
 
 #[derive(Copy, Drop, Serde, starknet::Store)]
 pub struct Ray {
-    pub(crate) val: u128
+    pub val: u128
 }
 
 // Core functions

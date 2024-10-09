@@ -9,14 +9,14 @@ const HALF_PRIME: u256 = 1809251394333065606848661391547535052811553607665798349
 
 #[derive(Copy, Drop, Serde)]
 pub struct SignedWad {
-    pub(crate) val: u128,
-    pub(crate) sign: bool
+    pub val: u128,
+    pub sign: bool
 }
 
 #[derive(Copy, Drop, Serde)]
 pub struct SignedRay {
-    pub(crate) val: u128,
-    pub(crate) sign: bool
+    pub val: u128,
+    pub sign: bool
 }
 
 // External helpers
