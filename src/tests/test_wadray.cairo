@@ -1,4 +1,5 @@
-use core::num::traits::{One, Zero};
+use core::num::traits::{One, Bounded, Sqrt, Zero};
+use wadray::tests::utils::assert_equalish;
 use wadray::{
     BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, ray_to_wad, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr,
     Wad, WAD_ONE, WAD_DECIMALS, WAD_SCALE, wdiv_rw, wmul_rw, wmul_wr,
@@ -389,6 +390,54 @@ fn test_one() {
     // Test is_non_one
     assert(!ray_one.is_non_one(), 'Value should be 1 #9');
     assert(ray_zero.is_non_one(), 'Value should not be 1 #10');
+}
+
+#[test]
+fn test_sqrt() {
+    let ERROR_MARGIN: Ray = 1_u128.into();
+
+    let val: Ray = Zero::zero();
+    let sqrt: Ray = Sqrt::sqrt(val);
+    assert(sqrt.val == Zero::zero(), 'wrong sqrt #1');
+
+    // Ground truth tests
+
+    // 1000
+    let val: Ray = 1000000000000000000000000000000_u128.into();
+    assert_equalish(Sqrt::sqrt(val), 31622776601683793319988935444_u128.into(), ERROR_MARGIN, 'wrong sqrt #2');
+
+    // 6969
+    let val: Ray = 6969000000000000000000000000000_u128.into();
+    assert_equalish(Sqrt::sqrt(val), 83480536653761396384637711221_u128.into(), ERROR_MARGIN, 'wrong sqrt #3');
+
+    // pi
+    let val: Ray = 3141592653589793238462643383_u128.into();
+    assert_equalish(Sqrt::sqrt(val), 1772453850905516027298167483_u128.into(), ERROR_MARGIN, 'wrong sqrt #4');
+
+    // e
+    let val: Ray = 2718281828459045235360287471_u128.into();
+    assert_equalish(Sqrt::sqrt(val), 1648721270700128146848650787_u128.into(), ERROR_MARGIN, 'wrong sqrt #5');
+
+    // Testing the property x = sqrt(x)^2
+
+    let ERROR_MARGIN: Ray = 1000_u128.into();
+
+    let val: Ray = (4 * RAY_ONE).into();
+    let sqrt: Ray = Sqrt::sqrt(val);
+    assert_equalish((4 * RAY_ONE).into(), sqrt * sqrt, ERROR_MARGIN, 'wrong sqrt #6');
+
+    let val: Ray = (1000 * RAY_ONE).into();
+    let sqrt: Ray = Sqrt::sqrt(val);
+    assert_equalish((1000 * RAY_ONE).into(), sqrt * sqrt, ERROR_MARGIN, 'wrong sqrt #7');
+
+    // tau
+    let val: Ray = 6283185307179586476925286766_u128.into();
+    let sqrt: Ray = Sqrt::sqrt(val);
+    assert_equalish(6283185307179586476925286766_u128.into(), sqrt * sqrt, ERROR_MARGIN, 'wrong sqrt #8');
+
+    // testing the maximum possible value `sqrt` could accept doesn't cause it to fail
+    let val: Ray = Bounded::MAX;
+    Sqrt::sqrt(val);
 }
 
 #[test]
