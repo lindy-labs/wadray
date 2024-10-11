@@ -460,6 +460,15 @@ pub impl RayOne of One<Ray> {
 }
 
 // Square root
+pub impl WadSqrt of Sqrt<Wad> {
+    type Target = Wad;
+    #[inline]
+    fn sqrt(self: Wad) -> Wad {
+        let scaled_val: u256 = self.val.into() * WAD_SCALE.into();
+        Sqrt::sqrt(scaled_val).into()
+    }
+}
+
 pub impl RaySqrt of Sqrt<Ray> {
     type Target = Ray;
     #[inline]

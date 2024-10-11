@@ -393,7 +393,55 @@ fn test_one() {
 }
 
 #[test]
-fn test_sqrt() {
+fn test_sqrt_wad() {
+    let ERROR_MARGIN: Wad = 1_u128.into();
+
+    let val: Wad = Zero::zero();
+    let sqrt: Wad = Sqrt::sqrt(val);
+    assert(sqrt.val == Zero::zero(), 'wrong sqrt #1');
+
+    // Ground truth tests
+
+    // 1000
+    let val: Wad = 1000000000000000000000_u128.into();
+    assert_equalish(Sqrt::sqrt(val), 31622776601683793319_u128.into(), ERROR_MARGIN, 'wrong sqrt #2');
+
+    // 6969
+    let val: Wad = 6969000000000000000000_u128.into();
+    assert_equalish(Sqrt::sqrt(val), 83480536653761396384_u128.into(), ERROR_MARGIN, 'wrong sqrt #3');
+
+    // pi
+    let val: Wad = 3141592653589793238_u128.into();
+    assert_equalish(Sqrt::sqrt(val), 1772453850905516027_u128.into(), ERROR_MARGIN, 'wrong sqrt #4');
+
+    // e
+    let val: Wad = 2718281828459045235_u128.into();
+    assert_equalish(Sqrt::sqrt(val), 1648721270700128146_u128.into(), ERROR_MARGIN, 'wrong sqrt #5');
+
+    // Testing the property x = sqrt(x)^2
+
+    let ERROR_MARGIN: Wad = 1000_u128.into();
+
+    let val: Wad = (4 * WAD_ONE).into();
+    let sqrt: Wad = Sqrt::sqrt(val);
+    assert_equalish((4 * WAD_ONE).into(), sqrt * sqrt, ERROR_MARGIN, 'wrong sqrt #6');
+
+    let val: Wad = (1000 * WAD_ONE).into();
+    let sqrt: Wad = Sqrt::sqrt(val);
+    assert_equalish((1000 * WAD_ONE).into(), sqrt * sqrt, ERROR_MARGIN, 'wrong sqrt #7');
+
+    // tau
+    let val: Wad = 6283185307179586476_u128.into();
+    let sqrt: Wad = Sqrt::sqrt(val);
+    assert_equalish(6283185307179586476_u128.into(), sqrt * sqrt, ERROR_MARGIN, 'wrong sqrt #8');
+
+    // testing the maximum possible value `sqrt` could accept doesn't cause it to fail
+    let val: Wad = Bounded::MAX;
+    Sqrt::sqrt(val);
+}
+
+#[test]
+fn test_sqrt_ray() {
     let ERROR_MARGIN: Ray = 1_u128.into();
 
     let val: Ray = Zero::zero();
