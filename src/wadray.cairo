@@ -284,6 +284,13 @@ pub impl TIntoRay<T, impl TIntoU128: Into<T, u128>> of Into<T, Ray> {
     }
 }
 
+pub impl WadIntoU128 of Into<Wad, u128> {
+    #[inline]
+    fn into(self: Wad) -> u128 {
+        self.val
+    }
+}
+
 pub impl WadIntoFelt252 of Into<Wad, felt252> {
     #[inline]
     fn into(self: Wad) -> felt252 {
@@ -295,6 +302,13 @@ pub impl WadIntoU256 of Into<Wad, u256> {
     #[inline]
     fn into(self: Wad) -> u256 {
         self.val.into()
+    }
+}
+
+pub impl RayIntoU128 of Into<Ray, u128> {
+    #[inline]
+    fn into(self: Ray) -> u128 {
+        self.val
     }
 }
 

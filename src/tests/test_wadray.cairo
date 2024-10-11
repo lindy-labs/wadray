@@ -277,9 +277,11 @@ fn test_bounded() {
 }
 
 #[test]
-fn test_wadray_into_u256() {
+fn test_wadray_into_unsigned() {
+    // Test WadIntoU128
+    assert_eq!(Wad { val: 5 }.into(), 5_u128, "Incorrect Wad->u256 conversion");
     // Test WadIntoU256
-    assert_eq!(Wad { val: 5 }.into(), 5_u256, "Incorrect Wad->u256 conversion")
+    assert_eq!(Wad { val: 5 }.into(), 5_u256, "Incorrect Wad->u256 conversion");
 }
 
 #[test]
