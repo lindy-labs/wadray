@@ -1,7 +1,7 @@
 use core::num::traits::{One, Zero};
 use wadray::{
     BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, ray_to_wad, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr,
-    Wad, WAD_ONE, WAD_DECIMALS, WAD_SCALE, wdiv_rw, wmul_rw, wmul_wr,
+    Wad, WAD_ONE, WAD_DECIMALS, WAD_SCALE, wad_to_ray, wdiv_rw, wmul_rw, wmul_wr,
 };
 
 #[test]
@@ -236,13 +236,13 @@ fn test_div_ray_fail() {
 #[test]
 fn test_conversions() {
     // Test conversion from Wad to Ray
-    let a: Ray = Wad { val: WAD_ONE }.try_into().unwrap();
+    let a: Ray = wad_to_ray(Wad { val: WAD_ONE }).unwrap();
     assert_eq!(a.val, RAY_ONE, "Incorrect wad->ray conversion");
 
-    let a: Ray = Wad { val: MAX_CONVERTIBLE_WAD }.try_into().unwrap();
+    let a: Ray = wad_to_ray(Wad { val: MAX_CONVERTIBLE_WAD }).unwrap();
     assert_eq!(a.val, MAX_CONVERTIBLE_WAD * DIFF, "Incorrect wad->ray conversion");
 
-    let a: Option::<Ray> = Wad { val: MAX_CONVERTIBLE_WAD + 1 }.try_into();
+    let a: Option::<Ray> = wad_to_ray(Wad { val: MAX_CONVERTIBLE_WAD + 1 });
     assert(a.is_none(), 'Incorrect wad->ray conversion');
 
     // Test conversion from Ray to Wad
@@ -288,12 +288,6 @@ fn test_wadray_into_unsigned() {
 fn test_u256_try_into_wadray() {
     // Test U256TryIntoWad
     assert_eq!(Wad { val: 5 }, 5_u256.try_into().unwrap(), "Incorrect u256->Wad conversion");
-}
-
-#[test]
-#[should_panic(expected: ('Option::unwrap failed.',))]
-fn test_conversions_fail2() {
-    let _: Ray = Wad { val: MAX_CONVERTIBLE_WAD + 1 }.try_into().unwrap();
 }
 
 // comparison tests are split into 2 fns to overcome a test runner bug

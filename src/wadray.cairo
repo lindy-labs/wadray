@@ -255,13 +255,11 @@ pub impl RayDivAssign of DivAssign<Ray, Ray> {
 
 
 // Conversions
-pub impl WadTryIntoRay of TryInto<Wad, Ray> {
-    fn try_into(self: Wad) -> Option::<Ray> {
-        if (self.val <= MAX_CONVERTIBLE_WAD) {
-            Option::Some(Ray { val: self.val * DIFF })
-        } else {
-            Option::None
-        }
+pub fn wad_to_ray(x: Wad) -> Option<Ray> {
+    if (x.val <= MAX_CONVERTIBLE_WAD) {
+        Option::Some(Ray { val: x.val * DIFF })
+    } else {
+        Option::None
     }
 }
 
