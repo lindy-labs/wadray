@@ -14,4 +14,5 @@ pub use wadray_signed::{
 mod tests {
     mod test_wadray;
     mod test_wadray_signed;
+    pub mod utils;
 }

@@ -1,5 +1,5 @@
 use core::fmt::{Debug, Display, Error, Formatter};
-use core::num::traits::{One, Zero, Bounded};
+use core::num::traits::{Bounded, One, Sqrt, Zero};
 use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
 use core::traits::Default;
 
@@ -458,6 +458,26 @@ pub impl RayOne of One<Ray> {
         *self.val != RAY_ONE
     }
 }
+
+// Square root
+pub impl WadSqrt of Sqrt<Wad> {
+    type Target = Wad;
+    #[inline]
+    fn sqrt(self: Wad) -> Wad {
+        let scaled_val: u256 = self.val.into() * WAD_SCALE.into();
+        Sqrt::sqrt(scaled_val).into()
+    }
+}
+
+pub impl RaySqrt of Sqrt<Ray> {
+    type Target = Ray;
+    #[inline]
+    fn sqrt(self: Ray) -> Ray {
+        let scaled_val: u256 = self.val.into() * RAY_SCALE.into();
+        Sqrt::sqrt(scaled_val).into()
+    }
+}
+
 
 // Display and Debug
 pub impl DisplayWad of Display<Wad> {
