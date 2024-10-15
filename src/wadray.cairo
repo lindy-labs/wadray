@@ -255,13 +255,11 @@ pub impl RayDivAssign of DivAssign<Ray, Ray> {
 
 
 // Conversions
-pub impl WadTryIntoRay of TryInto<Wad, Ray> {
-    fn try_into(self: Wad) -> Option::<Ray> {
-        if (self.val <= MAX_CONVERTIBLE_WAD) {
-            Option::Some(Ray { val: self.val * DIFF })
-        } else {
-            Option::None
-        }
+pub fn wad_to_ray(x: Wad) -> Option<Ray> {
+    if (x.val <= MAX_CONVERTIBLE_WAD) {
+        Option::Some(Ray { val: x.val * DIFF })
+    } else {
+        Option::None
     }
 }
 
@@ -284,6 +282,13 @@ pub impl TIntoRay<T, impl TIntoU128: Into<T, u128>> of Into<T, Ray> {
     }
 }
 
+pub impl WadIntoU128 of Into<Wad, u128> {
+    #[inline]
+    fn into(self: Wad) -> u128 {
+        self.val
+    }
+}
+
 pub impl WadIntoFelt252 of Into<Wad, felt252> {
     #[inline]
     fn into(self: Wad) -> felt252 {
@@ -295,6 +300,13 @@ pub impl WadIntoU256 of Into<Wad, u256> {
     #[inline]
     fn into(self: Wad) -> u256 {
         self.val.into()
+    }
+}
+
+pub impl RayIntoU128 of Into<Ray, u128> {
+    #[inline]
+    fn into(self: Ray) -> u128 {
+        self.val
     }
 }
 
