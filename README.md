@@ -96,6 +96,7 @@ The following conversions from this library's types can also be performed via th
 - `Wad` -> `felt252`: Convert a `Wad` to a `felt252` without modifying the value
 - `Wad` -> `u256`: Convert a `Wad` to a `u256` without modifying the value
 - `Wad` -> `SignedWad`: Convert a `Wad` to a `SignedWad` without modifying the value, with the `sign` set to `false`
+- `Ray` -> `SignedRay`: Convert a `Ray` to a `SignedRay` without modifying the value, with the `sign` set to `false`
 - `SignedWad` -> `felt252`: Convert a `SignedWad` to a `felt252` without modifying the value
 - `SignedRay` -> `felt252`: Convert a `SignedRay` to a `felt252` without modifying the value
 
