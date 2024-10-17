@@ -110,6 +110,22 @@ The following functions can be used to scale between `Wad` and `Ray`:
 - `fn ray_to_wad(x: Ray) -> Wad`: Divide the `Ray` value by 10<sup>9</sup> and return a `Wad`
 - `fn wad_to_ray(x: Wad) -> Option::<Ray>`: Multiply the `Wad` value by 10<sup>9</sup> and return `Option::Some<Ray>` if there is no overflow or `Option::None` otherwise
 
+#### Additional notes on conversion between `Wad` and `Ray`
+
+##### Overview
+
+Starting from `v0.4.1` of this library, we have made significant changes to how `Wad` values are converted to `Ray` values. This aims to improve type safety and align with the semantics of Rust's `Into` trait.
+
+##### Key Changes
+
+1. `Into<Wad, Ray>` trait behaviour previously scaled the value by 10<sup>9</sup>. It now performs direct type cast without value modification
+2. Introduced `wad_to_ray()` function for value-preserving conversions
+
+##### Recommended Usage
+
+1. Prefer `wad_to_ray()` for most `Wad` to `Ray` conversions.
+2. Use `Into<Wad, Ray>` only when a simple type cast is required (expected to be rare).
+
 ### Signed
 
 The following functions are available for `SignedWad` and `SignedRay` via the `Signed` trait:
