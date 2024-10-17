@@ -115,17 +115,17 @@ The following functions can be used to scale between `Wad` and `Ray`:
 
 ##### Overview
 
-Starting from `v0.4.1` of this library, we have made significant changes to how `Wad` values are converted to `Ray` values. This aims to improve type safety and align with the semantics of Rust's `Into` trait.
+Starting from `v0.4.1` of this library, we have made significant changes to how `Wad` values are converted to `Ray` values and vice versa. This aims to improve type safety and align with the semantics of Rust's `Into` trait.
 
 ##### Key Changes
 
-1. `Into<Wad, Ray>` trait behaviour previously scaled the value by 10<sup>9</sup>. It now performs direct type cast without value modification
-2. Introduced `wad_to_ray()` function for value-preserving conversions
+1. Previously, `Into<Wad, Ray>` scaled the value by 10<sup>9</sup> while `Into<Ray, Wad>` scaled the value by 10<sup>-9</sup>. Both now perform direct type cast without value modification
+2. Introduced `wad_to_ray()` and `ray_to_wad()` functions for value-preserving conversions
 
 ##### Recommended Usage
 
-1. Prefer `wad_to_ray()` for most `Wad` to `Ray` conversions.
-2. Use `Into<Wad, Ray>` only when a simple type cast is required (expected to be rare).
+1. Prefer `wad_to_ray()` and `ray_to_wad()` for most conversions between `Wad` and `Ray`.
+2. Use the `Into` trait only when a simple type cast is required (expected to be rare).
 
 ### Signed
 
