@@ -115,7 +115,7 @@ The following functions can be used to scale between `Wad` and `Ray`:
 
 ##### Overview
 
-Starting from `v0.4.1` of this library, we have made significant changes to how `Wad` values are converted to `Ray` values and vice versa. This aims to improve type safety and align with the semantics of Rust's `Into` trait.
+Starting from `v0.5.0` of this library, we have made significant changes to how `Wad` values are converted to `Ray` values and vice versa. This aims to improve type safety and align with the semantics of Rust's `Into` trait.
 
 ##### Key Changes
 
@@ -139,7 +139,7 @@ To use this library, add the repository as a dependency in your `Scarb.toml`:
 
 ```
 [dependencies]
-wadray = "0.4.1"
+wadray = "0.5.0"
 ```
 then add the following line in your `.cairo` file
 ```cairo
