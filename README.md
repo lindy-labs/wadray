@@ -84,6 +84,8 @@ where both `a` and `b` are of the same type.
 
 ### Conversion
 
+#### Type Casting
+
 Any type that can be converted to a `u128` via the `Into` trait can similarly be converted to a `Wad` or `Ray` via the `Into` trait.
 
 Additionally, the following conversions from integer types are supported for `SignedWad` and `SignedRay` via the `Into` trait`:
@@ -94,17 +96,36 @@ The following conversions from this library's types can also be performed via th
 - `Wad` -> `felt252`: Convert a `Wad` to a `felt252` without modifying the value
 - `Wad` -> `u256`: Convert a `Wad` to a `u256` without modifying the value
 - `Wad` -> `SignedWad`: Convert a `Wad` to a `SignedWad` without modifying the value, with the `sign` set to `false`
-- `Wad` -> `SignedRay`: Multiply the `Wad` by 10<sup>9</sup> and return a `SignedRay` with the `sign` set to `false`
-- `Ray` -> `Wad`: Divide the `Ray` value by 10<sup>9</sup> and return a `Wad`
 - `Ray` -> `SignedRay`: Convert a `Ray` to a `SignedRay` without modifying the value, with the `sign` set to `false`
 - `SignedWad` -> `felt252`: Convert a `SignedWad` to a `felt252` without modifying the value
 - `SignedRay` -> `felt252`: Convert a `SignedRay` to a `felt252` without modifying the value
 
 The following conversions can be performed via the `TryInto` trait:
-- `Wad` -> `Option::<Ray>`: Multiply the `Wad` value by 10<sup>9</sup> and return `Option::Some<Ray>` if there is no overflow or `Option::None` otherwise
 - `u256` -> `Option::<Wad>`: Returns `Option::Some<Wad>` if the value is within bounds of `u128` or `Option::None` otherwise
 - `SignedWad` -> `Option::<Wad>`: Returns `Option::Some<Wad>` if `sign` is false or `Option::None` otherwise
 - `SignedRay` -> `Option::<Ray>`: Returns `Option::Some<Ray>` if `sign` is false or `Option::None` otherwise
+
+#### Scaling
+
+The following functions can be used to scale between `Wad` and `Ray`:
+- `fn ray_to_wad(x: Ray) -> Wad`: Divide the `Ray` value by 10<sup>9</sup> and return a `Wad`
+- `fn wad_to_ray(x: Wad) -> Option::<Ray>`: Multiply the `Wad` value by 10<sup>9</sup> and return `Option::Some<Ray>` if there is no overflow or `Option::None` otherwise
+
+#### Additional notes on conversion between `Wad` and `Ray`
+
+##### Overview
+
+Starting from `v0.5.0` of this library, we have made significant changes to how `Wad` values are converted to `Ray` values and vice versa. This aims to improve type safety and align with the semantics of Rust's `Into` trait.
+
+##### Key Changes
+
+1. Previously, `Into<Wad, Ray>` scaled the value by 10<sup>9</sup> while `Into<Ray, Wad>` scaled the value by 10<sup>-9</sup>. Both now perform direct type cast without value modification
+2. Introduced `wad_to_ray()` and `ray_to_wad()` functions for value-preserving conversions
+
+##### Recommended Usage
+
+1. Prefer `wad_to_ray()` and `ray_to_wad()` for most conversions between `Wad` and `Ray`.
+2. Use the `Into` trait only when a simple type cast is required (expected to be rare).
 
 ### Signed
 
@@ -118,7 +139,7 @@ To use this library, add the repository as a dependency in your `Scarb.toml`:
 
 ```
 [dependencies]
-wadray = { git = "https://github.com/lindy-labs/wadray.git" }
+wadray = "0.5.0"
 ```
 then add the following line in your `.cairo` file
 ```cairo
