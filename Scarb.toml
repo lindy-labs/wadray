@@ -1,7 +1,7 @@
 [package]
 name = "wadray"
 version = "0.5.0"
-cairo-version = "2.7.0"
+cairo-version = "2.8.0"
 edition = "2024_07"
 authors = ["Lindy Labs"]
 description = "Fixed-point decimal numbers for Cairo"
@@ -11,11 +11,11 @@ license-file = "LICENSE"
 keywords = ["fixed-point", "wad", "ray", "cairo", "starknet"]
 
 [dependencies]
-starknet = ">= 2.7.0"
+starknet = ">= 2.8.0"
 
 [dev-dependencies]
-snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry.git", tag = "v0.27.0" }
-assert_macros = "0.1.0"
+snforge_std = ">= 0.31.0"
+assert_macros = ">= 2.8.0"
 
 [lib]
 sierra-text = true

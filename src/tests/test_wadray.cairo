@@ -2,7 +2,7 @@ use core::num::traits::{One, Bounded, Sqrt, Zero};
 use wadray::tests::utils::assert_equalish;
 use wadray::{
     BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, ray_to_wad, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr,
-    Wad, WAD_ONE, WAD_DECIMALS, WAD_SCALE, wad_to_ray, wdiv_rw, wmul_rw, wmul_wr,
+    Wad, WAD_ONE, wad_to_ray, wdiv_rw, wmul_rw, wmul_wr,
 };
 
 #[test]
