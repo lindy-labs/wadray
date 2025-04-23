@@ -1,8 +1,8 @@
-use core::num::traits::{One, Bounded, Sqrt, Zero};
+use core::num::traits::{Bounded, One, Sqrt, Zero};
 use wadray::tests::utils::assert_equalish;
 use wadray::{
-    BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, Ray, RAY_ONE, ray_to_wad, rdiv_wr, rdiv_ww, rmul_rw, rmul_wr,
-    Wad, WAD_ONE, wad_to_ray, wdiv_rw, wmul_rw, wmul_wr,
+    BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, RAY_ONE, Ray, WAD_ONE, Wad, ray_to_wad, rdiv_wr, rdiv_ww,
+    rmul_rw, rmul_wr, wad_to_ray, wdiv_rw, wmul_rw, wmul_wr,
 };
 
 #[test]
@@ -17,7 +17,7 @@ fn test_add() {
     assert_eq!(
         Wad { val: 123456789101112 } + Wad { val: 121110987654321 },
         Wad { val: 244567776755433 },
-        "Incorrect addition #3"
+        "Incorrect addition #3",
     );
 
     // 0 + 0 = 0
@@ -30,7 +30,7 @@ fn test_add() {
     assert_eq!(
         Ray { val: 123456789101112 } + Ray { val: 121110987654321 },
         Ray { val: 244567776755433 },
-        "Incorrect addition #6"
+        "Incorrect addition #6",
     );
 }
 
@@ -64,7 +64,7 @@ fn test_sub() {
     assert_eq!(
         Wad { val: 244567776755433 } - Wad { val: 121110987654321 },
         Wad { val: 123456789101112 },
-        "Incorrect subtraction #3"
+        "Incorrect subtraction #3",
     );
 
     // 0 - 0 = 0
@@ -77,7 +77,7 @@ fn test_sub() {
     assert_eq!(
         Ray { val: 244567776755433 } - Ray { val: 121110987654321 },
         Ray { val: 123456789101112 },
-        "Incorrect subtraction #6"
+        "Incorrect subtraction #6",
     );
 }
 
@@ -106,7 +106,7 @@ fn test_mul() {
 
     // 1 * 1 = 0 (truncated)
     assert_eq!(
-        Wad { val: 1 } * Wad { val: 1 }, Wad { val: 0 }, "Incorrect multiplication #2"
+        Wad { val: 1 } * Wad { val: 1 }, Wad { val: 0 }, "Incorrect multiplication #2",
     ); // Result should be truncated
 
     // 1 (wad) * 1 (wad) = 1 (wad)
@@ -116,7 +116,7 @@ fn test_mul() {
     assert_eq!(
         Wad { val: 121110987654321531059 } * Wad { val: 1234567891011125475893 },
         Wad { val: 149519736606670187008926 },
-        "Incorrect multiplication #4"
+        "Incorrect multiplication #4",
     );
 
     // 0 * 69 = 0
@@ -124,7 +124,7 @@ fn test_mul() {
 
     // 1 * 1 = 0 (truncated)
     assert_eq!(
-        Ray { val: 1 } * Ray { val: 1 }, Ray { val: 0 }, "Incorrect multiplication #6"
+        Ray { val: 1 } * Ray { val: 1 }, Ray { val: 0 }, "Incorrect multiplication #6",
     ); // Result should be truncated
 
     // 1 (ray) * 1 (ray) = 1 (ray)
@@ -134,27 +134,27 @@ fn test_mul() {
     assert_eq!(
         Ray { val: 121110987654321531059 } * Ray { val: 1234567891011125475893 },
         Ray { val: 149519736606670 },
-        "Incorrect multiplication #8"
+        "Incorrect multiplication #8",
     );
 
     // wmul(ray, wad) -> ray
     assert_eq!(
-        wmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }), Ray { val: RAY_ONE }, "Incorrect multiplication #9"
+        wmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }), Ray { val: RAY_ONE }, "Incorrect multiplication #9",
     );
 
     // wmul(wad, ray) -> ray
     assert_eq!(
-        wmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }), Ray { val: RAY_ONE }, "Incorrect multiplication #10"
+        wmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }), Ray { val: RAY_ONE }, "Incorrect multiplication #10",
     );
 
     // rmul(ray, wad) -> wad
     assert_eq!(
-        rmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }), Wad { val: WAD_ONE }, "Incorrect multiplication #11"
+        rmul_rw(Ray { val: RAY_ONE }, Wad { val: WAD_ONE }), Wad { val: WAD_ONE }, "Incorrect multiplication #11",
     );
 
     // rmul(wad, ray) -> wad
     assert_eq!(
-        rmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }), Wad { val: WAD_ONE }, "Incorrect multiplication #12"
+        rmul_wr(Wad { val: WAD_ONE }, Ray { val: RAY_ONE }), Wad { val: WAD_ONE }, "Incorrect multiplication #12",
     );
 }
 
@@ -243,7 +243,7 @@ fn test_conversions() {
     let a: Ray = wad_to_ray(Wad { val: MAX_CONVERTIBLE_WAD }).unwrap();
     assert_eq!(a.val, MAX_CONVERTIBLE_WAD * DIFF, "Incorrect wad->ray conversion");
 
-    let a: Option::<Ray> = wad_to_ray(Wad { val: MAX_CONVERTIBLE_WAD + 1 });
+    let a: Option<Ray> = wad_to_ray(Wad { val: MAX_CONVERTIBLE_WAD + 1 });
     assert(a.is_none(), 'Incorrect wad->ray conversion');
 
     // Test conversion from Ray to Wad

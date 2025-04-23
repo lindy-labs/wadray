@@ -1,7 +1,7 @@
 [package]
 name = "wadray"
 version = "0.5.0"
-cairo-version = "2.8.0"
+cairo-version = "2.11.4"
 edition = "2024_07"
 authors = ["Lindy Labs"]
 description = "Fixed-point decimal numbers for Cairo"
@@ -11,11 +11,11 @@ license-file = "LICENSE"
 keywords = ["fixed-point", "wad", "ray", "cairo", "starknet"]
 
 [dependencies]
-starknet = ">= 2.8.0"
+starknet = ">= 2.11.4"
 
 [dev-dependencies]
-snforge_std = ">= 0.31.0"
-assert_macros = ">= 2.8.0"
+snforge_std = ">= 0.41.0"
+assert_macros = ">= 2.11.4"
 
 [lib]
 sierra-text = true
@@ -23,6 +23,9 @@ sierra-text = true
 [tool.fmt]
 sort-module-level-items = true
 max-line-length = 120
+
+[tool.scarb]
+allow-prebuilt-plugins = ["snforge_std"]
 
 [scripts]
 test = "snforge test"
