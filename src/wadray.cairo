@@ -514,6 +514,7 @@ pub impl PowWad of Pow<Wad, usize> {
 pub impl PowRay of Pow<Ray, usize> {
     type Output = Ray;
 
+    // For `self < 1`, the error is bounded by `exp / RAY_SCALE`.
     fn pow(self: Ray, exp: usize) -> Ray {
         pow(self, exp)
     }
