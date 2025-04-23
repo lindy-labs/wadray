@@ -1,6 +1,6 @@
 [package]
 name = "wadray"
-version = "0.5.0"
+version = "0.6.0"
 cairo-version = "2.11.4"
 edition = "2024_07"
 authors = ["Lindy Labs"]
