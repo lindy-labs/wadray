@@ -1,4 +1,4 @@
-use core::num::traits::{Bounded, One, Sqrt, Zero};
+use core::num::traits::{Bounded, One, Pow, Sqrt, Zero};
 use wadray::tests::utils::assert_equalish;
 use wadray::{
     BoundedRay, BoundedWad, DIFF, MAX_CONVERTIBLE_WAD, RAY_ONE, Ray, WAD_ONE, Wad, ray_to_wad, rdiv_wr, rdiv_ww,
@@ -482,6 +482,28 @@ fn test_sqrt_ray() {
     // testing the maximum possible value `sqrt` could accept doesn't cause it to fail
     let val: Ray = Bounded::MAX;
     Sqrt::sqrt(val);
+}
+
+#[test]
+fn test_pow_wad() {
+    let ERROR_MARGIN: Wad = 1000_u128.into();
+
+    let val: Wad = 3141592653589793238_u128.into();
+    assert_equalish(val.pow(2), 9869604401089358615_u128.into(), ERROR_MARGIN, 'wrong pow wad#1');
+
+    let val: Wad = 1414213562373095048_u128.into();
+    assert_equalish(val.pow(4), (4 * WAD_ONE).into(), ERROR_MARGIN, 'wrong pow wad #2');
+}
+
+#[test]
+fn test_pow_ray() {
+    let ERROR_MARGIN: Ray = 1000_u128.into();
+
+    let val: Ray = 3141592653589793238462643383_u128.into();
+    assert_equalish(val.pow(2), 9869604401089358618834490999_u128.into(), ERROR_MARGIN, 'wrong pow ray #1');
+
+    let val: Ray = 1414213562373095048801688724_u128.into();
+    assert_equalish(val.pow(4), (4 * RAY_ONE).into(), ERROR_MARGIN, 'wrong pow ray #2');
 }
 
 #[test]
