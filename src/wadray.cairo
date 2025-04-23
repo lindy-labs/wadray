@@ -1,5 +1,5 @@
 use core::fmt::{Debug, Display, Error, Formatter};
-use core::num::traits::{Bounded, One, Sqrt, Zero};
+use core::num::traits::{Bounded, One, Pow, Sqrt, Zero};
 use core::ops::{AddAssign, DivAssign, MulAssign, SubAssign};
 use core::traits::Default;
 
@@ -490,6 +490,35 @@ pub impl RaySqrt of Sqrt<Ray> {
     }
 }
 
+// Pow
+fn pow<T, impl TMul: Mul<T>, impl TOne: One<T>, impl TDrop: Drop<T>, impl TCopy: Copy<T>>(x: T, mut n: usize) -> T {
+    if n == 0 {
+        TOne::one()
+    } else if n == 1 {
+        x
+    } else if n % 2 == 0 {
+        pow(x * x, n / 2)
+    } else {
+        x * pow(x * x, (n - 1) / 2)
+    }
+}
+
+pub impl PowWad of Pow<Wad, usize> {
+    type Output = Wad;
+
+    fn pow(self: Wad, exp: usize) -> Wad {
+        pow(self, exp)
+    }
+}
+
+pub impl PowRay of Pow<Ray, usize> {
+    type Output = Ray;
+
+    // For `self < RAY_ONE`, the error is bounded by `exp / RAY_SCALE`.
+    fn pow(self: Ray, exp: usize) -> Ray {
+        pow(self, exp)
+    }
+}
 
 // Display and Debug
 pub impl DisplayWad of Display<Wad> {
