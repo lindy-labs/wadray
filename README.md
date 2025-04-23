@@ -24,7 +24,7 @@ where both `a` and `b` are of the same type.
 
 #### Multiplication and Division
 
-Multiplication and division can be performed via the the `Mul`, `MulEq`, `Div` and `DivEq` traits as follows:
+Multiplication and division can be performed via the `Mul`, `MulEq`, `Div` and `DivEq` traits as follows:
 - `a * b`
 - `a *= b`
 - `a / b`
@@ -39,6 +39,14 @@ There is also a set of functions for operations involving a `Wad` and a `Ray`:
 - `rdiv_ww`: Scale up a `Wad` value by one `Ray` scale and divide the scaled value by a `Wad` to return a `Ray`
 
 For multiplication, the prefixes `w` and `r` denote whether the product is divided (i.e. scaled down) by a `Wad` or `Ray` respectively. For division, the prefixes `w` and `r` denote whether the first operand is multiplied (i.e. scaled up) by a `Wad` or `Ray` before the division respectively. 
+
+As these are fixed point operations, do take note that there will be a loss of precision.
+
+#### Exponentiation
+
+The following exponentiation operations can be performed for `Wad` and `Ray`:
+- `Sqrt::sqrt(a)`
+- `a.pow(exp)` where `exp` is of `usize` type
 
 As these are fixed point operations, do take note that there will be a loss of precision.
 
@@ -139,7 +147,7 @@ To use this library, add the repository as a dependency in your `Scarb.toml`:
 
 ```
 [dependencies]
-wadray = "0.5.0"
+wadray = "0.6.0"
 ```
 then add the following line in your `.cairo` file
 ```cairo
