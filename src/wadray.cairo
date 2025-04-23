@@ -1,6 +1,6 @@
 use core::fmt::{Debug, Display, Error, Formatter};
 use core::num::traits::{Bounded, One, Sqrt, Zero};
-use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
+use core::ops::{AddAssign, DivAssign, MulAssign, SubAssign};
 use core::traits::Default;
 
 
@@ -26,7 +26,7 @@ pub struct Wad {
 
 #[derive(Copy, Drop, Serde, starknet::Store)]
 pub struct Ray {
-    pub(crate) val: u128
+    pub(crate) val: u128,
 }
 
 // Core functions

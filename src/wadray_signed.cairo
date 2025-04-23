@@ -1,22 +1,22 @@
 use core::fmt::{Debug, Display, Error, Formatter};
-use core::num::traits::{One, Zero, Bounded};
-use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
+use core::num::traits::{Bounded, One, Zero};
+use core::ops::{AddAssign, DivAssign, MulAssign, SubAssign};
 use core::traits::{Default, Neg};
 use starknet::storage_access::StorePacking;
-use wadray::wadray::{DIFF, Ray, RAY_ONE, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul, Wad, WAD_ONE};
+use wadray::wadray::{DIFF, RAY_ONE, Ray, WAD_ONE, Wad, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul};
 
 const HALF_PRIME: u256 = 1809251394333065606848661391547535052811553607665798349986546028067936010240;
 
 #[derive(Copy, Drop, Serde)]
 pub struct SignedWad {
     pub(crate) val: u128,
-    pub(crate) sign: bool
+    pub(crate) sign: bool,
 }
 
 #[derive(Copy, Drop, Serde)]
 pub struct SignedRay {
     pub(crate) val: u128,
-    pub(crate) sign: bool
+    pub(crate) sign: bool,
 }
 
 // External helpers
