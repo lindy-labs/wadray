@@ -147,7 +147,7 @@ To use this library, add the repository as a dependency in your `Scarb.toml`:
 
 ```
 [dependencies]
-wadray = "0.6.0"
+wadray = "0.6.1"
 ```
 then add the following line in your `.cairo` file
 ```cairo
