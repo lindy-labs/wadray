@@ -1,3 +1,4 @@
+pub mod common;
 pub mod wadray;
 pub mod wadray_signed;
 

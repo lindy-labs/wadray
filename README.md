@@ -44,8 +44,8 @@ As these are fixed point operations, do take note that there will be a loss of p
 
 #### Exponentiation
 
-The following exponentiation operations can be performed for `Wad` and `Ray`:
-- `Sqrt::sqrt(a)`
+The following exponentiation operations can be performed:
+- `Sqrt::sqrt(a)` for `Wad` and `Ray` only
 - `a.pow(exp)` where `exp` is of `usize` type
 
 As these are fixed point operations, do take note that there will be a loss of precision.

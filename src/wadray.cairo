@@ -2,6 +2,7 @@ use core::fmt::{Debug, Display, Error, Formatter};
 use core::num::traits::{Bounded, One, Pow, Sqrt, Zero};
 use core::ops::{AddAssign, DivAssign, MulAssign, SubAssign};
 use core::traits::Default;
+use wadray::common::pow;
 
 
 pub const WAD_DECIMALS: u8 = 18;
@@ -491,18 +492,6 @@ pub impl RaySqrt of Sqrt<Ray> {
 }
 
 // Pow
-fn pow<T, impl TMul: Mul<T>, impl TOne: One<T>, impl TDrop: Drop<T>, impl TCopy: Copy<T>>(x: T, mut n: usize) -> T {
-    if n == 0 {
-        TOne::one()
-    } else if n == 1 {
-        x
-    } else if n % 2 == 0 {
-        pow(x * x, n / 2)
-    } else {
-        x * pow(x * x, (n - 1) / 2)
-    }
-}
-
 pub impl PowWad of Pow<Wad, usize> {
     type Output = Wad;
 
