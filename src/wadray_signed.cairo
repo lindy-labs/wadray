@@ -1,8 +1,9 @@
 use core::fmt::{Debug, Display, Error, Formatter};
-use core::num::traits::{Bounded, One, Zero};
+use core::num::traits::{Bounded, One, Pow, Zero};
 use core::ops::{AddAssign, DivAssign, MulAssign, SubAssign};
 use core::traits::{Default, Neg};
 use starknet::storage_access::StorePacking;
+use wadray::common::pow;
 use wadray::wadray::{DIFF, RAY_ONE, Ray, WAD_ONE, Wad, u128_rdiv, u128_rmul, u128_wdiv, u128_wmul};
 
 const HALF_PRIME: u256 = 1809251394333065606848661391547535052811553607665798349986546028067936010240;
@@ -486,6 +487,22 @@ pub impl SignedRayOne of One<SignedRay> {
     }
 }
 
+// Pow
+pub impl PowSignedWad of Pow<SignedWad, usize> {
+    type Output = SignedWad;
+
+    fn pow(self: SignedWad, exp: usize) -> SignedWad {
+        pow(self, exp)
+    }
+}
+
+pub impl PowSignedRay of Pow<SignedRay, usize> {
+    type Output = SignedRay;
+
+    fn pow(self: SignedRay, exp: usize) -> SignedRay {
+        pow(self, exp)
+    }
+}
 
 // Signed
 pub trait Signed<T> {

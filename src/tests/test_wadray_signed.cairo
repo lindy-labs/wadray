@@ -1,5 +1,5 @@
 mod test_wadray_signed {
-    use core::num::traits::Bounded;
+    use core::num::traits::{Bounded, Pow};
     use starknet::storage_access::StorePacking;
     use wadray::{
         BoundedSignedRay, BoundedSignedWad, DIFF, RAY_ONE, Ray, Signed, SignedRay, SignedRayOne, SignedRayZero,
@@ -402,6 +402,20 @@ mod test_wadray_signed {
         let non_one = SignedRay { val: 200, sign: false };
         assert(!non_one.is_one(), 'One non_one fail');
         assert(non_one.is_non_one(), 'One non_one fail');
+    }
+
+    #[test]
+    fn test_pow_signed_wad() {
+        let val: SignedWad = WAD_ONE.into();
+        assert_eq!((-val).pow(2), val, "wrong pow signed wad #1");
+        assert_eq!((-val).pow(3), -val, "wrong pow signed wad #2");
+    }
+
+    #[test]
+    fn test_pow_signed_ray() {
+        let val: SignedRay = RAY_ONE.into();
+        assert_eq!((-val).pow(2), val, "wrong pow signed ray #1");
+        assert_eq!((-val).pow(3), -val, "wrong pow signed ray #2");
     }
 
     #[test]
